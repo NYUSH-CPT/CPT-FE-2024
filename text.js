@@ -82,3 +82,52 @@ export const FAQ = [
             '培训的风险不大，主要是关于性少数群体男性的生活和挑战，我们会通过一些文本和视频来让您了解他们的生活和想法，您需要根据文本和视频的内容来完成一些写作',
     },
 ]
+
+
+export const TASK_EXP_GRP = [
+    {
+        title: 'Day 1：自由写作',
+        discription: '预计时间：30分钟',
+        url: '/free_writing',
+    },
+    {
+        title: 'Day 2：游戏',
+        discription: '预计时间：30分钟',
+        url: '/game/1',
+    },
+    {
+        title: 'Day 3：游戏',
+        discription: '预计时间：30分钟',
+        url: '/game/2',
+    },
+    {
+        title: 'Day 4：挑战性写作1',
+        discription: '预计时间：30分钟',
+        url: '/challenge_writing/1',
+    },
+    {
+        title: 'Day 5：挑战性写作2',
+        discription: '预计时间：30分钟',
+        url: '/challenge_writing/2',
+    },
+    {
+        title: 'Day 6：挑战性写作3',
+        discription: '预计时间：30分钟',
+        url: '/challenge_writing/3',
+    },
+    {
+        title: 'Day 7：写作反馈',
+        discription: '预计时间：30分钟',
+        url: '/feed_back/day6',
+    },
+    {
+        title: 'Day 8：虚拟信件',
+        discription: '预计时间：30分钟',
+        url: '/virtual_letter',
+    },
+    {
+        title: 'Day 9：写作反馈',
+        discription: '预计时间：30分钟',
+        url: '/feed_back/day8',
+    },
+]
