@@ -1,7 +1,5 @@
+import { useEffect } from 'react'
 import Head from 'next/head'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import FormHelperText from '@mui/material/FormHelperText'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Markdown from 'markdown-to-jsx'
@@ -11,21 +9,27 @@ import Header from '@/components/Header'
 import styles from '@/styles/article.module.scss'
 
 import { CONTENT_WRITING_DAY1 } from '@/text'
+import { requester, enableAutoSave } from '@/utils'
 
 export default function FreeWriting() {
+    useEffect(() => {
+        enableAutoSave('myform')
+    }, [])
     const handleSubmit = e => {
         const form = document.getElementById('myform')
 
         if (form.checkValidity()) {
             e.preventDefault()
             e.stopPropagation()
-
             const formData = new FormData(form)
             const data = {}
             for (let key of formData.keys()) {
                 data[key] = formData.get(key)
             }
-            console.log(data)
+
+            // TODO: handle submit (use requester.post)
+            // Error handling: what if the request fails?
+            // Error handling: what if the content already exists? (need backend support)
         }
     }
     return (
