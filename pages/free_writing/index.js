@@ -1,8 +1,17 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router';
+
 import Head from 'next/head'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Markdown from 'markdown-to-jsx'
+
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Alert from '@mui/material/Alert'
 
 import Header from '@/components/Header'
 
@@ -12,9 +21,33 @@ import { CONTENT_WRITING_DAY1 } from '@/text'
 import { requester, enableAutoSave } from '@/utils'
 
 export default function FreeWriting() {
+    const [contentExist, setContentExist] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
+    const router = useRouter();
+
     useEffect(() => {
         enableAutoSave('myform')
+        requester.get("/writing/1")
+            .then(res => {
+                setContentExist(true)
+            })
+            .catch(err => {
+                console.log(err.response);
+            })
     }, [])
+
+
+    const handleCloseSuccessDialog = () => {
+        setSuccessDialogOpen(false)
+        router.push("/")
+    }
+
+    const handleRedirect = e => {
+        e.preventDefault()
+        router.push("/")
+    }
+
     const handleSubmit = e => {
         const form = document.getElementById('myform')
 
@@ -26,10 +59,17 @@ export default function FreeWriting() {
             for (let key of formData.keys()) {
                 data[key] = formData.get(key)
             }
-
-            // TODO: handle submit (use requester.post)
-            // Error handling: what if the request fails?
-            // Error handling: what if the content already exists? (need backend support)
+            requester.post("/writing/1", data)
+                .then(res => {
+                    console.log(res)
+                    setSuccessDialogOpen(true)
+                }
+            ).catch(
+                err => {
+                    console.error(err.response)
+                    setErrorMessage(err.response.data.error)
+                }
+            )
         }
     }
     return (
@@ -43,6 +83,11 @@ export default function FreeWriting() {
                 <Markdown>{CONTENT_WRITING_DAY1}</Markdown>
                 <hr className="my-4" />
                 <div className="flex flex-col gap-6">
+                    {errorMessage && (
+                        <Alert severity="error">
+                            {errorMessage}
+                        </Alert>
+                    )}
                     <TextField
                         name="scene"
                         multiline
@@ -50,7 +95,7 @@ export default function FreeWriting() {
                         minRows={5}
                         label="发生的事情"
                         required
-                        inputProps={{ minLength: '300' }}
+                        inputProps={{ minLength: '300', readOnly: contentExist }}
                     />
                     <TextField
                         name="feeling"
@@ -59,13 +104,31 @@ export default function FreeWriting() {
                         minRows={5}
                         label="当时的想法"
                         required
-                        inputProps={{ minLength: '300' }}
+                        inputProps={{ minLength: '300', readOnly: contentExist }}
                     />
-                    <Button variant="contained" color="primary" onClick={handleSubmit} type="submit">
-                        提交
+                    
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={contentExist ? handleRedirect : handleSubmit}
+                        type="submit"
+                    >
+                        {contentExist ? "您已经提交过这次写作，返回" : "提交"}
                     </Button>
                 </div>
             </form>
+
+            <Dialog open={isSuccessDialogOpen} onClose={handleCloseSuccessDialog}>
+                <DialogTitle>提交成功</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>感谢您用写作的方式关怀自己！</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseSuccessDialog} color="primary">
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

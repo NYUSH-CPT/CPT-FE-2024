@@ -29,6 +29,9 @@ export default function Home() {
         const daysSinceStart = today.diff(expStart, 'days')
         const activeStep = Math.min(daysSinceStart, currentDay - 1)
 
+        console.log(currentDay, expStart, today, daysSinceStart)
+        console.log(activeStep)
+
         return (
             <>
                 <h1>任务列表</h1>
