@@ -9,11 +9,8 @@ import Markdown from "markdown-to-jsx";
 import {
     FormLabel,
     Checkbox,
-    FormControl,
     FormGroup,
     FormControlLabel,
-    Radio,
-    Typography,
 } from "@mui/material";
 
 import Dialog from "@mui/material/Dialog";
@@ -27,7 +24,7 @@ import Header from "@/components/Header";
 
 import styles from "@/styles/article.module.scss";
 
-import { CONTENT_WRITING_DAY4 } from "@/text";
+import { CONTENT_WRITING_DAY4, REFERENCE_WRITING_DAY4 } from "@/text";
 import { requester } from "@/utils";
 
 
@@ -46,11 +43,12 @@ export default function ChallengeWriting() {
     const q3Questions = {
         0: { prompt: '有什么证据可以支持这些想法吗？', checked: false, text: "" },
         1: { prompt: '有什么证据可以反驳这些想法吗？', checked: false, text: "" },
-        2: { prompt: '这些想法是不是只关注了事情的一面？', checked: false, text: "" },
-        3: { prompt: '这些想法的产生是基于您的感受还是基于事实？', checked: false, text: "" },
-        4: { prompt: '这些想法是否高估了事情发生的概率？', checked: false, text: "" },
-        5: { prompt: '这些想法的信息来源可靠吗？', checked: false, text: "" },
-        6: { prompt: '我没有发现TA的非适应性思维，所以我不需要提问。', checked: false, text: "" },
+        2: { prompt: '这些想法是不是过于极端或者夸张了？', checked: false, text: ""},
+        3: { prompt: '这些想法是不是只关注了事情的一面？', checked: false, text: "" },
+        4: { prompt: '这些想法的产生是基于您的感受还是基于事实？', checked: false, text: "" },
+        5: { prompt: '这些想法是否高估了事情发生的概率？', checked: false, text: "" },
+        6: { prompt: '这些想法的信息来源可靠吗？', checked: false, text: "" },
+        7: { prompt: '我没有发现TA的非适应性思维，所以我不需要提问。', checked: false, text: "" },
     };
 
 
@@ -68,10 +66,8 @@ export default function ChallengeWriting() {
         }));
     };
 
-
     const [biasState, setBiasState] = useState(q2Biases);
     const [questionState, setQuestionState] = useState(q3Questions);
-    
     const [q1Content, setQ1Content] = useState("");
     const [q4Content, setQ4Content] = useState("");
 
@@ -81,51 +77,31 @@ export default function ChallengeWriting() {
     const router = useRouter();
     const day = +router.query.id + 3;
 
-
-    useEffect(() => {
-        setTimeout(() => {
-            console.log("Bias State after a delay:", biasState);
-        }, 0);
-    }, [biasState]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            console.log("Question State after a delay:", questionState);
-        }, 0);
-    }, [questionState]);
-
-
+    const [reference, setReference] = useState({});
+    const [isReferenceDialogOpen, setReferenceDialogOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadedData = localStorage.getItem(`__autosave-${window.location.pathname}`);
         if (loadedData) {
             const { biasState, questionState, q1Content, q4Content } = JSON.parse(loadedData);
-            console.log("loadedData:", loadedData);
-
             setBiasState(prev => {
                 const updatedState = {
                     ...q2Biases,  
                     ...biasState 
                 };
-                // console.log("Updated bias state to be set:", updatedState);
                 return updatedState;
             });
-
             setQuestionState(prev => {
                 const updatedState = {
                     ...q3Questions,  
                     ...questionState 
                 };
-                // console.log("Updated question state to be set:", updatedState);
                 return updatedState;
             });
-
             setQ1Content(q1Content || "");
-            
             setQ4Content(q4Content || "");
-
         } else {
-            console.log("No data found in localStorage, using default states");
             setBiasState(q2Biases);
             setQuestionState(q3Questions);
             setQ1Content("");
@@ -135,34 +111,36 @@ export default function ChallengeWriting() {
 
 
     useEffect(() => {
-        requester
-            .get(`/writing/${day}`)
-            .then((res) => {
-                setContentExist(true);
-                console.log(res)
-            })
-            .catch((err) => {
-                console.log(err.response);
-            });
+        if (day) {
+            requester
+                .get(`/writing/${day}`)
+                .then((res) => {
+                    setContentExist(true);
+                    console.log(res)
+                    setReference(res.data.reference);
+                    setReferenceDialogOpen(true);
+                    setLoading(false)
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    setLoading(false)
+                });
+        }
     }, [day])
+
     
     useEffect(() => {
         setTimeout(() => {
-        
             const getDataToSave = () => ({
                 biasState,
                 questionState,
                 q1Content,
                 q4Content
             });
-        
             const dataToSave = getDataToSave();
-        
-            console.log("auto saving after a delay:", dataToSave)
             localStorage.setItem(`__autosave-${window.location.pathname}`, JSON.stringify(dataToSave));
         }, 0);
     }, [biasState, questionState, q1Content, q4Content]);
-
 
 
     const handleCloseSuccessDialog = () => {
@@ -175,6 +153,9 @@ export default function ChallengeWriting() {
         router.push("/");
     };
 
+    const handleCloseReferenceDialog = () => {
+        setReferenceDialogOpen(false);
+    };
 
     const handleSubmit = (e) => {
         const form = document.getElementById("myform");
@@ -208,8 +189,6 @@ export default function ChallengeWriting() {
                 q4: q4Content
             };
 
-            console.log(payload)
-
             requester
                 .post(`writing/${day}`, payload)
                 .then((res) => {
@@ -224,6 +203,7 @@ export default function ChallengeWriting() {
     };
 
     return (
+        (!loading &&
         <>
             <Head>
                 <title>Day {day} 挑战性写作</title>
@@ -250,7 +230,19 @@ export default function ChallengeWriting() {
                         inputProps={{
                             readOnly: contentExist,
                         }}
+                        label="您的回答"
                     />
+
+                    {contentExist && <TextField
+                        color="secondary"
+                        name="q1_ref"
+                        multiline
+                        variant="outlined"
+                        minRows={5}
+                        value={reference.q1}
+                        readOnly
+                        label="参考答案"
+                    />}
 
                     <FormLabel>
                         2）在以上您列出的所有想法里，您看到了哪些类型的非适应性思维？[多选题]
@@ -258,35 +250,65 @@ export default function ChallengeWriting() {
                     <FormGroup>
                         {Object.entries(biasState).map(([key, {prompt, checked, text}]) => (
                             <div key={`q2_${key}`}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={checked}  
-                                            value={q1Content}
-                                            onChange={handleCheckboxChange(key, setBiasState)}
-                                            name={key}
-                                            inputProps={{
-                                                readOnly: contentExist,
-                                            }}
-                                        />
-                                    }
-                                    label={prompt}
-                                />
-                                
-                                {checked && key !== '7' && (
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        margin="dense"
-                                        label="对应的想法"
-                                        required
-                                        value={text}
-                                        onChange={handleTextChange(key, setBiasState)} 
-                                        inputProps={{
-                                            readOnly: contentExist,
-                                        }}
+                                {!contentExist? ( <>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={checked}  
+                                                onChange={handleCheckboxChange(key, setBiasState)}
+                                                name={key}
+                                            />
+                                        }
+                                        label={prompt}
                                     />
-                                )}
+                                    
+                                    {checked && key !== '7' && (
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            margin="dense"
+                                            label="对应的想法"
+                                            required
+                                            value={text}
+                                            onChange={handleTextChange(key, setBiasState)} 
+                                        />
+                                    )}
+                                </>) : (<>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={reference.q2[key].checked}  
+                                                readOnly
+                                                name={key}
+                                            />
+                                        }
+                                        label={prompt}
+                                    />
+                            
+                                    {reference.q2[key].checked && key !== '7' && (
+                                    <>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            margin="dense"
+                                            label="您的回答"
+                                            value={text}
+                                            readOnly
+                                        />
+
+                                        <TextField
+                                            color="secondary"
+                                            fullWidth
+                                            variant="outlined"
+                                            margin="dense"
+                                            label="参考答案"
+                                            value={reference.q2[key].text}
+                                            readOnly
+                                        />
+                                    </>
+                                    )}
+                                </> )
+                            }
 
                             </div>
                         ))}
@@ -298,34 +320,63 @@ export default function ChallengeWriting() {
                     <FormGroup>
                         {Object.entries(questionState).map(([key, { prompt, checked, text }]) => (
                             <div key={`q3_${key}`}> 
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={checked} 
-                                            onChange={handleCheckboxChange(key, setQuestionState)}  
-                                            name={key} 
-                                            inputProps={{
-                                                readOnly: contentExist,
-                                            }}
-                                        />
-                                    }
-                                    label={prompt}
-                                />
-                                
-                                {checked && key !== '6' && (
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        margin="dense"
-                                        label="对应的想法"
-                                        required
-                                        value={text}  
-                                        onChange={handleTextChange(key, setQuestionState)} 
-                                        inputProps={{
-                                            readOnly: contentExist,
-                                        }}
+                                {!contentExist? (<>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={checked} 
+                                                onChange={handleCheckboxChange(key, setQuestionState)}  
+                                                name={key} 
+                                            />
+                                        }
+                                        label={prompt}
                                     />
-                                )}
+                                    
+                                    {checked && key !== '7' && (
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            margin="dense"
+                                            label="对应的想法"
+                                            required
+                                            value={text}  
+                                            onChange={handleTextChange(key, setQuestionState)} 
+                                        />
+                                    )}
+                                </>) : (<>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={reference.q3[key].checked} 
+                                                name={key} 
+                                                readOnly
+                                            />
+                                        }
+                                        label={prompt}
+                                    />
+                                    
+                                    {reference.q3[key].checked && key !== '7' && (
+                                    <>
+                                        <TextField
+                                            fullWidth
+                                            variant="outlined"
+                                            margin="dense"
+                                            label="您的回答"
+                                            value={text}  
+                                            readOnly
+                                        />
+                                        <TextField
+                                            color="secondary"
+                                            fullWidth
+                                            variant="outlined"
+                                            margin="dense"
+                                            value={reference.q3[key].text}  
+                                            label="参考答案"
+                                            readOnly
+                                        />
+                                    </>
+                                    )}
+                                </>)}
                             </div>
                         ))}
                     </FormGroup>
@@ -348,6 +399,18 @@ export default function ChallengeWriting() {
                         }}
                         
                     />
+
+                    {contentExist &&
+                        <TextField
+                            name="q4_ref"
+                            multiline
+                            variant="outlined"
+                            minRows={5}
+                            value={reference.q1}
+                            readOnly
+                        />
+                    }
+                    
                     {errorMessage && (
                         <Alert severity="error">{errorMessage}</Alert>
                     )}
@@ -379,6 +442,26 @@ export default function ChallengeWriting() {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {contentExist && 
+                <Dialog
+                    open={isReferenceDialogOpen}
+                    onClose={handleCloseReferenceDialog}
+                >
+                    <DialogTitle>参考答案</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {REFERENCE_WRITING_DAY4}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseReferenceDialog} color="primary">
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            }
         </>
+        )
     );
 }
