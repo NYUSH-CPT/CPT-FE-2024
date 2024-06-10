@@ -1,71 +1,384 @@
-import { useEffect } from 'react'
-import Head from 'next/head'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import Markdown from 'markdown-to-jsx'
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/router";
 
-import Header from '@/components/Header'
+import Head from "next/head";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Markdown from "markdown-to-jsx";
 
-import styles from '@/styles/article.module.scss'
+import {
+    FormLabel,
+    Checkbox,
+    FormControl,
+    FormGroup,
+    FormControlLabel,
+    Radio,
+    Typography,
+} from "@mui/material";
 
-import { CONTENT_WRITING_DAY1 } from '@/text'
-import { requester, enableAutoSave } from '@/utils'
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Alert from "@mui/material/Alert";
+
+import Header from "@/components/Header";
+
+import styles from "@/styles/article.module.scss";
+
+import { CONTENT_WRITING_DAY4 } from "@/text";
+import { requester } from "@/utils";
+
 
 export default function ChallengeWriting() {
+    const q2Biases = {
+        0: { prompt: "非黑即白", checked: false, text: "" },
+        1: { prompt: "以偏概全", checked: false, text: "" },
+        2: { prompt: "灾难化思维", checked: false, text: "" },
+        3: { prompt: "揣摩人心", checked: false, text: "" },
+        4: { prompt: "过分自责", checked: false, text: "" },
+        5: { prompt: "对号入座", checked: false, text: "" },
+        6: { prompt: "其它", checked: false, text: "" },
+        7: { prompt: "我没有发现TA的非适应性思维。", checked: false, text: "" },
+    };
+
+    const q3Questions = {
+        0: { prompt: '有什么证据可以支持这些想法吗？', checked: false, text: "" },
+        1: { prompt: '有什么证据可以反驳这些想法吗？', checked: false, text: "" },
+        2: { prompt: '这些想法是不是只关注了事情的一面？', checked: false, text: "" },
+        3: { prompt: '这些想法的产生是基于您的感受还是基于事实？', checked: false, text: "" },
+        4: { prompt: '这些想法是否高估了事情发生的概率？', checked: false, text: "" },
+        5: { prompt: '这些想法的信息来源可靠吗？', checked: false, text: "" },
+        6: { prompt: '我没有发现TA的非适应性思维，所以我不需要提问。', checked: false, text: "" },
+    };
+
+
+    const handleCheckboxChange = (key, updater) => (event) => {
+        updater(prevState => ({
+            ...prevState,
+            [key]: { ...prevState[key], checked: event.target.checked }
+        }));
+    };
+
+    const handleTextChange = (key, updater) => (event) => {
+        updater(prevState => ({
+            ...prevState,
+            [key]: { ...prevState[key], text: event.target.value }
+        }));
+    };
+
+
+    const [biasState, setBiasState] = useState(q2Biases);
+    const [questionState, setQuestionState] = useState(q3Questions);
+    
+    const [q1Content, setQ1Content] = useState("");
+    const [q4Content, setQ4Content] = useState("");
+
+    const [contentExist, setContentExist] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
+    const router = useRouter();
+    const day = +router.query.id + 3;
+
+
     useEffect(() => {
-        enableAutoSave('myform')
-    }, [])
-    const handleSubmit = e => {
-        const form = document.getElementById('myform')
+        setTimeout(() => {
+            console.log("Bias State after a delay:", biasState);
+        }, 0);
+    }, [biasState]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            console.log("Question State after a delay:", questionState);
+        }, 0);
+    }, [questionState]);
+
+
+
+    useEffect(() => {
+        const loadedData = localStorage.getItem(`__autosave-${window.location.pathname}`);
+        if (loadedData) {
+            const { biasState, questionState, q1Content, q4Content } = JSON.parse(loadedData);
+            console.log("loadedData:", loadedData);
+
+            setBiasState(prev => {
+                const updatedState = {
+                    ...q2Biases,  
+                    ...biasState 
+                };
+                // console.log("Updated bias state to be set:", updatedState);
+                return updatedState;
+            });
+
+            setQuestionState(prev => {
+                const updatedState = {
+                    ...q3Questions,  
+                    ...questionState 
+                };
+                // console.log("Updated question state to be set:", updatedState);
+                return updatedState;
+            });
+
+            setQ1Content(q1Content || "");
+            
+            setQ4Content(q4Content || "");
+
+        } else {
+            console.log("No data found in localStorage, using default states");
+            setBiasState(q2Biases);
+            setQuestionState(q3Questions);
+            setQ1Content("");
+            setQ4Content("");
+        }
+    }, []);
+
+
+    useEffect(() => {
+        requester
+            .get(`/writing/${day}`)
+            .then((res) => {
+                setContentExist(true);
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
+    }, [day])
+    
+    useEffect(() => {
+        setTimeout(() => {
+        
+            const getDataToSave = () => ({
+                biasState,
+                questionState,
+                q1Content,
+                q4Content
+            });
+        
+            const dataToSave = getDataToSave();
+        
+            console.log("auto saving after a delay:", dataToSave)
+            localStorage.setItem(`__autosave-${window.location.pathname}`, JSON.stringify(dataToSave));
+        }, 0);
+    }, [biasState, questionState, q1Content, q4Content]);
+
+
+
+    const handleCloseSuccessDialog = () => {
+        setSuccessDialogOpen(false);
+        router.push("/");
+    };
+
+    const handleRedirect = (e) => {
+        e.preventDefault();
+        router.push("/");
+    };
+
+
+    const handleSubmit = (e) => {
+        const form = document.getElementById("myform");
 
         if (form.checkValidity()) {
-            e.preventDefault()
-            e.stopPropagation()
-            const formData = new FormData(form)
-            const data = {}
-            for (let key of formData.keys()) {
-                data[key] = formData.get(key)
+            e.preventDefault();
+            e.stopPropagation();
+            const biasIsChecked = Object.values(biasState).some(key => key.checked);
+            const questionIsChecked = Object.values(questionState).some(key => key.checked);
+            if (!biasIsChecked) {
+                setErrorMessage("第二题必须至少选择一项。")
+                return
+            }
+            else if (!questionIsChecked) {
+                setErrorMessage("第三题必须至少选择一项。")
+                return
             }
 
-            // TODO: handle submit (use requester.post)
-            // Error handling: what if the request fails?
-            // Error handling: what if the content already exists? (need backend support)
+            const q2Data = Object.entries(biasState)
+            .filter(([key, { checked }]) => checked) 
+            .map(([key, { text }]) => ({id: key, bias: q2Biases[key].prompt, text: text }));
+    
+            const q3Data = Object.entries(questionState)
+                .filter(([key, { checked }]) => checked)
+                .map(([key, { text }]) => ({id: key, question: q3Questions[key].prompt, text: text }));
+        
+            const payload = {
+                q1: q1Content,
+                q2: q2Data,
+                q3: q3Data,
+                q4: q4Content
+            };
+
+            console.log(payload)
+
+            requester
+                .post(`writing/${day}`, payload)
+                .then((res) => {
+                    console.log(res);
+                    setSuccessDialogOpen(true);
+                })
+                .catch((err) => {
+                    console.error(err.response);
+                    setErrorMessage(err.response.data.error);
+                });
         }
-    }
+    };
+
     return (
         <>
             <Head>
-                <title>Day 1 自由写作</title>
+                <title>Day {day} 挑战性写作</title>
             </Head>
             <Header />
             <form className={styles.article} id="myform">
-                <h1>Day 1 自由写作</h1>
-                <Markdown>{CONTENT_WRITING_DAY1}</Markdown>
+                <h1>Day {day} 挑战性写作</h1>
+                <Markdown>{CONTENT_WRITING_DAY4}</Markdown>
+
                 <hr className="my-4" />
                 <div className="flex flex-col gap-6">
+                    <h2>请尝试回答以下问题</h2>
+                    <FormLabel>
+                        1）在这份写作中您看到了TA的哪些非适应性思维？
+                    </FormLabel>
                     <TextField
-                        name="scene"
+                        name="q1"
                         multiline
                         variant="outlined"
                         minRows={5}
-                        label="发生的事情"
                         required
-                        inputProps={{ minLength: '300' }}
+                        value={q1Content}
+                        onChange={e => setQ1Content(e.target.value)}
+                        inputProps={{
+                            readOnly: contentExist,
+                        }}
                     />
+
+                    <FormLabel>
+                        2）在以上您列出的所有想法里，您看到了哪些类型的非适应性思维？[多选题]
+                    </FormLabel>
+                    <FormGroup>
+                        {Object.entries(biasState).map(([key, {prompt, checked, text}]) => (
+                            <div key={`q2_${key}`}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={checked}  
+                                            value={q1Content}
+                                            onChange={handleCheckboxChange(key, setBiasState)}
+                                            name={key}
+                                            inputProps={{
+                                                readOnly: contentExist,
+                                            }}
+                                        />
+                                    }
+                                    label={prompt}
+                                />
+                                
+                                {checked && key !== '7' && (
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        margin="dense"
+                                        label="对应的想法"
+                                        required
+                                        value={text}
+                                        onChange={handleTextChange(key, setBiasState)} 
+                                        inputProps={{
+                                            readOnly: contentExist,
+                                        }}
+                                    />
+                                )}
+
+                            </div>
+                        ))}
+                    </FormGroup>
+
+                    <FormLabel>                    
+                        3）接下来，让我们通过问问题来帮助TA寻找更灵活的思维方式。针对您所找到的这些非适应性思维，您会问以下哪几种问题呢？试想一下TA又会怎样回答这些问题呢？您可以结合个人经历使用第一人称回答。[多选题]
+                    </FormLabel>
+                    <FormGroup>
+                        {Object.entries(questionState).map(([key, { prompt, checked, text }]) => (
+                            <div key={`q3_${key}`}> 
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={checked} 
+                                            onChange={handleCheckboxChange(key, setQuestionState)}  
+                                            name={key} 
+                                            inputProps={{
+                                                readOnly: contentExist,
+                                            }}
+                                        />
+                                    }
+                                    label={prompt}
+                                />
+                                
+                                {checked && key !== '6' && (
+                                    <TextField
+                                        fullWidth
+                                        variant="outlined"
+                                        margin="dense"
+                                        label="对应的想法"
+                                        required
+                                        value={text}  
+                                        onChange={handleTextChange(key, setQuestionState)} 
+                                        inputProps={{
+                                            readOnly: contentExist,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </FormGroup>
+
+                    
+                    <FormLabel>   
+                        4）在思考完以上问题之后，您认为TA可以如何更灵活、全面地看待当时的处境？您可以结合个人经历使用第一人称写作。（字数要求：≥300字）                 
+                    </FormLabel>
                     <TextField
-                        name="feeling"
+                        name="q4"
                         multiline
                         variant="outlined"
                         minRows={5}
-                        label="当时的想法"
                         required
-                        inputProps={{ minLength: '300' }}
+                        value={q4Content}
+                        onChange={e => setQ4Content(e.target.value)}
+                        inputProps={{
+                            minLength: "300",
+                            readOnly: contentExist,
+                        }}
+                        
                     />
-                    <Button variant="contained" color="primary" onClick={handleSubmit} type="submit">
-                        提交
+                    {errorMessage && (
+                        <Alert severity="error">{errorMessage}</Alert>
+                    )}
+
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={contentExist ? handleRedirect : handleSubmit}
+                        type="submit"
+                    >
+                        {contentExist ? "您已经提交过这次写作，返回" : "提交"}
                     </Button>
                 </div>
             </form>
+
+            <Dialog
+                open={isSuccessDialogOpen}
+                onClose={handleCloseSuccessDialog}
+            >
+                <DialogTitle>提交成功</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        感谢您用写作的方式关怀自己！
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseSuccessDialog} color="primary">
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
-    )
+    );
 }
