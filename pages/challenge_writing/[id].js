@@ -1,32 +1,32 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Head from "next/head";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Markdown from "markdown-to-jsx";
 
 import {
+    TextField,
+    Button,
     FormLabel,
     Checkbox,
     FormGroup,
     FormControlLabel,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Alert
 } from "@mui/material";
 
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
-import Alert from "@mui/material/Alert";
-
 import Header from "@/components/Header";
+import Skill from "@/components/Skill";
 
 import styles from "@/styles/article.module.scss";
 
-import { CONTENT_WRITING_DAY4, REFERENCE_WRITING_DAY4 } from "@/text";
 import { requester } from "@/utils";
 
+import { CHALLENGE_WRITING_INTRO, CHALLENGE_WRITING_PROMPT, CHALLENGE_WRITING_REFERENCE } from "./text";
 
 export default function ChallengeWriting() {
     const q2Biases = {
@@ -81,6 +81,9 @@ export default function ChallengeWriting() {
     const [isReferenceDialogOpen, setReferenceDialogOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    const [day6Prompt, setDay6Prompt] = useState({});
+    const [day6ContentExist, setDay6ContentExist] = useState(false);
+
     useEffect(() => {
         const loadedData = localStorage.getItem(`__autosave-${window.location.pathname}`);
         if (loadedData) {
@@ -112,17 +115,44 @@ export default function ChallengeWriting() {
 
     useEffect(() => {
         if (day) {
+            if (![4, 5, 6].includes(day)) {
+                router.push("/error")
+            }
             requester
                 .get(`/writing/${day}`)
                 .then((res) => {
-                    setContentExist(true);
                     console.log(res)
                     setReference(res.data.reference);
+                    if (day !== 6) setContentExist(true);
+                    const { biasState, questionState, q1Content, q4Content } = JSON.parse(res.data.answer);
+                    setBiasState(prev => {
+                        const updatedState = {
+                            ...q2Biases,  
+                            ...biasState 
+                        };
+                        return updatedState;
+                    });
+                    setQuestionState(prev => {
+                        const updatedState = {
+                            ...q3Questions,  
+                            ...questionState 
+                        };
+                        return updatedState;
+                    });
+                    setQ1Content(q1Content || "");
+                    setQ4Content(q4Content || "");
                     setReferenceDialogOpen(true);
+                    if (day == 6) {
+                        setDay6Prompt(res.data.prompt)
+                        setDay6ContentExist(true);
+                    }
                     setLoading(false)
                 })
                 .catch((err) => {
-                    console.log(err.response);
+                    console.log(err.response.data.prompt);
+                    if (day == 6) {
+                        setDay6Prompt(err.response.data.prompt)
+                    }
                     setLoading(false)
                 });
         }
@@ -209,12 +239,31 @@ export default function ChallengeWriting() {
                 <title>Day {day} 挑战性写作</title>
             </Head>
             <Header />
+            <Skill />
             <form className={styles.article} id="myform">
-                <h1>Day {day} 挑战性写作</h1>
-                <Markdown>{CONTENT_WRITING_DAY4}</Markdown>
+            <h1>Day {day} 挑战性写作</h1>
+                {day != 4 && CHALLENGE_WRITING_INTRO[day]}
+                {day == 4 && (<p>换您来试试吧！下面是一位性少数男性针对最近的苦恼写下的一段话。您能识别并挑战其中所体现的非适应性思维吗？</p>)}
+                    {day != 6? (
+                        CHALLENGE_WRITING_PROMPT[day]
+                    ) : <div className="flex flex-col gap-1"> 
+                            <h2>请先阅读这位性少数男性的经历：</h2>
+                            <h3>
+                                1）发生了什么事情？
+                            </h3>
+                            <p> 
+                                {day6Prompt.scene}
+                            </p>
+                            <h3>
+                                2）您当时有什么想法？
+                            </h3>
+                            <p>
+                                {day6Prompt.feeling}
+                            </p> <br/>
+                        </div>}
 
-                <hr className="my-4" />
-                <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6">
+
                     <h2>请尝试回答以下问题</h2>
                     <FormLabel>
                         1）在这份写作中您看到了TA的哪些非适应性思维？
@@ -277,7 +326,7 @@ export default function ChallengeWriting() {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={reference.q2[key].checked}  
+                                                checked={reference.q2[key].checked || checked}  
                                                 readOnly
                                                 name={key}
                                             />
@@ -285,7 +334,7 @@ export default function ChallengeWriting() {
                                         label={prompt}
                                     />
                             
-                                    {reference.q2[key].checked && key !== '7' && (
+                                    {(reference.q2[key].checked || checked) && key !== '7' && (
                                     <>
                                         <TextField
                                             fullWidth
@@ -347,7 +396,7 @@ export default function ChallengeWriting() {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={reference.q3[key].checked} 
+                                                checked={reference.q3[key].checked || checked} 
                                                 name={key} 
                                                 readOnly
                                             />
@@ -355,7 +404,7 @@ export default function ChallengeWriting() {
                                         label={prompt}
                                     />
                                     
-                                    {reference.q3[key].checked && key !== '7' && (
+                                    {(reference.q3[key].checked || checked) && key !== '7' && (
                                     <>
                                         <TextField
                                             fullWidth
@@ -381,7 +430,6 @@ export default function ChallengeWriting() {
                         ))}
                     </FormGroup>
 
-                    
                     <FormLabel>   
                         4）在思考完以上问题之后，您认为TA可以如何更灵活、全面地看待当时的处境？您可以结合个人经历使用第一人称写作。（字数要求：≥300字）                 
                     </FormLabel>
@@ -397,6 +445,7 @@ export default function ChallengeWriting() {
                             minLength: "300",
                             readOnly: contentExist,
                         }}
+                        label="您的回答"
                         
                     />
 
@@ -408,6 +457,7 @@ export default function ChallengeWriting() {
                             minRows={5}
                             value={reference.q1}
                             readOnly
+                            label="参考答案"
                         />
                     }
                     
@@ -418,10 +468,10 @@ export default function ChallengeWriting() {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={contentExist ? handleRedirect : handleSubmit}
+                        onClick={(contentExist || (day == 6 && day6ContentExist)) ? handleRedirect : handleSubmit}
                         type="submit"
                     >
-                        {contentExist ? "您已经提交过这次写作，返回" : "提交"}
+                        {(contentExist || (day == 6 && day6ContentExist)) ? "您已经提交过这次写作，返回" : "提交"}
                     </Button>
                 </div>
             </form>
@@ -451,7 +501,7 @@ export default function ChallengeWriting() {
                     <DialogTitle>参考答案</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            {REFERENCE_WRITING_DAY4}
+                            {CHALLENGE_WRITING_REFERENCE[day]}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
