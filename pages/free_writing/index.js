@@ -95,7 +95,8 @@ export default function FreeWriting() {
                         minRows={5}
                         label="发生的事情"
                         required
-                        inputProps={{ minLength: '300', readOnly: contentExist }}
+                        disabled={contentExist}
+                        inputProps={{ minLength: '300' }}
                     />
                     <TextField
                         name="feeling"
@@ -104,7 +105,8 @@ export default function FreeWriting() {
                         minRows={5}
                         label="当时的想法"
                         required
-                        inputProps={{ minLength: '300', readOnly: contentExist }}
+                        disabled={contentExist}
+                        inputProps={{ minLength: '300' }}
                     />
                     
                     <Button

@@ -13,6 +13,8 @@ import styles from '@/styles/article.module.scss'
 import { TASK_EXP_GRP } from '@/text'
 import { requester } from '@/utils'
 
+import { Badge } from '@mui/material'
+
 export default function Home() {
     const [info, setInfo] = useState(null)
 
@@ -27,9 +29,10 @@ export default function Home() {
         const expStart = moment(info.startDate)
         const today = moment()
         const daysSinceStart = today.diff(expStart, 'days')
-        const activeStep = Math.min(daysSinceStart, currentDay - 1)
+        const activeStep = Math.min(daysSinceStart, currentDay)
 
-        console.log(currentDay, expStart, today, daysSinceStart)
+        // console.log(currentDay, expStart, today, daysSinceStart)
+        // console.log(activeStep)
         console.log(activeStep)
 
         return (
@@ -44,9 +47,13 @@ export default function Home() {
                             <Link key={index} href={item.url}>
                                 <StepLabel>
                                     <h4>{item.title}</h4>
+
                                     <span className="description">{item.discription}</span>
+
                                 </StepLabel>
                             </Link>
+
+                            
                         </Step>
                     ))}
                 </Stepper>

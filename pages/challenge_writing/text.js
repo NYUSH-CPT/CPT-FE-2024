@@ -90,6 +90,7 @@ export const CHALLENGE_WRITING_SAMPLE = (
                 variant="outlined"
                 minRows={5}
                 label="您的回答"
+                disabled
             />
             <FormLabel>
                 2）在以上您列出的所有想法里，您看到了哪些类型的非适应性思维？[多选题]
@@ -105,6 +106,8 @@ export const CHALLENGE_WRITING_SAMPLE = (
                                     />
                                 }
                                 label={prompt}
+                                disabled
+
                             />
                             
                             {checked && key !== '7' && (
@@ -114,6 +117,8 @@ export const CHALLENGE_WRITING_SAMPLE = (
                                     margin="dense"
                                     label="对应的想法"
                                     value={text}
+                                    disabled
+                                    multiline
                                 />
                             )}
                     </div>
@@ -134,6 +139,7 @@ export const CHALLENGE_WRITING_SAMPLE = (
                                     />
                                 }
                                 label={prompt}
+                                disabled
                             />
                             {checked && key !== '7' && (
                                 <TextField
@@ -142,6 +148,8 @@ export const CHALLENGE_WRITING_SAMPLE = (
                                     margin="dense"
                                     label="对应的想法"
                                     value={text}  
+                                    disabled
+                                    multiline
                                 />
                             )}
                     </div>
@@ -158,6 +166,7 @@ export const CHALLENGE_WRITING_SAMPLE = (
                 minRows={5}
                 label="您的回答"
                 value="其实说尊重，我妈很多时候也很尊重我的想法。当时我大学一直想学唱歌，虽然这个对普通人来说前景不好，但家里人也支持我学了，送我上学时候我爸妈还哭了。而且我也挺勇敢的，敢选这么个大学专业，证明我不孬。我现在在酒吧驻唱，赚了些钱，家里那个液晶电视就是我买的，虽然摔坏了不过我可以再给家里买新的。至于下一代，要是有下一代，我可能会吸取自己成长中的教训，会比我爸妈更会教育。"
+                disabled
             />
         </div>
     </form>

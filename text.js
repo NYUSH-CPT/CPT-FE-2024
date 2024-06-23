@@ -103,7 +103,7 @@ export const TASK_EXP_GRP = [
     {
         title: 'Day 4：挑战性写作1',
         discription: '预计时间：30分钟',
-        url: '/challenge_writing/1',
+        url: '/challenge_writing/intro',
     },
     {
         title: 'Day 5：挑战性写作2',

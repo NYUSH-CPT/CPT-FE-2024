@@ -23,7 +23,7 @@ export default function ChallengeWritingIntro() {
     };
 
     return (
-    (day && <>
+    <>
     <Head>
         <title>Day 4 挑战性写作</title>
     </Head>
@@ -46,6 +46,6 @@ export default function ChallengeWritingIntro() {
     </div>  
 
     </>
-    ))
+    )
 
 }
