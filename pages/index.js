@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Header from '@/components/Header'
 
@@ -65,7 +65,6 @@ export default function Home() {
                                     </Badge>
                                 </StepLabel>
                             </Link>
-                            
                         </Step>
                     ))}
                 </Stepper>
