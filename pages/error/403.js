@@ -7,8 +7,8 @@ const Custom403 = () => {
         <div>
             <h1>403 - Access Denied</h1>
             <p>Sorry, you do not have permission to access this page.</p>
-            <Link href={"/"}>
-            <a className="text-blue-500 hover:underline">Return to the main page</a>
+            <Link href={"/"} className="text-blue-500 underline">
+            Return to the main page
             </Link>
         </div>
     );

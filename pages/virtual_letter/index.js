@@ -17,7 +17,7 @@ import Header from '@/components/Header'
 
 import styles from '@/styles/article.module.scss'
 
-import { CONTENT_WRITING_DAY1 } from '@/text'
+import { CONTENT_WRITING_DAY8 } from '@/text'
 import { requester, enableAutoSave } from '@/utils'
 
 export default function FreeWriting() {
@@ -28,7 +28,7 @@ export default function FreeWriting() {
 
     useEffect(() => {
         enableAutoSave('myform')
-        requester.get("/writing/1")
+        requester.get("/writing/8")
             .then(res => {
                 setContentExist(true)
             })
@@ -59,7 +59,7 @@ export default function FreeWriting() {
             for (let key of formData.keys()) {
                 data[key] = formData.get(key)
             }
-            requester.post("/writing/1", data)
+            requester.post("/writing/8", data)
                 .then(res => {
                     console.log(res)
                     setSuccessDialogOpen(true)
@@ -78,12 +78,12 @@ export default function FreeWriting() {
     return (
         <>
             <Head>
-                <title>Day 1 自由写作</title>
+                <title>Day 8 虚拟信件</title>
             </Head>
             <Header />
             <form className={styles.article} id="myform">
-                <h1>Day 1 自由写作</h1>
-                <Markdown>{CONTENT_WRITING_DAY1}</Markdown>
+                <h1>Day 8 虚拟信件</h1>
+                <Markdown>{CONTENT_WRITING_DAY8}</Markdown>
                 <hr className="my-4" />
                 <div className="flex flex-col gap-6">
                     {errorMessage && (
@@ -92,21 +92,10 @@ export default function FreeWriting() {
                         </Alert>
                     )}
                     <TextField
-                        name="scene"
+                        name="letter"
                         multiline
                         variant="outlined"
                         minRows={5}
-                        label="发生的事情"
-                        required
-                        disabled={contentExist}
-                        inputProps={{ minLength: '300' }}
-                    />
-                    <TextField
-                        name="feeling"
-                        multiline
-                        variant="outlined"
-                        minRows={5}
-                        label="当时的想法"
                         required
                         disabled={contentExist}
                         inputProps={{ minLength: '300' }}

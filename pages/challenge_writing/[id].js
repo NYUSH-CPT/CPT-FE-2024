@@ -156,7 +156,7 @@ export default function ChallengeWriting() {
                 .catch((err) => {
                     console.log(err)
                     if (err.response.status === 400 || err.response.status === 403) {
-                        router.push(`/${err.response.status}`)
+                        router.push(`/error/${err.response.status}`)
                     }
                     if (day == 6) {
                         setDay6Prompt(err.response.data.prompt)
