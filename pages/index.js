@@ -45,6 +45,12 @@ export default function Home() {
             }
         }
 
+        const getLink = (item, index) => {
+            if (index==3 && index<activeStep) return item.completed_url
+            else if (index<=activeStep) return item.url
+            else return "/"
+        }
+
         console.log(currentDay, expStart, today, daysSinceStart)
         console.log(activeStep)
 
@@ -57,7 +63,9 @@ export default function Home() {
                 <Stepper orientation="vertical" activeStep={activeStep}>
                     {TASK_EXP_GRP.map((item, index) => (
                         <Step key={index}>
-                            <Link key={index} href={(index==3 && index<activeStep)? item.completed_url: item.url} onClick={() => handleClick(index)}>
+                            <Link key={index} 
+                                href={getLink(item, index)} 
+                                onClick={() => handleClick(index)}>
                                 <StepLabel>
                                     <h4>{item.title}</h4>
                                     <Badge variant="dot" color='primary' invisible={![3,4].includes(index) || dayRead[index+1] || index>=activeStep}>
