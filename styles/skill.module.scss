@@ -1,0 +1,36 @@
+@import '@/styles/var.scss';
+
+
+.skill {
+    background-color: $primary-background;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 250;
+    font-size: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    cursor: pointer;
+}
+
+
+
+.article {
+
+    max-width: 800px;
+    margin: 0 auto;
+
+    h3 {
+        font-size: 18px;
+        padding: 0 0 16px;
+        font-weight: 350;
+    }
+
+    ul {
+        padding: 0 0 16px 32px;
+        font-weight: 300;
+        list-style-type: circle;
+    }
+
+}

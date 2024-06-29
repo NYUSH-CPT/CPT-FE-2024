@@ -13,13 +13,21 @@ import styles from '@/styles/article.module.scss'
 import { TASK_EXP_GRP } from '@/text'
 import { requester } from '@/utils'
 
+import { Badge } from '@mui/material'
+
 export default function Home() {
     const [info, setInfo] = useState(null)
+
+    const [dayRead, setDayRead] = useState({4: false, 5: false})
 
     useEffect(() => {
         requester.get('/info').then(res => {
             setInfo(res.data)
         })
+        const days = localStorage.getItem(`__autosave-${window.location.pathname}-day-read`)
+        if (days) {
+            setDayRead(JSON.parse(days))
+        }
     }, [])
 
     const Tasks = () => {
@@ -27,7 +35,21 @@ export default function Home() {
         const expStart = moment(info.startDate)
         const today = moment()
         const daysSinceStart = today.diff(expStart, 'days')
-        const activeStep = Math.min(daysSinceStart, currentDay - 1)
+        const activeStep = Math.min(daysSinceStart, currentDay)
+
+        const handleClick = (index) => {
+            if ([3,4].includes(index) && index<activeStep) {
+                dayRead[index+1] = true;
+                localStorage.setItem(`__autosave-${window.location.pathname}-day-read`, JSON.stringify(dayRead))
+                setDayRead(dayRead)
+            }
+        }
+
+        const getLink = (item, index) => {
+            if (index==3 && index<activeStep) return item.completed_url
+            else if (index<=activeStep) return item.url
+            else return "/"
+        }
 
         console.log(currentDay, expStart, today, daysSinceStart)
         console.log(activeStep)
@@ -41,10 +63,14 @@ export default function Home() {
                 <Stepper orientation="vertical" activeStep={activeStep}>
                     {TASK_EXP_GRP.map((item, index) => (
                         <Step key={index}>
-                            <Link key={index} href={item.url}>
+                            <Link key={index} 
+                                href={getLink(item, index)} 
+                                onClick={() => handleClick(index)}>
                                 <StepLabel>
                                     <h4>{item.title}</h4>
-                                    <span className="description">{item.discription}</span>
+                                    <Badge variant="dot" color='primary' invisible={![3,4].includes(index) || dayRead[index+1] || index>=activeStep}>
+                                        <span className="description">{(index<activeStep)? item.completed_description: item.discription}</span>
+                                    </Badge>
                                 </StepLabel>
                             </Link>
                         </Step>
