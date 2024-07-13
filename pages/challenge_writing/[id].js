@@ -22,11 +22,11 @@ import {
 import Header from "@/components/Header";
 import Skill from "@/components/Skill";
 
-import styles from "@/styles/article.module.scss";
+import styles from "@/styles/challenge.module.scss";
 
 import { requester } from "@/utils";
 
-import { CHALLENGE_WRITING_INTRO, CHALLENGE_WRITING_PROMPT, CHALLENGE_WRITING_REFERENCE } from "./text";
+import { CHALLENGE_WRITING_INTRO, CHALLENGE_WRITING_PROMPT, CHALLENGE_WRITING_REFERENCE } from "@/components/text";
 
 export default function ChallengeWriting() {
     const q2Biases = {
@@ -154,11 +154,10 @@ export default function ChallengeWriting() {
                     setLoading(false)
                 })
                 .catch((err) => {
-                    console.log(err)
-                    if (err.response.status === 400 || err.response.status === 403) {
+                    if ([400, 401, 403].includes(+err.response.status)) {
                         router.push(`/error/${err.response.status}`)
                     }
-                    if (day == 6) {
+                    else if (day == 6) {
                         setDay6Prompt(err.response.data.prompt)
                     }
                     setLoading(false)
@@ -253,7 +252,7 @@ export default function ChallengeWriting() {
             <hr/>
             <Skill />
 
-            <form className={styles.article} id="myform">
+            <form className={styles.container} id="myform">
             <h1>Day {day} 挑战性写作</h1>
                 {day != 4 && CHALLENGE_WRITING_INTRO[day]}
                 {day == 4 && (<p>换您来试试吧！下面是一位性少数男性针对最近的苦恼写下的一段话。您能识别并挑战其中所体现的非适应性思维吗？</p>)}
@@ -308,15 +307,12 @@ export default function ChallengeWriting() {
 
                     {contentExist && day!=6 && 
                        
-                    <TextField
-                        name="q1_ref"
-                        multiline
-                        variant="outlined"
-                        minRows={5}
-                        value={reference.q1}
-                        disabled
-                        label="咨询师的回答"
-                    />
+                    <Typography
+                        fontSize='0.8em'
+                        sx = {{whiteSpace: 'pre-line'}}
+                        color='primary'
+                    > 咨询师的回答：<br/>{reference.q1}</Typography>
+
                     }
 
                     {day==6 && <>
@@ -368,9 +364,10 @@ export default function ChallengeWriting() {
                                         />
 
                                         <Typography 
-                                            variant="outlined"
+                                            color='primary'
+                                            fontSize='0.8em'
                                             > 
-                                            {reference.q2[key].text ? 
+                                            咨询师的回答：{reference.q2[key].text ? 
                                                 `我们发现了“${prompt}”的思维方式，因为TA提到：“${reference.q2[key].text}”`
                                                 : "我们没有发现这种非适应性思维。"}
                                         </Typography>
@@ -439,7 +436,8 @@ export default function ChallengeWriting() {
                                             disabled
                                             multiline
                                         />
-                                        <Typography variant="outlined">
+                        
+                                        <Typography color='primary' fontSize='0.8em'>
                                             咨询师的回答：{reference.q3[key].text}
                                         </Typography>
                                     </>
@@ -496,15 +494,11 @@ export default function ChallengeWriting() {
                     />
 
                     {contentExist && day!=6 &&
-                        <TextField
-                            name="q4_ref"
-                            multiline
-                            variant="outlined"
-                            minRows={5}
-                            value={reference.q1}
-                            disabled
-                            label="咨询师的回答"
-                        />
+                        <Typography
+                        fontSize='0.8em'
+                        color='primary'
+                        sx = {{whiteSpace: 'pre-line'}}
+                        > 咨询师的回答：<br/>{reference.q4}</Typography>
                     }
                     
                     {errorMessage && (
@@ -516,6 +510,7 @@ export default function ChallengeWriting() {
                         color="primary"
                         onClick={(contentExist || (day == 6 && day6ContentExist)) ? handleRedirect : handleSubmit}
                         type="submit"
+                        sx = {{marginBottom: "2em"}}
                     >
                         {(contentExist || (day == 6 && day6ContentExist)) ? "您已经提交过这次写作，返回" : "提交"}
                     </Button>
@@ -533,7 +528,9 @@ export default function ChallengeWriting() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseSuccessDialog} color="primary">
+                    <Button 
+                        sx = {{marginBottom: "0.5em", marginRight: "0.5em"}}
+                        onClick={handleCloseSuccessDialog} color="primary" variant="contained">
                         OK
                     </Button>
                 </DialogActions>
@@ -551,7 +548,9 @@ export default function ChallengeWriting() {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCloseReferenceDialog} color="primary">
+                        <Button 
+                        sx = {{marginBottom: "0.5em", marginRight: "0.5em"}}
+                        onClick={handleCloseReferenceDialog} color="primary" variant="contained">
                             OK
                         </Button>
                     </DialogActions>

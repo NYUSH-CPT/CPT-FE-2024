@@ -1,10 +1,10 @@
 @import '@/styles/var.scss';
 
-.article {
+.container {
 
     max-width: 800px;
     margin: 0 auto;
-    padding: 4em 1em 2em 1em;
+    padding: 6.75em 1em 0 1em;
 
 
     h1 {
@@ -42,14 +42,5 @@
         text-decoration: none;
         font-weight: 300;
     }
-
-    .accordionTitle {
-        font-size: 16px;
-        font-weight: 450;
-        cursor: pointer;
-    }
 }
 
-.MuiStepIcon text {
-    visibility: hidden;
-}

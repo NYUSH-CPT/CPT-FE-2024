@@ -78,11 +78,11 @@ export default function FreeWriting() {
     return (
         <>
             <Head>
-                <title>Day 1 自由写作</title>
+                <title>第1天 自由写作</title>
             </Head>
             <Header />
             <form className={styles.article} id="myform">
-                <h1>Day 1 自由写作</h1>
+                <h1>第1天 自由写作</h1>
                 <Markdown>{CONTENT_WRITING_DAY1}</Markdown>
                 <hr className="my-4" />
                 <div className="flex flex-col gap-6">

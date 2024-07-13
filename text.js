@@ -86,56 +86,64 @@ export const FAQ = [
 
 export const TASK_EXP_GRP = [
     {
-        title: 'Day 1：自由写作',
+        title: '第1天：自由写作',
         discription: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/free_writing',
     },
     {
-        title: 'Day 2：游戏',
+        title: '第2天：科普视频',
+        discription: '预计时间：10分钟',
+        completed_description: '已完成',
+        url: '/video',
+    },
+    {
+        title: '第2天：游戏',
         discription: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/game/1',
+        completed_url: '/'
     },
     {
-        title: 'Day 3：游戏',
+        title: '第3天：游戏',
         discription: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/game/2',
+        completed_url: '/'
     },
     {
-        title: 'Day 4：挑战性写作1',
+        title: '第4天：挑战性写作1',
         discription: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/intro',
         completed_url: '/challenge_writing/1'
     },
     {
-        title: 'Day 5：挑战性写作2',
+        title: '第5天：挑战性写作2',
         discription: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/2',
     },
     {
-        title: 'Day 6：挑战性写作3',
+        title: '第6天：挑战性写作3',
         discription: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/challenge_writing/3',
     },
     {
-        title: 'Day 7：写作反馈',
+        title: '第7天：写作反馈',
         discription: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day6',
     },
     {
-        title: 'Day 8：虚拟信件',
+        title: '第8天：虚拟信件',
         discription: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/virtual_letter',
     },
     {
-        title: 'Day 9：写作反馈',
+        title: '第9天：写作反馈',
         discription: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day8',

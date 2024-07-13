@@ -8,7 +8,7 @@ import {
 
 } from "@mui/material";
 
-import styles from "@/styles/article.module.scss";
+import styles from "@/styles/sample.module.scss";
 
 const biasState = {
     0: { prompt: "非黑即白", checked: false, text: "" },
@@ -58,7 +58,7 @@ export const CHALLENGE_WRITING_SKILLS = (
 
 
 export const CHALLENGE_WRITING_SAMPLE = (
-    <form className={styles.article}>
+    <div className={styles.sample}>
         <div className="flex flex-col gap-1"> 
             <h2>请先阅读这位性少数男性的经历：</h2>
             <h3>
@@ -169,7 +169,7 @@ export const CHALLENGE_WRITING_SAMPLE = (
                 disabled
             />
         </div>
-    </form>
+    </div>
 );
 
 const CHALLENGE_WRITING_DAY4_INTRO = (
