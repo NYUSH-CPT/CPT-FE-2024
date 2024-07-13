@@ -18,13 +18,14 @@ export class requester {
 
     static setInstance() {
         const token = window.localStorage.getItem('access_token')
-        if (!token) {
-            return null
-        }
+        // if (!token) {
+        //     // TODO: if no token / token expired, redirect to login
+        //     return null
+        // }
         this.#instance = axios.create({
             baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
             },
         })
     }

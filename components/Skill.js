@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import styles from '@/styles/skill.module.scss'
 
-import { CHALLENGE_WRITING_SAMPLE, CHALLENGE_WRITING_SKILLS } from "../pages/challenge_writing/text"
+import { CHALLENGE_WRITING_SAMPLE, CHALLENGE_WRITING_SKILLS } from "./text"
 
 export default function Skill() {
 
@@ -36,7 +36,7 @@ export default function Skill() {
             <div className="relative w-full h-full p-4">
                 <CloseIcon 
                     onClick={handleClick('left', false)} 
-                    className="fixed top-4 left-4 cursor-pointer"
+                    className="fixed top-4 left-4 cursor-pointer z-10"
                 />
                 {CHALLENGE_WRITING_SAMPLE}
             </div>

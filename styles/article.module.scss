@@ -4,7 +4,8 @@
 
     max-width: 800px;
     margin: 0 auto;
-    padding: 32px 16px;
+    padding: 4em 1em 2em 1em;
+
 
     h1 {
         font-size: 28px;
@@ -47,4 +48,8 @@
         font-weight: 450;
         cursor: pointer;
     }
+}
+
+.MuiStepIcon text {
+    visibility: hidden;
 }
