@@ -8,13 +8,6 @@ import { getUserNameFromLocalStorage } from '@/utils'
 import styles from '@/styles/header.module.scss'
 
 export default function Header() {
-    // for test purpose only
-    useEffect(() => {
-        window.localStorage.setItem(
-            'access_token',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
-        )
-    }, [])
 
     const [open, setOpen] = useState(false)
     const [userName, setUserName] = useState('')
@@ -23,10 +16,10 @@ export default function Header() {
         setOpen(!open)
     }
 
-    useEffect(() => {
-        const name = getUserNameFromLocalStorage()
-        setUserName(name)
-    }, [])
+    // useEffect(() => {
+    //     const name = getUserNameFromLocalStorage()
+    //     setUserName(name)
+    // }, [])
 
     const handleLogout = () => {
         window.localStorage.removeItem('access_token')

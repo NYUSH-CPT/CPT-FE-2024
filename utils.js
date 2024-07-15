@@ -19,15 +19,32 @@ export class requester {
     static setInstance() {
         const token = window.localStorage.getItem('access_token')
         if (!token) {
-            return null
+            this.#instance = axios.create({
+                baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+            })
+        } else {
+            this.#instance = axios.create({
+                baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
         }
-        this.#instance = axios.create({
-            baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-            headers: {
-                Authorization: token,
-            },
-        })
+        
+        this.#instance.interceptors.response.use(
+            response => response,
+            error => {
+                console.log(error)
+                if (error.response) {
+                    if ([400, 401, 403].includes(error.response.status)) {
+                        window.location.href = `/error/${error.response.status}`
+                    }
+                }
+                return Promise.reject(error);
+            }
+        );
     }
+
 
     static get axios() {
         this.setInstance()

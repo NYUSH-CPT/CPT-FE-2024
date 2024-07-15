@@ -32,9 +32,6 @@ export default function FreeWriting() {
             .then(res => {
                 setContentExist(true)
             })
-            .catch(err => {
-                console.log(err.response);
-            })
     }, [])
 
 
@@ -63,14 +60,9 @@ export default function FreeWriting() {
                 .then(res => {
                     console.log(res)
                     setSuccessDialogOpen(true)
-                }
-            ).catch(
-                err => {
-                    console.error(err.response)
+                })
+                .catch(err => {
                     setErrorMessage(err.response.data.error)
-                    if (err.response.status === 400 || err.response.status === 403) {
-                        router.push(`/error/${err.response.status}`)
-                    }
                 }
             )
         }
@@ -78,11 +70,11 @@ export default function FreeWriting() {
     return (
         <>
             <Head>
-                <title>Day 8 虚拟信件</title>
+                <title>第8天 虚拟信件</title>
             </Head>
             <Header />
             <form className={styles.article} id="myform">
-                <h1>Day 8 虚拟信件</h1>
+                <h1>第8天 虚拟信件</h1>
                 <Markdown>{CONTENT_WRITING_DAY8}</Markdown>
                 <hr className="my-4" />
                 <div className="flex flex-col gap-6">

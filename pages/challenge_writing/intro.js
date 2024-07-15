@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 
 import Head from "next/head";
 
@@ -10,42 +9,55 @@ import Header from "@/components/Header";
 
 import styles from "@/styles/article.module.scss";
 
+import { requester } from "@/utils";
 
-import { CHALLENGE_WRITING_INTRO,  CHALLENGE_WRITING_SAMPLE } from "./text";
+import { useEffect, useState } from "react";
+
+import { useRouter } from "next/router";
+
+import { CHALLENGE_WRITING_INTRO,  CHALLENGE_WRITING_SAMPLE } from "@/components/text";
 
 export default function ChallengeWritingIntro() {
 
     const router = useRouter();
 
-    const handleRedirect = (e) => {
-        e.preventDefault();
-        router.push(`/challenge_writing/1`);
-    };
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        requester.get('/info').then(
+            setLoading(false)
+        )
+    }, [])
+
 
     return (
-    <>
-    <Head>
-        <title>Day 4 挑战性写作</title>
-    </Head>
-    <Header />
-    <div className={`flex flex-col gap-1 ${styles.article}`}>
-        <h1>Day 4 挑战性写作</h1>
-        {CHALLENGE_WRITING_INTRO[4]}
-    </div>  
-    {CHALLENGE_WRITING_SAMPLE}
-    <div className={`flex flex-col gap-1 ${styles.article}`}>
-
-                <Button
-        variant="contained"
-        color="primary"
-        onClick={handleRedirect}
-        type="submit"
-        >
-            继续
-        </Button>
-    </div>  
-
-    </>
-    )
-
+        <>
+            {!loading ? (
+            <>
+                <Head>
+                    <title>第4天 挑战性写作</title>
+                </Head>
+                <Header />
+                
+                <div className={`flex flex-col gap-1 ${styles.article}`}>
+                    <h1>第4天 挑战性写作</h1>
+                    {CHALLENGE_WRITING_INTRO[4]}
+                </div>  
+                {CHALLENGE_WRITING_SAMPLE}
+                <div className={`flex flex-col p-4`}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {window.location.href = "/challenge_writing/1"}}
+                        type="submit"
+                    >
+                        继续
+                    </Button>
+                </div>  
+            </>
+            ) : (
+                '加载中...'
+            )}
+        </>
+        )
 }

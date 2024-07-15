@@ -2,12 +2,15 @@
 
 .header {
     background-color: $primary-background;
-    padding: 12px 16px;
+    padding: 0.75em 1em;
     color: white;
     display: flex;
     justify-content: space-between;
     font-weight: 250;
     font-size: 16px;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
 }
 
 .drawer {

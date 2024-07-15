@@ -4,7 +4,8 @@
 
     max-width: 800px;
     margin: 0 auto;
-    padding: 32px 16px;
+    padding: 4em 1em 2em 1em;
+
 
     h1 {
         font-size: 28px;
@@ -47,4 +48,21 @@
         font-weight: 450;
         cursor: pointer;
     }
+}
+
+.stepLabel text {
+    visibility: hidden;
+}
+
+
+.description {
+    color: grey;
+    font-size: 0.75rem;
+    font-weight: 150;
+}
+
+.inactiveReason {
+    white-space: pre-line;
+    color: rgb(255, 158, 158);
+    font-size: 0.75rem;
 }

@@ -1,0 +1,45 @@
+@import '@/styles/var.scss';
+
+.sample {
+
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2em 1em 0 1em;
+
+
+    h1 {
+        font-size: 28px;
+        padding: 0 0 16px;
+        font-weight: 450;
+    }
+
+    h2 {
+        font-size: 20px;
+        padding: 0 0 16px;
+        font-weight: 400;
+    }
+
+    h3 {
+        font-size: 18px;
+        padding: 0 0 16px;
+        font-weight: 350;
+    }
+
+    p {
+        font-size: 16px;
+        padding: 0 0 16px;
+        font-weight: 300;
+    }
+
+    ul {
+        padding: 0 0 16px 32px;
+        font-weight: 300;
+        list-style-type: circle;
+    }
+
+    a {
+        color: $primary-text;
+        text-decoration: none;
+        font-weight: 300;
+    }
+}
