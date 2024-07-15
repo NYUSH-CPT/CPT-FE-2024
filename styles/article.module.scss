@@ -50,6 +50,19 @@
     }
 }
 
-.MuiStepIcon text {
+.stepLabel text {
     visibility: hidden;
+}
+
+
+.description {
+    color: grey;
+    font-size: 0.75rem;
+    font-weight: 150;
+}
+
+.inactiveReason {
+    white-space: pre-line;
+    color: rgb(255, 158, 158);
+    font-size: 0.75rem;
 }

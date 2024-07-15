@@ -18,16 +18,10 @@ export default function FeedBackDay6() {
     const router = useRouter(); 
 
     useEffect(() => {
-        requester.get("/writing/7")
+        requester.get("/info")
             .then(res => {
                 console.log(res)
-                setContent(res.data)
-            })
-            .catch(err => {
-                console.log(err.response);
-                if (err.response.status === 400 || err.response.status === 403) {
-                    router.push(`/error/${err.response.status}`)
-                }
+                setContent(res.data.feedback6)
             })
     }, [])
 
