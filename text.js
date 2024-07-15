@@ -85,66 +85,76 @@ export const FAQ = [
 
 
 export const TASK_EXP_GRP = [
-    {
+    {   
+        day: 1,
         title: '第1天：自由写作',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/free_writing',
     },
-    {
+    {   
+        day: 2,
         title: '第2天：科普视频',
-        discription: '预计时间：10分钟',
+        description: '预计时间：10分钟',
         completed_description: '已完成',
         url: '/video',
     },
     {
+        day: 2.1,
         title: '第2天：游戏',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/game/1',
         completed_url: '/'
     },
     {
+        day: 3,
         title: '第3天：游戏',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/game/2',
         completed_url: '/'
     },
     {
+        day: 4,
         title: '第4天：挑战性写作1',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/intro',
         completed_url: '/challenge_writing/1'
     },
     {
+        day: 5,
         title: '第5天：挑战性写作2',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/2',
     },
     {
+        day: 6,
         title: '第6天：挑战性写作3',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/challenge_writing/3',
     },
     {
+        day: 7,
         title: '第7天：写作反馈',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day6',
     },
     {
+        day: 8,
         title: '第8天：虚拟信件',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/virtual_letter',
     },
     {
+        day: 9,
         title: '第9天：写作反馈',
-        discription: '预计时间：30分钟',
+        description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day8',
     },

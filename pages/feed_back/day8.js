@@ -16,17 +16,12 @@ export default function FeedBackDay8() {
     const router = useRouter(); 
 
     useEffect(() => {
-        requester.get("/writing/9")
+        requester.get("/info")
             .then(res => {
                 console.log(res)
-                setContent(res.data)
+                setContent(res.data.feedback8)
             })
-            .catch(err => {
-                console.log(err.response);
-                if (err.response.status === 400 || err.response.status === 403) {
-                    router.push(`/error/${err.response.status}`)
-                }
-            })
+
     }, [])
 
 

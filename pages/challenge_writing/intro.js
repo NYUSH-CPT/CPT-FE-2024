@@ -26,9 +26,7 @@ export default function ChallengeWritingIntro() {
     useEffect(() => {
         requester.get('/info').then(
             setLoading(false)
-        ).catch((e) => {
-            router.push("/error/401")
-        })
+        )
     }, [])
 
 

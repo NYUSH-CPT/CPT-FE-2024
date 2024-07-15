@@ -122,8 +122,7 @@ export default function ChallengeWriting() {
             if (![4, 5, 6].includes(day)) {
                 router.push("/error")
             }
-            requester
-                .get(`/writing/${day}`)
+            requester.get(`/writing/${day}`)
                 .then((res) => {
                     console.log(res)
                     setReference(res.data.reference);
@@ -154,10 +153,7 @@ export default function ChallengeWriting() {
                     setLoading(false)
                 })
                 .catch((err) => {
-                    if ([400, 401, 403].includes(+err.response.status)) {
-                        router.push(`/error/${err.response.status}`)
-                    }
-                    else if (day == 6) {
+                    if (day == 6) {
                         setDay6Prompt(err.response.data.prompt)
                     }
                     setLoading(false)
@@ -229,14 +225,12 @@ export default function ChallengeWriting() {
 
             if (day==6) payload.day6ExtraContent = day6ExtraContent
 
-            requester
-                .post(`writing/${day}`, payload)
+            requester.post(`writing/${day}`, payload)
                 .then((res) => {
                     console.log(res);
                     setSuccessDialogOpen(true);
                 })
                 .catch((err) => {
-                    console.error(err.response);
                     setErrorMessage(err.response.data.error);
                 });
         }

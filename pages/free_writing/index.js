@@ -32,9 +32,6 @@ export default function FreeWriting() {
             .then(res => {
                 setContentExist(true)
             })
-            .catch(err => {
-                console.log(err.response);
-            })
     }, [])
 
 
@@ -64,15 +61,9 @@ export default function FreeWriting() {
                     console.log(res)
                     setSuccessDialogOpen(true)
                 }
-            ).catch(
-                err => {
-                    console.error(err.response)
-                    setErrorMessage(err.response.data.error)
-                    if (err.response.status === 400 || err.response.status === 403) {
-                        router.push(`/error/${err.response.status}`)
-                    }
-                }
-            )
+            ).catch((err) => {
+                setErrorMsg(err.response? err.response.data.error: JSON.stringify(err))
+            })
         }
     }
     return (
