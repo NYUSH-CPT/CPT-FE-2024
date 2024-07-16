@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Username Cipher</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 1em;
+                padding: 0;
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+                justify-content: center;
+                background-color: #1a1a1a;
+                color: #ededed;
+            }
+
+            input,
+            textarea,
+            button {
+                background-color: #1a1a1a;
+                box-shadow: none;
+                outline: none;
+                border: 1px solid #ededed;
+                border-radius: 4px;
+                color: #ededed;
+                padding: 4px 8px;
+                box-sizing: border-box;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #ededed;
+                color: #1a1a1a;
+            }
+
+            button:active {
+                box-shadow: 0 0 8px #ededed;
+            }
+
+            main {
+                width: 100%;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .pannel {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .textarea-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .textarea-wrapper textarea {
+                width: 100%;
+            }
+
+            p {
+                margin: 4px 0;
+            }
+
+            h1 {
+                margin-bottom: 64px;
+            }
+
+            .input-outer-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .input-wrapper {
+                display: flex;
+                gap: 8px;
+            }
+
+            footer {
+                margin: 32px 0;
+            }
+
+            footer > p {
+                text-align: center;
+            }
+        </style>
+        <script>
+            class Data {
+                get(key) {
+                    return document.getElementById(key).value
+                }
+                set(key, value, doNotStore) {
+                    document.getElementById(key).value = value
+                    if ((key = 'key')) {
+                        if (!doNotStore) {
+                            window.localStorage.setItem('key', this.get('key'))
+                        }
+                        const key = this.get('key')
+                        if (key == '') {
+                            document.getElementById('main-content').style.display = 'none'
+                        } else {
+                            document.getElementById('main-content').style.display = 'block'
+                        }
+                    }
+                }
+            }
+            const data = new Data()
+
+            function encryptUsername(username) {
+                /* 
+            Encryption algorithm:
+              1. Convert username to int
+              2. remove the first digit "1" (since all usernames start with 1)
+              3. Add salt
+              4. Convert back to string in base 36
+            */
+                const usernameInt = parseInt(username) - 10000000000
+                return Number(usernameInt - parseInt(data.get('key')))
+                    .toString(36)
+                    .toUpperCase()
+            }
+            function decryptUsername(username) {
+                const usernameInt = parseInt(username, 36)
+                return (usernameInt + parseInt(data.get('key')) + 10000000000).toString()
+            }
+            const batchDecrypt = () => {
+                const input_data = document.getElementById('input_batch').value.split('\n')
+                const output_data = input_data.map(username => decryptUsername(username))
+                document.getElementById('output_batch').value = output_data.join('\n')
+            }
+            const batchEncrypt = () => {
+                const input_data = document.getElementById('output_batch').value.split('\n')
+                const output_data = input_data.map(username => encryptUsername(username))
+                document.getElementById('input_batch').value = output_data.join('\n')
+            }
+        </script>
+    </head>
+
+    <body>
+        <main>
+            <h1>Username Cipher</h1>
+            <h2>Configuration</h2>
+            <label>Key: <input name="key" id="key" type="password" oninput="data.set('key', data.get('key'))" /></label>
+
+            <div id="main-content" style="display: none">
+                <h2>Single Converstion</h2>
+                <div class="pannel">
+                    <div class="input-outer-wrapper">
+                        <p>User ID</p>
+                        <div class="input-wrapper">
+                            <input
+                                name="input"
+                                id="input_single"
+                                oninput="data.set('output_single',decryptUsername(data.get('input_single')));"
+                            />
+                            <button onclick="navigator.clipboard.writeText(data.get('input_single'))">Copy</button>
+                        </div>
+                    </div>
+                    <div class="input-outer-wrapper">
+                        <p>Phone Number</p>
+                        <div class="input-wrapper">
+                            <input
+                                name="output"
+                                id="output_single"
+                                oninput="data.set('input_single',encryptUsername(data.get('output_single')));"
+                            />
+                            <button onclick="navigator.clipboard.writeText(data.get('output_single'))">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Batch Converstion</h2>
+                <div class="pannel">
+                    <div class="textarea-wrapper">
+                        <p>User ID</p>
+                        <textarea name="input" id="input_batch" cols="30" rows="30" oninput="batchDecrypt()"></textarea>
+                        <button onclick="navigator.clipboard.writeText(data.get('input_batch'))">Copy</button>
+                    </div>
+                    <div class="textarea-wrapper">
+                        <p>Phone Number</p>
+                        <textarea
+                            name="output"
+                            id="output_batch"
+                            cols="30"
+                            rows="30"
+                            oninput="batchEncrypt()"
+                        ></textarea>
+                        <button onclick="navigator.clipboard.writeText(data.get('output_batch'))">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p style="color: #a2a2a2">Dev Contact: Harry Lee [harrylee@nyu.edu]</p>
+        </footer>
+    </body>
+    <script>
+        const storedKey = window.localStorage.getItem('key')
+        if (storedKey) {
+            data.set('key', storedKey, true)
+        }
+    </script>
+</html>
