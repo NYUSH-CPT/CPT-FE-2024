@@ -35,8 +35,10 @@ export default function Home() {
     const Tasks = () => {
         const currentDay = info.currentDay
         const expStart = moment(info.startDate)
-        const today = moment()
+        const today = moment().startOf('days')
         const daysSinceStart = today.diff(expStart, 'days')+1
+        console.log(today, expStart)
+        console.log(currentDay, daysSinceStart)
 
         const viewInfo = {4: info.challengeWriting1Viewed, 5: info.challengeWriting2Viewed, 7: info.feedback6Viewed, 9: info.feedback8Viewed}
         const fieldNameMap = {
@@ -46,7 +48,6 @@ export default function Home() {
             9: 'feedback8Viewed'
         };
         
-        console.log(currentDay, daysSinceStart)
 
 
         const handleClick = (day) =>  {
@@ -75,26 +76,30 @@ export default function Home() {
                             const earlistStartDate = expStart.clone().add(item.day - 1, 'days').add(4, 'hours')
                             const latestStartDate = expStart.clone().add(item.day + 1, 'days').add(4, 'hours')
                             const hasViewedAll = Object.keys(viewInfo).map(Number).filter(day => day < item.day).every(day => viewInfo[day]); 
-                            if (!moment().isBetween(earlistStartDate, latestStartDate)) {
+                            if (info.banFlag) {
                                 stepProps.active = false
-                                description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
-                            } else if (item.day === 7) {
-                                if (!info.feedback6) {
+                                description += "后台禁止用户访问，原因 [" + info.banReason + "]。\n"
+                            } else {
+                                if (!moment().isBetween(earlistStartDate, latestStartDate)) {
                                     stepProps.active = false
-                                    description += "管理员还未为您提供第6天的反馈。\n"
+                                    description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
+                                } else if (item.day === 7) {
+                                    if (!info.feedback6) {
+                                        stepProps.active = false
+                                        description += "管理员还未为您提供第6天的反馈。\n"
+                                    }
+                                } else if (item.day === 9) {
+                                    if (!info.feedback8) {
+                                        stepProps.active = false
+                                        description += "管理员还未为您提供第8天的反馈。\n"
+                                    }
                                 }
-                            } else if (item.day === 9) {
-                                if (!info.feedback8) {
+                                if (!hasViewedAll) {
                                     stepProps.active = false
-                                    description += "管理员还未为您提供第8天的反馈。\n"
-                                }
+                                    const dayToRead = Object.keys(viewInfo).map(Number).filter(day => (!viewInfo[day] && day < item.day)).reduce((max, day) => Math.max(max, day), -Infinity);
+                                    description += `请先查看第${dayToRead}天的反馈。\n`
+                                } 
                             }
-                            if (!hasViewedAll) {
-                                stepProps.active = false
-                                const dayToRead = Object.keys(viewInfo).map(Number).filter(day => (!viewInfo[day] && day < item.day)).reduce((max, day) => Math.max(max, day), -Infinity);
-                                description += `请先查看第${dayToRead}天的反馈。\n`
-                            } 
-                            
                         } else if (item.day > currentDay) {
                             stepProps.active = false
                             link = "/"
