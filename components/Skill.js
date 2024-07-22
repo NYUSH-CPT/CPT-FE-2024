@@ -20,7 +20,7 @@ export default function Skill() {
 
 
     return (
-        <skill className={`${styles.skill}`}>
+        <div className={styles.skill}>
 
             <div onClick={handleClick("left", true)}
             className='flex w-1/2 justify-center items-center border-r py-3'>
@@ -29,7 +29,7 @@ export default function Skill() {
             
             <div onClick={handleClick("right", true)}
             className='flex w-1/2 justify-center items-center py-3'>
-                <h2>练习回顾</h2>
+                <h2>技能回顾</h2>
             </div>
 
             <Drawer anchor='left' open={state['left']} onClose={handleClick('left', false)}>
@@ -54,6 +54,6 @@ export default function Skill() {
                     </div>
                 </div>
             </Drawer>
-        </skill>  
+        </div>  
     )
 }

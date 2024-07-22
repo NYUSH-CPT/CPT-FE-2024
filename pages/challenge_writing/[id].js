@@ -104,15 +104,12 @@ export default function ChallengeWriting() {
                 console.log(updatedState)
                 return updatedState;
             });
-            setQ1Content(q1Content || "");
-            setQ4Content(q4Content || "");
-            if (day==6) setDay6ExtraContent(day6ExtraContent || "");
+            setQ1Content(q1Content);
+            setQ4Content(q4Content);
+            if (day===6) setDay6ExtraContent(day6ExtraContent);
         } else {
             setBiasState(q2Biases);
             setQuestionState(q3Questions);
-            setQ1Content("");
-            setQ4Content("");
-            setDay6ExtraContent("");
         }
     }, []);
 
@@ -142,13 +139,13 @@ export default function ChallengeWriting() {
                         };
                         return updatedState;
                     });
-                    setQ1Content(q1Content || "");
-                    setQ4Content(q4Content || "");
+                    setQ1Content(q1Content);
+                    setQ4Content(q4Content);
                     setReferenceDialogOpen(true);
                     if (day == 6) {
                         setDay6Prompt(res.data.prompt)
                         setDay6ContentExist(true);
-                        setDay6ExtraContent(day6ExtraContent || "");
+                        setDay6ExtraContent(day6ExtraContent);
                     }
                     setLoading(false)
                 })
@@ -314,7 +311,6 @@ export default function ChallengeWriting() {
                         4）在学习了非适应性思维相关的知识以后，回想一下当时的场景，有没有哪些想法是您在上次写作中没有提及的呢？
                         </FormLabel>
                         <TextField
-                            color="primary"
                             name="day6_extra_thought"
                             multiline
                             variant="outlined"

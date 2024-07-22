@@ -97,4 +97,9 @@ export function enableAutoSave(formId) {
         }
         window.localStorage.setItem(`__autosave-${window.location}`, JSON.stringify(data))
     })
+
+    if (savedData) {
+        return JSON.parse(savedData)
+    }
+
 }

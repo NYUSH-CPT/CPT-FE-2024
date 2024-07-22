@@ -16,6 +16,8 @@ import { TASK_EXP_GRP } from '@/text'
 import { requester } from '@/utils'
 
 
+import { Badge } from '@mui/material'
+
 export default function Home() {
     const [info, setInfo] = useState(null)
     const router = useRouter();
@@ -28,9 +30,10 @@ export default function Home() {
             requester.get('/info').then(res => {
                 setInfo(res.data)
                 console.log(res.data)
-            })
+            }).catch(err => {})
         }
     }, [])
+    
 
     const Tasks = () => {
         const currentDay = info.currentDay
@@ -47,11 +50,14 @@ export default function Home() {
             7: 'feedback6Viewed',
             9: 'feedback8Viewed'
         };
+
+        const unViewed = (day) => {
+            return ((day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
+        }
         
-
-
-        const handleClick = (day) =>  {
-            if (Object.keys(viewInfo).map(Number).includes(day)) {
+        const handleClick = (stepProps, day) =>  {
+            console.log("HandleClick", day)
+            if (unViewed(day) && (stepProps.active||stepProps.completed)) {
                 const fieldName = fieldNameMap[day];
                 const payload = {[fieldName]: true}
                 console.log("Update view info", payload)
@@ -68,14 +74,16 @@ export default function Home() {
                 </p>
                 <Stepper orientation="vertical" >
                     {TASK_EXP_GRP.map((item, index) => {
+                        const day = item.day;
                         const stepProps = {completed: false, active: false};
-                        let link = "/", description = "";
-                        if (item.day == currentDay) {
+                        let link = "/", description = "", invisible = true;
+                        invisible = !(unViewed(day))
+
+                        if (day == currentDay) {
                             stepProps.active = true
-                            link = item.url
-                            const earlistStartDate = expStart.clone().add(item.day - 1, 'days').add(4, 'hours')
-                            const latestStartDate = expStart.clone().add(item.day + 1, 'days').add(4, 'hours')
-                            const hasViewedAll = Object.keys(viewInfo).map(Number).filter(day => day < item.day).every(day => viewInfo[day]); 
+                            const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
+                            const latestStartDate = expStart.clone().add(day + 1, 'days').add(4, 'hours')
+                            const hasViewedAll = Object.keys(viewInfo).map(Number).filter(d => d < day).every(d => viewInfo[d]); 
                             if (info.banFlag) {
                                 stepProps.active = false
                                 description += "后台禁止用户访问，原因 [" + info.banReason + "]。\n"
@@ -83,42 +91,50 @@ export default function Home() {
                                 if (!moment().isBetween(earlistStartDate, latestStartDate)) {
                                     stepProps.active = false
                                     description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
-                                } else if (item.day === 7) {
+                                } else if (day === 7) {
                                     if (!info.feedback6) {
                                         stepProps.active = false
-                                        description += "管理员还未为您提供第6天的反馈。\n"
+                                        description += "请耐心等待第6天的反馈\n"
                                     }
-                                } else if (item.day === 9) {
+                                } else if (day === 9) {
                                     if (!info.feedback8) {
                                         stepProps.active = false
-                                        description += "管理员还未为您提供第8天的反馈。\n"
+                                        description += "请耐心等待第8天的反馈\n"
                                     }
                                 }
                                 if (!hasViewedAll) {
                                     stepProps.active = false
-                                    const dayToRead = Object.keys(viewInfo).map(Number).filter(day => (!viewInfo[day] && day < item.day)).reduce((max, day) => Math.max(max, day), -Infinity);
+                                    const dayToRead = Object.keys(viewInfo).map(Number).filter(d => (!viewInfo[d] && d < day)).reduce((max, day) => Math.max(max, day), -Infinity);
                                     description += `请先查看第${dayToRead}天的反馈。\n`
                                 } 
                             }
-                        } else if (item.day > currentDay) {
+                            link = stepProps.active? item.url: "/"
+                            invisible = invisible || !stepProps.active
+                        } else if (day > currentDay) {
                             stepProps.active = false
                             link = "/"
-                        } else if (item.day < currentDay) {
+                        } else if (day < currentDay) {
                             stepProps.completed = true
                             link = item.completed_url || item.url
                         }
 
+
                         return (
+                            
                             <Step key={index} {...stepProps} >
                                 <Link
                                     href={link} 
-                                    onClick={() => handleClick(item.day)}
+                                    onClick={() => handleClick(stepProps, day)}
                                 >
                                     <StepLabel className={styles.stepLabel}>
-                                        <h4>{item.title}</h4>
-                                        <span className={styles.description}>{item.day<currentDay? item.completed_description: item.description}</span><br/>
+                                        <Badge color='primary' variant='dot' invisible={invisible}>
+                                            <h4>{item.title}&nbsp;</h4>
+                                        </Badge>
+                                        <br/>
+                                        <span className={styles.description}>{day<currentDay? item.completed_description: item.description}</span><br/>
                                         <span className={styles.inactiveReason}>{description}</span>
                                     </StepLabel>
+                                    
                                 </Link>
                             </Step>
                         )
