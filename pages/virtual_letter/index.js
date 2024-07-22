@@ -31,6 +31,7 @@ export default function FreeWriting() {
         requester.get("/writing/8")
             .then(res => {
                 setContentExist(true)
+            }).catch(err => {
             })
     }, [])
 
@@ -57,12 +58,12 @@ export default function FreeWriting() {
                 data[key] = formData.get(key)
             }
             requester.post("/writing/8", data)
-                .then(res => {
+            .then(res => {
                     console.log(res)
                     setSuccessDialogOpen(true)
                 })
                 .catch(err => {
-                    setErrorMessage(err.response.data.error)
+                    setErrorMessage(err.response? err.response.data.error: JSON.stringify(err))
                 }
             )
         }

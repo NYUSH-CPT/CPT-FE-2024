@@ -20,7 +20,7 @@ export default function FeedBackDay8() {
             .then(res => {
                 console.log(res)
                 setContent(res.data.feedback8)
-            })
+            }).catch(() => {})
 
     }, [])
 

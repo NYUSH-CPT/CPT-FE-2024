@@ -1,5 +1,4 @@
-import React, {SyntheticEvent, useContext, useEffect, useState} from 'react'
-import { requester } from '@/utils'
+import React, {useEffect, useState} from 'react'
 
 import styles from "@/styles/login.module.scss"
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';

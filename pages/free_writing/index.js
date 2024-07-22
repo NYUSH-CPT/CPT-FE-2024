@@ -26,11 +26,22 @@ export default function FreeWriting() {
     const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
     const router = useRouter();
 
+    const [scene, setScene] = useState("")
+    const [feeling, setFeeling] = useState("")
+
     useEffect(() => {
-        enableAutoSave('myform')
+        const loadedData = localStorage.getItem(`__autosave-${window.location}`)
+        if (loadedData) {
+            const data = JSON.parse(loadedData)
+            setScene(data.scene)
+            setFeeling(data.feeling)
+        }
         requester.get("/writing/1")
             .then(res => {
                 setContentExist(true)
+                setScene(res.data.answer.scene)
+                setFeeling(res.data.answer.feeling)
+            }).catch(err => {
             })
     }, [])
 
@@ -62,7 +73,7 @@ export default function FreeWriting() {
                     setSuccessDialogOpen(true)
                 }
             ).catch((err) => {
-                setErrorMsg(err.response? err.response.data.error: JSON.stringify(err))
+                setErrorMessage(err.response? err.response.data.error: JSON.stringify(err))
             })
         }
     }
@@ -90,6 +101,8 @@ export default function FreeWriting() {
                         label="发生的事情"
                         required
                         disabled={contentExist}
+                        value={scene}
+                        onChange={e => setScene(e.target.value)}
                         inputProps={{ minLength: '300' }}
                     />
                     <TextField
@@ -100,6 +113,8 @@ export default function FreeWriting() {
                         label="当时的想法"
                         required
                         disabled={contentExist}
+                        value={feeling}
+                        onChange={e => setFeeling(e.target.value)}
                         inputProps={{ minLength: '300' }}
                     />
                     
