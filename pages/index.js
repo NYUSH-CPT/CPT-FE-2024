@@ -21,18 +21,20 @@ import { Badge } from '@mui/material'
 export default function Home() {
     const [info, setInfo] = useState(null)
     const router = useRouter();
-
+    const { key } = router.query;
+    
     useEffect(() => {
         const token = localStorage.getItem("access_token")
-        if (!token) {
+        if (key) localStorage.setItem("blued_uuid", key)
+        if (!token || !key) {
             router.push('/login')
-        } else {
+        } else if (key) { //TODO 用户登录后只能从blue访问吗？（请求必须包含blued uuid）
             requester.get('/info').then(res => {
                 setInfo(res.data)
                 console.log(res.data)
             }).catch(err => {})
         }
-    }, [])
+    }, [router, key])
     
 
     const Tasks = () => {
@@ -143,6 +145,7 @@ export default function Home() {
             </>
         )
     }
+
     return (
         <>
             <Head>
