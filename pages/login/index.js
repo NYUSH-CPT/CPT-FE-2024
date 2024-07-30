@@ -12,12 +12,13 @@ export default function Login() {
     const [smsState, setSmsState] = useState(false)
     const [smsText, setSmsText] = useState('发送验证码')
     const [errorMsg, setErrorMsg] = useState('')
+    const [uuid, setUuid] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        if (token) {
-            window.location.href = "/"
-        }
+        const uuid = localStorage.getItem('blued_uuid');
+        if (token) window.location.href = "/"
+        if (uuid) setUuid(uuid)
     }, []);
 
     const getSMS = async () => {
@@ -26,6 +27,7 @@ export default function Login() {
         setErrorMsg('')
         const payload = {
             phoneNumber: phone,
+            uuid: uuid
         }
         axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sms`, payload).then((res) => {
             console.log(res)
