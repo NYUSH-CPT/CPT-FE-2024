@@ -66,5 +66,5 @@ jobs:
           ssh-private-key: ${{ secrets.TENCENT_CLOUD_VM_PK }}
       - name: Deploy to production
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.TENCENT_CLOUD_VM_PK }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
 
