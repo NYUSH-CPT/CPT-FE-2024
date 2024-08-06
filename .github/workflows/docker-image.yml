@@ -60,16 +60,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Check Secrets
-        run: |
-          echo "SSH private key ${{ secrets.SSH_PRIVATE_KEY }}"
-          echo "SSH user ${{ secrets.SSH_USER }}"
-          echo "SSH host ${{ secrets.SSH_HOST }}"
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.TENCENT_CLOUD_VM_PK }}
       - name: Deploy to production
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.TENCENT_CLOUD_VM_PK }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
 
