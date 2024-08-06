@@ -59,6 +59,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Check Secrets
+        run: |
+          echo "SSH private key ${{ secrets.SSH_PRIVATE_KEY }}"
+          echo "SSH user ${{ secrets.SSH_USER }}"
+          echo "SSH host ${{ secrets.SSH_HOST }}"
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
