@@ -24,6 +24,8 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+    outputs:
+      image-digest: ${{ steps.push.outputs.digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -66,5 +68,7 @@ jobs:
           ssh-private-key: ${{ secrets.TENCENT_CLOUD_VM_PK }}
       - name: Deploy to production
         run: |
+          IMAGE_SHA="${{ needs.build-and-push-image.outputs.image-digest }}"
+          sed -i "s|\$IMAGE_SHA|$IMAGE_SHA|g" deploy.sh
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
 
