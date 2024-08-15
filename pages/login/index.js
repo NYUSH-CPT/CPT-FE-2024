@@ -12,13 +12,11 @@ export default function Login() {
     const [smsState, setSmsState] = useState(false)
     const [smsText, setSmsText] = useState('发送验证码')
     const [errorMsg, setErrorMsg] = useState('')
-
+    
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        if (token) {
-            window.location.href = "/"
-        }
-    }, []);
+        if (token) window.location.href = "/"
+    }, [])
 
     const getSMS = async () => {
         setSmsState(true)

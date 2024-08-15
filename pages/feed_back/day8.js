@@ -35,7 +35,7 @@ export default function FeedBackDay8() {
                 <h1>第9天 虚拟信件反馈</h1>
                 <Paper elevation={4} className={styles.paper}>
                     <Markdown>
-                        {content}
+                        {content || "助教还未为您提供反馈"}
                     </Markdown>
                 </Paper>
                 <Button
