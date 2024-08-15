@@ -85,8 +85,16 @@ export const FAQ = [
 
 
 export const TASK_EXP_GRP = [
-    {   
+    {
         day: 1,
+        title: '第1天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_0pmbmG3UcATIhPU',
+        completed_url: '/'
+    },
+    {   
+        day: 1.1,
         title: '第1天：自由写作',
         description: '预计时间：30分钟',
         completed_description: '已完成',
@@ -158,7 +166,140 @@ export const TASK_EXP_GRP = [
         completed_description: '查看反馈',
         url: '/feed_back/day8',
     },
+    {
+        day: 23,
+        title: '第23天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_eS7IRMfy2rUKvbg',
+        completed_url: '/'
+    },
+    {
+        day: 39,
+        title: '第39天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_bCqe0iAygJoIgnk',
+        completed_url: '/'
+    },
+    {
+        day: 99,
+        title: '第99天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_7ProglfMtqe1dKS',
+        completed_url: '/'
+    }
 ]
+
+export const TASK_WL_GRP = [
+    {
+        day: 1,
+        title: '第1天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_0pmbmG3UcATIhPU',
+        completed_url: '/'
+    },
+    {
+        day: 23,
+        title: '第23天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_eS7IRMfy2rUKvbg',
+        completed_url: '/'
+    },
+    {
+        day: 39,
+        title: '第39天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_bCqe0iAygJoIgnk',
+        completed_url: '/'
+    },
+    {
+        day: 99,
+        title: '第99天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_7ProglfMtqe1dKS',
+        completed_url: '/'
+    },
+    {   
+        day: 100,
+        title: '自由写作*',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: '/free_writing',
+    },
+    {   
+        day: 100,
+        title: '科普视频*',
+        description: '预计时间：10分钟',
+        completed_description: '已完成',
+        url: '/video',
+    },
+    {
+        day: 100,
+        title: '游戏*',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: '/game/1',
+        completed_url: '/'
+    },
+    {
+        day: 100,
+        title: '游戏*',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: '/game/2',
+        completed_url: '/'
+    },
+    {
+        day: 100,
+        title: '挑战性写作1*',
+        description: '预计时间：30分钟',
+        completed_description: '查看咨询师的解读',
+        url: '/challenge_writing/intro',
+        completed_url: '/challenge_writing/1'
+    },
+    {
+        day: 100,
+        title: '挑战性写作2*',
+        description: '预计时间：30分钟',
+        completed_description: '查看咨询师的解读',
+        url: '/challenge_writing/2',
+    },
+    {
+        day: 100,
+        title: '挑战性写作3*',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: '/challenge_writing/3',
+    },
+    {
+        day: 100,
+        title: '写作反馈*',
+        description: '预计时间：30分钟',
+        completed_description: '查看反馈',
+        url: '/feed_back/day6',
+    },
+    {
+        day: 100,
+        title: '虚拟信件*',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: '/virtual_letter',
+    },
+    {
+        day: 100,
+        title: '写作反馈*',
+        description: '预计时间：30分钟',
+        completed_description: '查看反馈',
+        url: '/feed_back/day8',
+    }
+]
+
 export const CONTENT_WRITING_DAY1 = `欢迎您参与本次研究！明天您将参与一个名为“菜鸟咨询师”的游戏。在这个游戏中，您将扮演一名咨询心理学专业的研究生，并且在助教Tim的的带领下，用咨询心理学的知识去帮助十六位正在被一些事情困扰的性少数男性来访者。
 在参与游戏之前，我们设置了一个自由写作练习，希望能通过这种方式来帮助您觉察自己对某件事情的认知。今天，我们希望您写下一直困扰着您的事件/情境。由于明天的游戏将聚焦于性少数男性来访者所遇到的困扰，如果可以的话，我们希望您所写下的这件事也与您的性倾向相关。希望您能打开心扉，回忆自己在这件事发生时的想法。当时发生了什么？这件事为何让您苦恼至今？这件事缘何而起，又对您的生活产生了什么影响？您也可以探索这件事与您生活的其它部分有无关系：比如您的童年或者您与其TA人的关系，包括父母、爱人、朋友、亲戚或其TA对您很重要的人。
 请放心，您写下的所有内容都是保密的，不会有除研究团队之外的任何人看到。同时，您也不用担心用语、标点符号、句子结构等语法问题。

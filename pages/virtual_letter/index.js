@@ -20,7 +20,7 @@ import styles from '@/styles/article.module.scss'
 import { CONTENT_WRITING_DAY8 } from '@/text'
 import { requester, enableAutoSave } from '@/utils'
 
-export default function FreeWriting() {
+export default function VirtualLetter() {
     const [contentExist, setContentExist] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
