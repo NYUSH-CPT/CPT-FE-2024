@@ -36,7 +36,7 @@ export default function FeedBackDay6() {
                 <h1>第7天 挑战性写作3反馈</h1>
                 <Paper elevation={4} className={styles.paper}>
                     <Markdown>
-                        {content}
+                        {content || "助教还未为您提供反馈"}
                     </Markdown>
                 </Paper>
                 <Button
