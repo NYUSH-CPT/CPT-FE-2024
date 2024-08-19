@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker pull ghcr.nju.edu.cn/harrilee/cpt-fe-2024@$IMAGE_SHA
+docker pull ghcr.nju.edu.cn/nyush-cpt/cpt-fe-2024@$IMAGE_SHA
 
 # Stop the current container
 
