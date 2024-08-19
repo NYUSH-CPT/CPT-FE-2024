@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker pull ghcr.nju.edu.cn/harrilee/cpt-fe-2024@$IMAGE_SHA
+docker pull ghcr.nju.edu.cn/nyush-cpt/cpt-fe-2024@$IMAGE_SHA
 
 # Stop the current container
 
@@ -18,6 +18,6 @@ docker run \
     -e "NEXT_PUBLIC_CONVERSATION_GAP=$NEXT_PUBLIC_CONVERSATION_GAP" \
     -e "NEXT_PUBLIC_PROJECT_NAME=$NEXT_PUBLIC_PROJECT_NAME" \
     -e "NEXT_PUBLIC_SHUFFLE_ARRAY_FLAG=$NEXT_PUBLIC_SHUFFLE_ARRAY_FLAG" \
-    -d --name cpt-fe -p 3000:3000 ghcr.nju.edu.cn/harrilee/cpt-fe-2024@$IMAGE_SHA
+    -d --name cpt-fe -p 3000:3000 ghcr.nju.edu.cn/nyush-cpt/cpt-fe-2024@$IMAGE_SHA
 
 docker system prune -f
