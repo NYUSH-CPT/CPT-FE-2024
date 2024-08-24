@@ -26,7 +26,10 @@ export default function Tasks(props) {
             <>
             <h1>任务列表</h1>
             <p>
-            欢迎回来！这是您参与研究的第{daysSinceStart}天。<br/>
+            {daysSinceStart > 0 ? 
+                (`欢迎回来！这是您参与研究的第 ${daysSinceStart} 天。`) : 
+                (`您的实验将于 ${expStart.format('YYYY-MM-DD')} 开始。`)
+            }<br/>
             您可以在完成第1天的调查问卷以及第23天、第39天与第99天的随访评估后分别获得补偿哦！补偿金额将由任务完成的进度和质量共同决定。金额将逐次累积并在最后一次随访评估后的三天内发放给您！此外，您还将获得一次免费参与心理干预项目的机会！项目将在您完成上述任务后自动开放，欢迎您的参与～
             </p>
             <Stepper orientation="vertical" >
@@ -100,7 +103,11 @@ export default function Tasks(props) {
         return (<>
             <h1>任务列表</h1>
             <p>
-            欢迎回来！这是您参与研究的第{daysSinceStart}天。<br/>
+            {daysSinceStart > 0 ? 
+                (`欢迎回来！这是您参与研究的第 ${daysSinceStart} 天。`) : 
+                (`您的实验将于 ${expStart.format('YYYY-MM-DD')} 开始。`)
+            }<br/>
+
             您可以在完成9天的任务以及第23天、第39天与第99天的评估后分别获得补偿哦！补偿金额将由任务完成的进度和质量共同决定。金额将逐次累积并在最后一次随访评估后的三天内发放给您！
             </p>
             <Stepper orientation="vertical" >
