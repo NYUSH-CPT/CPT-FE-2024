@@ -42,6 +42,7 @@ export default function Home() {
             if (!token) {
                 window.location.href = "/login" 
             } else {
+                console.log(token)
                 requester.get('/info').then(res => {
                     setInfo(res.data)
                     console.log(res.data)
