@@ -115,7 +115,7 @@ export default function Game() {
                 <div className={styles.header}>
                     <span>{names[displayID]}</span>
                     <span className={styles.visitor_count}>
-                        第{(displayID + 1) % 8}/{visitorCount}位来访者
+                        第{(displayID === 7 || displayID === 15) ? 8 : (displayID + 1) % 8}/{visitorCount}位来访者
                     </span>
                 </div>
             </div>
