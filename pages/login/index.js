@@ -5,6 +5,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 
 import axios from 'axios';
+import { requester } from '@/utils';
 
 export default function Login() {
     const [phone, setPhone] = useState('')
@@ -15,7 +16,13 @@ export default function Login() {
     
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        if (token) window.location.href = "/"
+        if (token) {
+            requester.get('/info').then(res => {
+                window.location.href = "/"
+            }).catch(err => {
+                console.log(err)
+            })
+        }
     }, [])
 
     const getSMS = async () => {

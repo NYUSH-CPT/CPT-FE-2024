@@ -25,9 +25,12 @@ export default function Game() {
     const [update, setUpdate] = useState(false)
 
     useEffect(() => {
-        if (id==1 && displayID >= 8) {
-            router.push("/")
-        }
+        requester.get("/info").then(res => {
+            console.log(res.data, id)
+            if (res.data.currentDay >= 3 && id==1 || res.data.currentDay >= 4 && id==2) {
+                window.location.href = "/"
+            }
+        }).catch(err => {})
     }, [id]);
 
     const elicitResponse = async (payload = {"choice": ""}) => {
