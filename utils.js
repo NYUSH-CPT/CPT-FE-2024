@@ -38,8 +38,9 @@ export class requester {
                 if (error.response) {
                     if (error.response.status === 401) {
                         localStorage.removeItem("access_token")
+                        window.location.href = `/login`
                     }
-                    if ([400, 401, 403].includes(error.response.status)) {
+                    if ([400, 403].includes(error.response.status)) {
                         window.location.href = `/error/${error.response.status}`
                     }
                 }
