@@ -39,10 +39,13 @@ const Video = () => {
         <main className={styles.video}>
             <h1>第2天 科普视频</h1>
             <p>视频播放完毕后将自动更新首页任务列表</p>
-            <Card>
+            <Card >
                 <video
+                    className={styles.player}
                     src="/video.mp4"
                     ref={videoRef}
+                    playsInline
+                    poster="/video.jpg"
                     onEnded={() => {
                         if (!watched && videoRef.current.currentTime >= videoRef.current.duration) {
                             console.log("video end");
