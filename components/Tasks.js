@@ -85,6 +85,12 @@ export default function Tasks(props) {
             7: 'feedback6Viewed',
             9: 'feedback8Viewed'
         };
+        requester.get("/info").then(res => {
+            Object.keys(viewInfo).forEach(key => {
+                viewInfo[key] = res.data[fieldNameMap[key]];
+            })
+            console.log("Update viewInfo", viewInfo)
+        }).catch(err=>{console.log(err)})
 
         const unViewed = (day) => {
             return ((day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
@@ -95,6 +101,7 @@ export default function Tasks(props) {
             if (unViewed(day) && (stepProps.active||stepProps.completed)) {
                 const fieldName = fieldNameMap[day];
                 const payload = {[fieldName]: true}
+                viewInfo[day] = true
                 console.log("Update view info", payload)
                 requester.post("/info", payload)
             }
