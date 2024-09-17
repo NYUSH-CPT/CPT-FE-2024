@@ -168,7 +168,7 @@ export default function Tasks(props) {
                         <Step key={index} {...stepProps} >
                             <Link
                                 href={link} 
-                                onClick={(e) => handleClick(link, stepProps, day)}
+                                onClick={(e) => handleClick(e, link, stepProps, day)}
                                 // onTouchEnd={() => handleClick(stepProps, day)}
                             >
                                 <StepLabel className={styles.stepLabel}>
