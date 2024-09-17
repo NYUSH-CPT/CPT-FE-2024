@@ -90,7 +90,8 @@ export default function Tasks(props) {
             return ((day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
         }
         
-        const handleClick = (stepProps, day) =>  {
+        const handleClick = (e, link, stepProps, day) =>  {
+            e.preventDefault()
             console.log("HandleClick", day)
             if (unViewed(day) && (stepProps.active||stepProps.completed)) {
                 const fieldName = fieldNameMap[day];
@@ -99,6 +100,7 @@ export default function Tasks(props) {
                 console.log("Update view info", payload)
                 requester.post("/info", payload)
             }
+            window.location.href = link
         }
 
         return (<>
@@ -166,7 +168,8 @@ export default function Tasks(props) {
                         <Step key={index} {...stepProps} >
                             <Link
                                 href={link} 
-                                onClick={() => handleClick(stepProps, day)}
+                                onClick={(e) => handleClick(link, stepProps, day)}
+                                // onTouchEnd={() => handleClick(stepProps, day)}
                             >
                                 <StepLabel className={styles.stepLabel}>
                                     <Badge color='primary' variant='dot' invisible={invisible}>
