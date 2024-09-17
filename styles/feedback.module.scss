@@ -51,4 +51,8 @@
     padding: 1.5em;
     border-radius: 1em;
     margin: 1em 1em 2em 1em;
+    overflow-wrap: break-word; 
+    word-break: break-word; 
+    overflow: hidden; 
+    max-width: 100%;
 }
