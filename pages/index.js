@@ -17,6 +17,21 @@ export default function Home() {
     const key = router.query.key;
 
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+        window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            // The page was restored from bfcache
+            console.log('Page restored from bfcache');
+            requester.get('/info').then(res => {
+                setInfo(res.data)
+                console.log(res.data)
+            }).catch(err => {})
+        }
+        });
+        }
+    },[])
+
+    useEffect(() => {
         if (!router.isReady) return;
         const token = localStorage.getItem("access_token")
         if (key) {
@@ -51,19 +66,6 @@ export default function Home() {
         }
     }, [key]);
 
-
-    if (typeof window !== 'undefined') {
-        window.addEventListener('pageshow', (event) => {
-        if (event.persisted) {
-            // The page was restored from bfcache
-            console.log('Page restored from bfcache');
-            requester.get('/info').then(res => {
-                setInfo(res.data)
-                console.log(res.data)
-            }).catch(err => {})
-        }
-        });
-    }
 
     return (
         <>
