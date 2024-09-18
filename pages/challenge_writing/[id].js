@@ -188,7 +188,7 @@ export default function ChallengeWriting() {
         setReferenceDialogOpen(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         const form = document.getElementById("myform");
 
         if (form.checkValidity()) {
@@ -222,7 +222,7 @@ export default function ChallengeWriting() {
 
             if (day==6) payload.day6ExtraContent = day6ExtraContent
 
-            requester.post(`writing/${day}`, payload)
+            await requester.post(`writing/${day}`, payload)
                 .then((res) => {
                     console.log(res);
                     setSuccessDialogOpen(true);

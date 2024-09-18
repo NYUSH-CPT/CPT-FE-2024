@@ -46,7 +46,7 @@ export default function VirtualLetter() {
         router.push("/")
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         const form = document.getElementById('myform')
 
         if (form.checkValidity()) {
@@ -57,7 +57,7 @@ export default function VirtualLetter() {
             for (let key of formData.keys()) {
                 data[key] = formData.get(key)
             }
-            requester.post("/writing/8", data)
+            await requester.post("/writing/8", data)
             .then(res => {
                     console.log(res)
                     setSuccessDialogOpen(true)
