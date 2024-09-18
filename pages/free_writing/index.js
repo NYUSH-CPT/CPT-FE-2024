@@ -56,7 +56,7 @@ export default function FreeWriting() {
         router.push("/")
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         const form = document.getElementById('myform')
 
         if (form.checkValidity()) {
@@ -67,7 +67,7 @@ export default function FreeWriting() {
             for (let key of formData.keys()) {
                 data[key] = formData.get(key)
             }
-            requester.post("/writing/1", data)
+            await requester.post("/writing/1", data)
                 .then(res => {
                     console.log(res)
                     setSuccessDialogOpen(true)
