@@ -90,7 +90,7 @@ export default function Tasks(props) {
             return ((day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
         }
         
-        const handleClick = (e, link, stepProps, day) =>  {
+        const handleClick = async (e, link, stepProps, day) =>  {
             e.preventDefault()
             console.log("HandleClick", day)
             if (unViewed(day) && (stepProps.active||stepProps.completed)) {
@@ -98,7 +98,7 @@ export default function Tasks(props) {
                 const payload = {[fieldName]: true}
                 viewInfo[day] = true
                 console.log("Update view info", payload)
-                requester.post("/info", payload)
+                await requester.post("/info", payload)
             }
             window.location.href = link
         }
@@ -167,7 +167,7 @@ export default function Tasks(props) {
                         
                         <Step key={index} {...stepProps} >
                             <Link
-                                href={link} 
+                                // href={link} 
                                 onClick={(e) => handleClick(e, link, stepProps, day)}
                                 // onTouchEnd={() => handleClick(stepProps, day)}
                             >
