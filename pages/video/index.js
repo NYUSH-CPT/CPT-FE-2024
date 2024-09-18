@@ -46,10 +46,10 @@ const Video = () => {
                     ref={videoRef}
                     playsInline
                     poster="/video.jpg"
-                    onEnded={() => {
+                    onEnded={async () => {
                         if (!watched && videoRef.current.currentTime >= videoRef.current.duration) {
                             console.log("video end");
-                            requester.post('/video');
+                            await requester.post('/video');
                             setWatched(true);
                         }
                         setPlayPauseText('重新播放')
