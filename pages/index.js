@@ -51,7 +51,9 @@ export default function Home() {
         }
     }, [key]);
 
-    window.addEventListener('pageshow', (event) => {
+
+    if (typeof window !== 'undefined') {
+        window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
             // The page was restored from bfcache
             console.log('Page restored from bfcache');
@@ -60,8 +62,8 @@ export default function Home() {
                 console.log(res.data)
             }).catch(err => {})
         }
-    });
-
+        });
+    }
 
     return (
         <>
