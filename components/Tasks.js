@@ -41,12 +41,12 @@ export default function Tasks(props) {
                     if (day == currentDay) {
                         stepProps.active = true
                         const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                        const latestStartDate = expStart.clone().add(day + 1, 'days').add(4, 'hours')
-                        if (info.banFlag) {
+                        const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
+                        if (info.banFlag && ![23, 39, 99].includes(day)) {
                             stepProps.active = false
                             description += "后台禁止用户访问，原因 [" + info.banReason + "]。\n"
                         } else {
-                            if (day < 100 && !moment().isBetween(earlistStartDate, latestStartDate)) {
+                            if (!moment().isBetween(earlistStartDate, latestStartDate)) {
                                 stepProps.active = false
                                 description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                             }
@@ -58,6 +58,11 @@ export default function Tasks(props) {
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
+                        if ([23, 39, 99].includes(day) && info[`survey${day}IsValid`] === "False") {
+                            stepProps.completed = false
+                            stepProps.active = false
+                            item.completed_description = "已逾期"
+                        }
                     }
     
                     return (
@@ -123,9 +128,9 @@ export default function Tasks(props) {
                     if (day == currentDay) {
                         stepProps.active = true
                         const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                        const latestStartDate = expStart.clone().add(day + 1, 'days').add(4, 'hours')
+                        const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
                         const hasViewedAll = Object.keys(viewInfo).map(Number).filter(d => d < day).every(d => viewInfo[d]); 
-                        if (info.banFlag) {
+                        if (info.banFlag && ![23, 39, 99].includes(day)) {
                             stepProps.active = false
                             description += "后台禁止用户访问，原因 [" + info.banReason + "]。\n"
                         } else {
@@ -160,6 +165,11 @@ export default function Tasks(props) {
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
+                        if ([23, 39, 99].includes(day) && info[`survey${day}IsValid`] === "False") {
+                            stepProps.completed = false
+                            stepProps.active = false
+                            item.completed_description = "已逾期"
+                        }
                     }
     
     
