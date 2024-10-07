@@ -202,7 +202,7 @@ export const TASK_WL_GRP = [
         title: '第1天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_0pmbmG3UcATIhPU',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_bfqaJJoB84pUy4C',
         completed_url: '/'
     },
     {
