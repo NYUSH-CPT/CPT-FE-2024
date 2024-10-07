@@ -20,6 +20,7 @@ export default function Tasks(props) {
     const daysSinceStart = today.diff(expStart, 'days')+1
     const group = info.group
     const uuid = info.uuid
+    const banDay = info.banDay
 
     if (group == 'Waitlist') {
         return (
@@ -55,6 +56,15 @@ export default function Tasks(props) {
                     } else if (day > currentDay) {
                         stepProps.active = false
                         link = "/"
+                        if (info.banFlag && day > banDay && daysSinceStart > currentDay) {
+                            const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
+                            if (moment().isBetween(expStart, latestStartDate)) {
+                                stepProps.active = true
+                                link = item.url + `?uuid=${uuid}`
+                            } else {
+                                item.description = "已逾期"
+                            }
+                        }
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
@@ -162,6 +172,15 @@ export default function Tasks(props) {
                     } else if (day > currentDay) {
                         stepProps.active = false
                         link = "/"
+                        if (info.banFlag && day > banDay && daysSinceStart > currentDay) {
+                            const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
+                            if (moment().isBetween(expStart, latestStartDate)) {
+                                stepProps.active = true
+                                link = item.url + `?uuid=${uuid}`
+                            } else {
+                                item.description = "已逾期"
+                            }
+                        }
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
