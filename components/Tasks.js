@@ -45,7 +45,8 @@ export default function Tasks(props) {
                         const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
                         if (info.banFlag && ![23, 39, 99].includes(day)) {
                             stepProps.active = false
-                            description += "后台禁止用户访问，原因 [" + info.banReason + "]。\n"
+                            // to be updated
+                            description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
                         } else {
                             if (!moment().isBetween(earlistStartDate, latestStartDate)) {
                                 stepProps.active = false
@@ -142,7 +143,7 @@ export default function Tasks(props) {
                         const hasViewedAll = Object.keys(viewInfo).map(Number).filter(d => d < day).every(d => viewInfo[d]); 
                         if (info.banFlag && ![23, 39, 99].includes(day)) {
                             stepProps.active = false
-                            description += "后台禁止用户访问，原因 [" + info.banReason + "]。\n"
+                            description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
                         } else {
                             if (!moment().isBetween(earlistStartDate, latestStartDate)) {
                                 stepProps.active = false
