@@ -45,10 +45,9 @@ export default function Tasks(props) {
                         const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
                         if (info.banFlag && ![23, 39, 99].includes(day)) {
                             stepProps.active = false
-                            // to be updated
                             description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
                         } else {
-                            if (!moment().isBetween(earlistStartDate, latestStartDate)) {
+                            if (!moment().isBetween(earlistStartDate, latestStartDate) && day!==100) {
                                 stepProps.active = false
                                 description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                             }

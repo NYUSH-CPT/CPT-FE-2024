@@ -44,7 +44,7 @@ export const CONTACT = `如果您有任何问题或疑问，请随时联系我�
 
 我们将在一个工作日内回复您的邮件。如果您在周末或节假日联系我们，我们将在下一个工作日回复您。如果您有任何紧急问题，您可以致电我们的研究助理经理程欣宜 Kelly，电话：[+86 186 1650 0737](tel:+8618616500737)。`
 
-export const FAQ = [
+export const FAQ_EXP_GRP = [
     {
         title: '培训持续多少天？/培训有哪些环节？',
         content:
@@ -87,6 +87,48 @@ export const FAQ = [
     },
 ]
 
+export const FAQ_WL_GRP = [
+    {
+        title: '培训持续多少天？/培训有哪些环节？',
+        content:
+            '培训的活动一共有9天，9天内每日会有任务需要您完成。培训结束后我们会有三次的后期问卷小调查，会在问卷发放的前一天给您短信提示，您完成调查会有不同金额的礼品卡奖励哦。',
+    },
+    {
+        title: '培训的时间安排是怎样的？',
+        content:
+            '培训的时间安排是您自己安排的，每天的任务大概需要30分钟左右，您可以根据自己的时间安排来完成任务，但是请您在当天完成任务，不要拖延哦。',
+    },
+    {
+        title: '培训的内容是什么？',
+        content:
+            '培训的内容主要是关于性少数群体男性的生活和挑战，我们会通过一些文本和视频来让您了解他们的生活和想法，您需要根据文本和视频的内容来完成一些写作练习。',
+    },
+    {
+        title: '培训的目的是什么？',
+        content:
+            '培训的目的是希望您能够了解性少数群体男性的生活和挑战，通过培训我们希望您能够更加理解他们的生活和想法，也希望您能够更加包容和理解他们。',
+    },
+    {
+        title: '培训的奖励是什么？',
+        content:
+            '培训结束后我们会有三次的后期问卷小调查，会在问卷发放的前一天给您短信提示，您完成调查会有不同金额的礼品卡奖励哦。',
+    },
+    {
+        title: '培训的要求是什么？',
+        content:
+            '培训的要求是您需要按时完成每天的任务，每天的任务大概需要30分钟左右，您可以根据自己的时间安排来完成任务，但是请您在当天完成任务，不要拖延哦。',
+    },
+    {
+        title: '培训的难度是什么？',
+        content:
+            '培训的难度不大，主要是关于性少数群体男性的生活和挑战，我们会通过一些文本和视频来让您了解他们的生活和想法，您需要根据文本和视频的内容来完成一些写作练习。',
+    },
+    {
+        title: '培训的风险是什么？',
+        content:
+            '培训的风险不大，主要是关于性少数群体男性的生活和挑战，我们会通过一些文本和视频来让您了解他们的生活和想法，您需要根据文本和视频的内容来完成一些写作',
+    },
+]
 
 export const TASK_EXP_GRP = [
     {
@@ -231,21 +273,21 @@ export const TASK_WL_GRP = [
     },
     {   
         day: 100,
-        title: '自由写作*',
+        title: '任务1：自由写作*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/free_writing',
     },
     {   
         day: 100,
-        title: '科普视频*',
+        title: '任务2：科普视频*',
         description: '预计时间：10分钟',
         completed_description: '已完成',
         url: '/video',
     },
     {
         day: 100,
-        title: '游戏*',
+        title: '任务3：游戏*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/game/1',
@@ -253,7 +295,7 @@ export const TASK_WL_GRP = [
     },
     {
         day: 100,
-        title: '游戏*',
+        title: '任务4：游戏*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/game/2',
@@ -261,7 +303,7 @@ export const TASK_WL_GRP = [
     },
     {
         day: 100,
-        title: '挑战性写作1*',
+        title: '任务5：挑战性写作1*',
         description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/intro',
@@ -269,35 +311,35 @@ export const TASK_WL_GRP = [
     },
     {
         day: 100,
-        title: '挑战性写作2*',
+        title: '任务6：挑战性写作2*',
         description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/2',
     },
     {
         day: 100,
-        title: '挑战性写作3*',
+        title: '任务7：挑战性写作3*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/challenge_writing/3',
     },
     {
         day: 100,
-        title: '写作反馈*',
+        title: '任务8：写作反馈*',
         description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day6',
     },
     {
         day: 100,
-        title: '虚拟信件*',
+        title: '任务9：虚拟信件*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/virtual_letter',
     },
     {
         day: 100,
-        title: '写作反馈*',
+        title: '任务10：写作反馈*',
         description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day8',

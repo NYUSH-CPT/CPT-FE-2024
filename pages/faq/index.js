@@ -10,9 +10,21 @@ import Header from '@/components/Header'
 
 import styles from '@/styles/article.module.scss'
 
-import { FAQ } from '@/text'
+import { FAQ_EXP_GRP, FAQ_WL_GRP } from '@/text'
+import { useState, useEffect } from 'react'
+import { requester } from '@/utils'
 
 export default function About() {
+
+    const [group, setGroup] = useState("");
+    useEffect(() => {
+        requester.get("/info")
+            .then(res => {
+                console.log(res)
+                setGroup(res.data.group)
+            }).catch(() => {})
+    }, [])
+
     return (
         <>
             <Head>
@@ -21,7 +33,7 @@ export default function About() {
             <Header />
             <div className={styles.article}>
                 <h1>常见疑问</h1>
-                {FAQ?.map((item, index) => (
+                {group === "Waitlist" ? (FAQ_WL_GRP?.map((item, index) => (
                     <Accordion key={index}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -35,7 +47,21 @@ export default function About() {
                             <Markdown>{item.content}</Markdown>
                         </AccordionDetails>
                     </Accordion>
-                ))}
+                ))) : FAQ_EXP_GRP?.map((item, index) => (
+                    <Accordion key={index}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls={`panel${index + 1}-content`}
+                            id={`panel${index + 1}-header`}
+                            className={styles.accordionTitle}
+                        >
+                            {item.title}
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Markdown>{item.content}</Markdown>
+                        </AccordionDetails>
+                    </Accordion>
+                ))} 
             </div>
         </>
     )
