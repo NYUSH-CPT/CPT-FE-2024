@@ -17,15 +17,20 @@ import { requester } from '@/utils'
 export default function About() {
 
     const [group, setGroup] = useState("");
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         requester.get("/info")
             .then(res => {
                 console.log(res)
                 setGroup(res.data.group)
+                setLoading(false)
             }).catch(() => {})
     }, [])
 
     return (
+        <>
+        {!loading? (
         <>
             <Head>
                 <title>常见疑问</title>
@@ -64,5 +69,9 @@ export default function About() {
                 ))} 
             </div>
         </>
+        ) : ('加载中...')
+        }
+        </>
+
     )
 }
