@@ -23,6 +23,7 @@ export default function Header() {
 
     const handleLogout = () => {
         window.localStorage.removeItem('access_token')
+        window.localStorage.removeItem("group")
         window.location.reload()
     }
 
