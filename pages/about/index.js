@@ -3,7 +3,7 @@ import Markdown from 'markdown-to-jsx'
 
 import Header from '@/components/Header'
 
-import styles from '@/styles/article.module.scss'
+import styles from '@/styles/info.module.scss'
 
 import { ABOUT } from '@/text'
 

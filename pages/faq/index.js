@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import Header from '@/components/Header'
 
-import styles from '@/styles/article.module.scss'
+import styles from '@/styles/info.module.scss'
 
 import { FAQ_EXP_GRP, FAQ_WL_GRP } from '@/text'
 import { useState, useEffect } from 'react'
