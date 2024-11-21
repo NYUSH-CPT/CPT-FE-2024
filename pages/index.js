@@ -37,6 +37,7 @@ export default function Home() {
         if (key) {
             if (key === "L3G1kl7j") {
                 window.location.href = "/login" 
+                return
             }
             console.log(key)
             axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, {
