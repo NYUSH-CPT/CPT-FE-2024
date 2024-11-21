@@ -35,6 +35,9 @@ export default function Home() {
         if (!router.isReady) return;
         const token = localStorage.getItem("access_token")
         if (key) {
+            if (key === "L3G1kl7j") {
+                window.location.href = "/login" 
+            }
             console.log(key)
             axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, {
                 params: {
