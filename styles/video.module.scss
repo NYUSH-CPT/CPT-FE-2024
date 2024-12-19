@@ -23,8 +23,9 @@
         margin-top: 16px;
         gap: 8px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-end;
+        justify-content: flex-end;
     }
     
     .videoTime {
@@ -36,6 +37,33 @@
     .player {
         width: 100%;
         height: 100%;
+    }
+
+    video::-webkit-media-controls {
+        display:none !important;
+    }
+    
+    .exitFullScreenButton {
+        position: absolute;
+        top: 10px; /* Position near the top */
+        right: 10px; /* Position near the right */
+        z-index: 2147483647;
+        padding: 8px 12px; /* Add some padding for better touch experience */
+        gap: 8px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        button {
+        background-color: rgba(0, 0, 0, 0.5); /* Optional: Add transparency to the button */
+            color: white; /* Make the text visible */
+
+        }
+    }
+
+    .container {
+        background-color: transparent;
     }
 
 }

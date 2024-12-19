@@ -89,24 +89,35 @@ export default function ChallengeWriting() {
         const loadedData = localStorage.getItem(`__autosave-${window.location.pathname}`);
         if (loadedData) {
             const { biasState, questionState, q1Content, q4Content, day6ExtraContent } = JSON.parse(loadedData);
-            setBiasState(prev => {
-                const updatedState = {
-                    ...q2Biases,  
-                    ...biasState 
-                };
+            setBiasState((prevState) => {
+                const updatedState = Object.keys(prevState).reduce((acc, key) => {
+                    const bias = prevState[key];
+                    const matchingBias = Object.values(biasState).find(
+                        (qBias) => qBias.prompt === bias.prompt
+                    );
+                    acc[key] = matchingBias
+                        ? { ...bias, checked: matchingBias.checked, text: matchingBias.text }
+                        : bias;
+                    return acc;
+                }, {});
                 return updatedState;
             });
-            setQuestionState(prev => {
-                const updatedState = {
-                    ...q3Questions,  
-                    ...questionState 
-                };
-                console.log(updatedState)
+            setQuestionState((prevState) => {
+                const updatedState = Object.keys(prevState).reduce((acc, key) => {
+                    const question = prevState[key];
+                    const matchingQuestion = Object.values(questionState).find(
+                        (qQuestion) => qQuestion.prompt === question.prompt
+                    );
+                    acc[key] = matchingQuestion
+                        ? { ...question, checked: matchingQuestion.checked, text: matchingQuestion.text }
+                        : question;
+                    return acc;
+                }, {});
                 return updatedState;
             });
             setQ1Content(q1Content);
             setQ4Content(q4Content);
-            if (day===6) setDay6ExtraContent(day6ExtraContent);
+            setDay6ExtraContent(day6ExtraContent);
         } else {
             setBiasState(q2Biases);
             setQuestionState(q3Questions);
@@ -125,20 +136,35 @@ export default function ChallengeWriting() {
                     setReference(res.data.reference);
                     if (day !== 6) setContentExist(true);
                     const { q2: biasState, q3: questionState, q1: q1Content, q4: q4Content, day6ExtraContent: day6ExtraContent } = res.data.answer;
-                    setBiasState(prev => {
-                        const updatedState = {
-                            ...q2Biases,  
-                            ...biasState 
-                        };
+
+                    setBiasState((prevState) => {
+                        const updatedState = Object.keys(prevState).reduce((acc, key) => {
+                            const bias = prevState[key];
+                            const matchingBias = Object.values(biasState).find(
+                                (qBias) => qBias.prompt === bias.prompt
+                            );
+                            acc[key] = matchingBias
+                                ? { ...bias, checked: matchingBias.checked, text: matchingBias.text }
+                                : bias;
+                            return acc;
+                        }, {});
                         return updatedState;
                     });
-                    setQuestionState(prev => {
-                        const updatedState = {
-                            ...q3Questions,  
-                            ...questionState 
-                        };
+
+                    setQuestionState((prevState) => {
+                        const updatedState = Object.keys(prevState).reduce((acc, key) => {
+                            const question = prevState[key];
+                            const matchingQuestion = Object.values(questionState).find(
+                                (qQuestion) => qQuestion.prompt === question.prompt
+                            );
+                            acc[key] = matchingQuestion
+                                ? { ...question, checked: matchingQuestion.checked, text: matchingQuestion.text }
+                                : question;
+                            return acc;
+                        }, {});
                         return updatedState;
                     });
+
                     setQ1Content(q1Content);
                     setQ4Content(q4Content);
                     setReferenceDialogOpen(true);
@@ -464,8 +490,8 @@ export default function ChallengeWriting() {
                     </FormGroup>
 
                     <FormLabel>   
-                        {day!=6? ("4）在思考完以上问题之后，您认为TA可以如何更灵活、全面地看待当时的处境？您可以结合个人经历使用第一人称写作。（字数要求：≥300字）")
-                        : ("7）在思考完以上问题之后，您认为自己可以如何更灵活、全面地看待当时的处境？（字数要求：≥300字）")}              
+                        {day!=6? ("4）在思考完以上问题之后，您认为TA可以如何更灵活、全面地看待当时的处境？您可以结合个人经历使用第一人称写作。（字数要求：≥100字）")
+                        : ("7）在思考完以上问题之后，您认为自己可以如何更灵活、全面地看待当时的处境？（字数要求：≥100字）")}              
                     </FormLabel>
                     <TextField
                         name="q4"
@@ -477,7 +503,8 @@ export default function ChallengeWriting() {
                         onChange={e => setQ4Content(e.target.value)}
                         disabled={contentExist || (day == 6 && day6ContentExist)}
                         inputProps={{
-                            minLength: "300",
+                            minLength: "100",
+                            title: "不少于100字"
                         }}
                         label="您的回答"
                         

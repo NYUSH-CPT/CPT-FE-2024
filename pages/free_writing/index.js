@@ -103,7 +103,7 @@ export default function FreeWriting() {
                         disabled={contentExist}
                         value={scene}
                         onChange={e => setScene(e.target.value)}
-                        inputProps={{ minLength: '300' }}
+                        inputProps={{ minLength: '50', title: "不少于50" }}
                     />
                     <TextField
                         name="feeling"
@@ -115,7 +115,7 @@ export default function FreeWriting() {
                         disabled={contentExist}
                         value={feeling}
                         onChange={e => setFeeling(e.target.value)}
-                        inputProps={{ minLength: '300' }}
+                        inputProps={{ minLength: '150', title: "不少于150" }}
                     />
                     
                     <Button
