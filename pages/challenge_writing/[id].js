@@ -86,7 +86,7 @@ export default function ChallengeWriting() {
     const [day6ExtraContent, setDay6ExtraContent] = useState("");
 
     useEffect(() => {
-        const loadedData = localStorage.getItem(`__autosave-${window.location.pathname}`);
+        const loadedData = localStorage.getItem(`__autosave--${window.location.pathname}`);
         if (loadedData) {
             const { biasState, questionState, q1Content, q4Content, day6ExtraContent } = JSON.parse(loadedData);
             setBiasState((prevState) => {
@@ -195,7 +195,7 @@ export default function ChallengeWriting() {
                 day6ExtraContent
             });
             const dataToSave = getDataToSave();
-            localStorage.setItem(`__autosave-${window.location.pathname}`, JSON.stringify(dataToSave));
+            localStorage.setItem(`__autosave--${window.location.pathname}`, JSON.stringify(dataToSave));
         }, 0);
     }, [biasState, questionState, q1Content, q4Content, day6ExtraContent]);
 
@@ -231,14 +231,18 @@ export default function ChallengeWriting() {
                 return
             }
 
-            const q2Data = Object.keys(biasState)
-                .filter(key => biasState[key].checked) 
-                .map(key => biasState[key]);
+            const q2Data = biasState[7]?.checked
+                ? [biasState[7]] 
+                : Object.keys(biasState)
+                    .filter(key => biasState[key].checked)
+                    .map(key => biasState[key]);
             
-            const q3Data = Object.keys(questionState)
-                .filter(key => questionState[key].checked)
-                .map(key => questionState[key]);
-        
+            const q3Data = questionState[7]?.checked 
+                ? [questionState[7]] 
+                : Object.keys(questionState)
+                    .filter(key => questionState[key].checked)
+                    .map(key => questionState[key]);
+    
             const payload = {
                 q1: q1Content,
                 q2: q2Data,
@@ -359,7 +363,7 @@ export default function ChallengeWriting() {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={checked}  
+                                                checked={key !== '7' && biasState[7].checked? false: checked}  
                                                 disabled
                                                 name={key}
                                             />
@@ -374,7 +378,7 @@ export default function ChallengeWriting() {
                                             variant="outlined"
                                             margin="dense"
                                             label="您的回答"
-                                            value={text || "您的回答为空。"}
+                                            value={(biasState[7].checked? false: checked) && text || "您的回答为空。"}
                                             disabled
                                             multiline
                                         />
@@ -433,7 +437,7 @@ export default function ChallengeWriting() {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={checked} 
+                                                checked={(key!=='7' && questionState[7].checked)? false: checked} 
                                                 name={key} 
                                                 disabled
                                             />
@@ -448,7 +452,7 @@ export default function ChallengeWriting() {
                                             variant="outlined"
                                             margin="dense"
                                             label="您的回答"
-                                            value={text || "您的回答为空。"}  
+                                            value={ (questionState[7].checked? false: checked) && text || "您的回答为空。"}  
                                             disabled
                                             multiline
                                         />
