@@ -91,7 +91,7 @@ export default function VirtualLetter() {
                         minRows={5}
                         required
                         disabled={contentExist}
-                        inputProps={{ minLength: '300' }}
+                        inputProps={{ minLength: '100', title: "不少于100" }}
                     />
                     
                     <Button

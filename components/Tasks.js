@@ -172,14 +172,19 @@ export default function Tasks(props) {
                     } else if (day > currentDay) {
                         stepProps.active = false
                         link = "/"
-                        if (info.banFlag && day > banDay && daysSinceStart > currentDay) {
-                            const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
-                            if (moment().isBetween(expStart, latestStartDate)) {
+                        if (info.banFlag && [23, 39, 99].includes(day) && day > banDay && daysSinceStart > currentDay) {
+                            const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
+                            const latestStartDate = expStart.clone().add(day + 6, 'days').add(4, 'hours')
+                            if (moment().isBetween(earlistStartDate, latestStartDate)) {
                                 stepProps.active = true
                                 link = item.url + `?uuid=${uuid}`
-                            } else {
+                            } else if (moment().isAfter(latestStartDate)) {
                                 item.description = "已逾期"
+                            } else {
+                                description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                             }
+                        } else if (info.banFlag && ![23, 39, 99].includes(day)) {
+                            item.description = "已失效"
                         }
                     } else if (day < currentDay) {
                         stepProps.completed = true
