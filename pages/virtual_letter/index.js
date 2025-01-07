@@ -18,7 +18,7 @@ import Header from '@/components/Header'
 import styles from '@/styles/article.module.scss'
 
 import { CONTENT_WRITING_DAY8 } from '@/text'
-import { requester, enableAutoSave } from '@/utils'
+import { requester, enableAutoSave, disablePasteForInputs } from '@/utils'
 
 export default function VirtualLetter() {
     const [contentExist, setContentExist] = useState(false)
@@ -35,6 +35,14 @@ export default function VirtualLetter() {
             })
     }, [])
 
+    useEffect(() => {
+        const { addListeners, removeListeners } = disablePasteForInputs();
+
+        addListeners(); // 绑定粘贴禁用事件
+        return () => {
+            removeListeners(); // 清除事件监听器
+        };
+    }, []);
 
     const handleCloseSuccessDialog = () => {
         setSuccessDialogOpen(false)
@@ -92,6 +100,7 @@ export default function VirtualLetter() {
                         required
                         disabled={contentExist}
                         inputProps={{ minLength: '100', title: "不少于100" }}
+                        className="disable-paste"
                     />
                     
                     <Button
