@@ -18,7 +18,7 @@ import Header from '@/components/Header'
 import styles from '@/styles/article.module.scss'
 
 import { CONTENT_WRITING_DAY1 } from '@/text'
-import { requester, enableAutoSave } from '@/utils'
+import { requester, disablePasteForInputs } from '@/utils'
 
 export default function FreeWriting() {
     const [contentExist, setContentExist] = useState(false)
@@ -44,6 +44,15 @@ export default function FreeWriting() {
             }).catch(err => {
             })
     }, [])
+
+    useEffect(() => {
+        const { addListeners, removeListeners } = disablePasteForInputs();
+
+        addListeners(); // 绑定粘贴禁用事件
+        return () => {
+            removeListeners(); // 清除事件监听器
+        };
+    }, []);
 
 
     const handleCloseSuccessDialog = () => {
@@ -104,6 +113,7 @@ export default function FreeWriting() {
                         value={scene}
                         onChange={e => setScene(e.target.value)}
                         inputProps={{ minLength: '50', title: "不少于50" }}
+                        className="disable-paste"
                     />
                     <TextField
                         name="feeling"
@@ -116,6 +126,7 @@ export default function FreeWriting() {
                         value={feeling}
                         onChange={e => setFeeling(e.target.value)}
                         inputProps={{ minLength: '150', title: "不少于150" }}
+                        className="disable-paste"
                     />
                     
                     <Button
