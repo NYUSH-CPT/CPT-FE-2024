@@ -24,7 +24,7 @@ import Skill from "@/components/Skill";
 
 import styles from "@/styles/challenge.module.scss";
 
-import { requester } from "@/utils";
+import { requester, disablePasteForInputs } from "@/utils";
 
 import { CHALLENGE_WRITING_INTRO, CHALLENGE_WRITING_PROMPT, CHALLENGE_WRITING_REFERENCE } from "@/components/text";
 
@@ -84,6 +84,17 @@ export default function ChallengeWriting() {
     const [day6Prompt, setDay6Prompt] = useState({});
     const [day6ContentExist, setDay6ContentExist] = useState(false);
     const [day6ExtraContent, setDay6ExtraContent] = useState("");
+
+
+    useEffect(() => {
+        const { addListeners, removeListeners } = disablePasteForInputs();
+
+        addListeners(); // 绑定粘贴禁用事件
+        return () => {
+            removeListeners(); // 清除事件监听器
+        };
+    }, []);
+
 
     useEffect(() => {
         const loadedData = localStorage.getItem(`__autosave--${window.location.pathname}`);
@@ -324,6 +335,7 @@ export default function ChallengeWriting() {
                         onChange={e => setQ1Content(e.target.value)}
                         disabled={contentExist || (day == 6 && day6ContentExist)}
                         label="您的回答"
+                        className="disable-paste"
                     />
 
                     {contentExist && day!=6 && 
@@ -511,7 +523,7 @@ export default function ChallengeWriting() {
                             title: "不少于100字"
                         }}
                         label="您的回答"
-                        
+                        className="disable-paste"
                     />
 
                     {contentExist && day!=6 &&

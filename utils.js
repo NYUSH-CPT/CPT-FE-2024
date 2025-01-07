@@ -105,3 +105,33 @@ export function enableAutoSave(formId) {
     }
 
 }
+
+
+export const disablePasteForInputs = (selector=".disable-paste") => {
+
+    const disablePaste = (e) => {
+        e.preventDefault();
+        alert("粘贴功能已禁用，请手动输入！");
+    };
+
+    const addListeners = () => {
+        const inputs = document.querySelectorAll(selector);
+        console.log(inputs)
+        inputs.forEach((input) => {
+            input.addEventListener("paste", disablePaste);
+        });
+    };
+
+    const removeListeners = () => {
+        const inputs = document.querySelectorAll(selector);
+        inputs.forEach((input) => {
+            input.removeEventListener("paste", disablePaste);
+        });
+    };
+
+    return {
+        addListeners,
+        removeListeners,
+    };
+
+}
