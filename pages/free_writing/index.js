@@ -125,7 +125,7 @@ export default function FreeWriting() {
                         disabled={contentExist}
                         value={feeling}
                         onChange={e => setFeeling(e.target.value)}
-                        inputProps={{ minLength: '150', title: "不少于150" }}
+                        inputProps={{ minLength: '100', title: "不少于100" }}
                         className="disable-paste"
                     />
                     
