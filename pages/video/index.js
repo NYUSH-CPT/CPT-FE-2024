@@ -15,7 +15,6 @@ const Video = () => {
     const [watched, setWatched] = useState(false)
     const [currentTime, setCurrentTime] = useState('')
     const [playPauseText, setPlayPauseText] = useState('播放')
-    const [isFullScreen, setIsFullScreen] = useState(false);
 
 
     useEffect(() => {
@@ -30,50 +29,6 @@ const Video = () => {
         })
     }, [])
 
-    const handleFullScreen = () => {
-        if (contRef.current.requestFullscreen) {
-            contRef.current.requestFullscreen();
-        } else if (contRef.current.webkitRequestFullscreen) { // Safari
-            contRef.current.webkitRequestFullscreen();
-        } else if (contRef.current.msRequestFullscreen) { // IE/Edge
-            contRef.current.msRequestFullscreen();
-        } else {
-            console.log("Fullscreen API is not supported");
-        }
-        setIsFullScreen(true);
-    };
-    const handleExitFullScreen = () => {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) { // Safari
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { // IE/Edge
-            document.msExitFullscreen();
-        } else {
-            console.log("Fullscreen API is not supported");
-        }
-        setIsFullScreen(false); // Exit full-screen mode
-    };
-
-    useEffect(() => {
-        const handleFullScreenChange = () => {
-            if (!document.fullscreenElement) {
-                setIsFullScreen(false);
-            }
-        };
-
-        document.addEventListener("fullscreenchange", handleFullScreenChange);
-        document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
-        document.addEventListener("msfullscreenchange", handleFullScreenChange);
-
-        return () => {
-            document.removeEventListener("fullscreenchange", handleFullScreenChange);
-            document.removeEventListener("webkitfullscreenchange", handleFullScreenChange);
-            document.removeEventListener("msfullscreenchange", handleFullScreenChange);
-        };
-    }, []);
-
-
 
     return(
         <>
@@ -85,12 +40,14 @@ const Video = () => {
         <main className={styles.video}>
             <h1>第2天 科普视频</h1>
             <p>视频播放完毕后将自动更新首页任务列表</p>
+            <p>为便于复习，首次观看完成后即可自由拖动进度条。</p>
             <Card className={styles.container} ref={contRef}>
                 <video
-                    className={styles.player}
+                    className={`${watched? styles.watchedPlayer : styles.player}`}
                     src="/video.mp4"
                     ref={videoRef}
                     playsInline
+                    controls={watched}
                     poster="/video.jpg"
                     onEnded={async () => {
                         if (!watched && videoRef.current.currentTime >= videoRef.current.duration) {
@@ -110,12 +67,13 @@ const Video = () => {
                         )
                     }}
                 />
-
-                {isFullScreen && (
-                    <div 
-                    className={styles.exitFullScreenButton}
-                    >
+            </Card>
+            <div 
+                className={styles.videoControl}>
+                    <span className={styles.videoTime}>{currentTime}</span>
+                    {!watched && 
                         <Button
+                            color='primary'
                             variant='contained'
                             onClick={() => {
                                 if (videoRef.current.paused) {
@@ -129,45 +87,7 @@ const Video = () => {
                         >
                             {playPauseText}
                         </Button>
-
-                        <Button 
-                        variant='contained'
-                        onClick={handleExitFullScreen}
-                        >
-                        退出全屏
-                        </Button>
-                    </div>
-                    
-
-                )}
-            </Card>
-            <div 
-                className={styles.videoControl}>
-                    <span className={styles.videoTime}>{currentTime}</span>
-                    <Button
-                        color='primary'
-                        variant='contained'
-                        onClick={() => {
-                            if (videoRef.current.paused) {
-                                videoRef.current.play()
-                                setPlayPauseText('暂停')
-                            } else {
-                                videoRef.current.pause()
-                                setPlayPauseText('播放')
-                            }
-                        }}
-                    >
-                        {playPauseText}
-                    </Button>
-
-                    <Button 
-                        color='primary'
-                        variant='contained'
-                        onClick={handleFullScreen}
-                    >
-                        全屏
-                    </Button>
-
+                    }
                     <Button 
                         color='primary'
                         variant='contained'
