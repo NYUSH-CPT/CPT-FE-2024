@@ -5,6 +5,7 @@ import {
     Checkbox,
     FormGroup,
     FormControlLabel,
+    Button, 
 
 } from "@mui/material";
 
@@ -273,3 +274,55 @@ export const CHALLENGE_WRITING_PROMPT = {4: CHALLENGE_WRITING_DAY4_PROMPT, 5: CH
 export const CHALLENGE_WRITING_INTRO = {4: CHALLENGE_WRITING_DAY4_INTRO, 5: CHALLENGE_WRITING_DAY5_INTRO, 6: CHALLENGE_WRITING_DAY6_INTRO}
 
 export const CHALLENGE_WRITING_REFERENCE = {4: CHALLENGE_WRITING_DAY4_REFERENCE, 5: CHALLENGE_WRITING_DAY5_REFERENCE}
+
+export const INFORMED_CONSENT = 
+(
+    <div>
+        <h2>后续研究邀请</h2>
+        <p>
+            经您填写的筛查问卷确认，您符合参与后续研究的条件。因此，我们邀请您参加一项追踪科学研究。本研究旨在了解性少数男性的压力与心理健康的关系。
+            <br/><br/>
+            本研究将由上海纽约大学与淡蓝公益合作展开，由上纽大李谷教授、Pekka Santtila教授和淡蓝公益于飞共同主持。本研究的研究数据将被写入学位论文或者被公开发表（如发表在学术会议、学术期刊上面）。
+            <br/>
+            </p>
+        <h3>
+            您需要做什么：
+        </h3>
+        <p>
+            待您正式注册进入本研究后，本研究将在三个半月内耗费您大约六个小时的时间。在第1天、第23天、第39天和第99天，您将分别完成一份问卷，该问卷大约需要25分钟完成。您还会被邀请参加一个为期9天的心理健康培训。在这个培训中，您将观看一个心理教育视频，并完成一些写作练习和游戏。游戏中，您需要在一个网页上浏览一些文字对话并根据指导做一些选择题。这些对话描述了中国性少数男性所面临的挑战以及TA们的想法。这个9天的培训每天大概会占用您30分钟的时间。除此之外我们将不会占用您的其它时间。
+            <br/><br/>
+            我们将通过您问卷中预留的微信账号以及Blued软件的站内信给您发送消息提醒以及包含后续问卷和其它研究材料的网页链接。我们也将通过您预留的手机号给您发送验证码用于登录研究网站。
+            <br/><br/>
+            调研报酬： 在研究的不同阶段，您将获得不同价值的京东电子购物券，总计50–250元，具体金额取决于您所完成任务的质量与数量。
+            <br/><br/>
+            隐私性：参加此研究是匿名的。您将通过手机号和验证码登录研究网站，但是您的手机号和其它个人信息（如微信账号）将会与正式入组后的研究数据分开保存，且只有少数的、签订了保密协议并且通过了CITI伦理培训的工作人员能够看到您的上述个人信息。
+            <br/><br/>
+            正式开始研究前，我们会向您提供知情同意书。请仔细查阅以获取有关本研究以及您的权利等的更多信息。如果您对本研究或您的参与有任何不清楚或不理解的地方，或希望报告与研究有关的问题，您可以联系：
+        </p>
+        <p>
+            主研究员：李谷博士<br/>
+            上海纽约大学心理学助理教授<br/>
+            邮箱：gu.li@nyu.edu<br/>
+            <br/>
+            合作研究员：Pekka Santtila博士<br/>
+            上海纽约大学心理学教授<br/>
+            邮箱：pekka.santtila@nyu.edu<br/>
+            <br/>
+            合作研究员：于飞<br/>
+            淡蓝公益中级社会工作师<br/>
+            邮箱：yufei@blued.com<br/>
+            <br/>
+            研究员：Pablo Yin<br/>
+            上海纽约大学心理学研究助理<br/>
+            邮箱：jiajunyin@nyu.edu<br/>
+            <br/>
+            如果您需要讨论作为参与者的权利，请联系上海纽约大学研究合规办公室<br/>
+            邮箱：RCOinfo@nyu.edu<br/>
+        </p>
+
+        <h3>
+            请选择以下所有适合您的情况：
+        </h3>
+
+</div>)
+

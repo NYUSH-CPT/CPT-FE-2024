@@ -1,0 +1,111 @@
+@import '@/styles/var.scss';
+
+.header {
+    background-color: $primary-background;
+    img{
+        padding: 0.5em 0.5em 0.5em 1em;
+        width: auto;
+        height: 4em;
+        filter: grayscale(10) invert(100%);
+        object-fit: contain;
+    }
+    margin: 0 auto;
+    position: fixed;
+    display: flex;
+    width: 100%;
+    z-index: 10;
+    max-height: 80px;
+}
+
+
+
+.container {
+
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 5em 1em 1em 1em;
+
+
+    h1 {
+        font-size: 28px;
+        padding: 0 0 16px;
+        font-weight: 450;
+    }
+
+    h2 {
+        font-size: 20px;
+        padding: 0 0 16px;
+        font-weight: 400;
+    }
+
+    h3 {
+        font-size: 18px;
+        padding: 0 0 16px;
+        font-weight: 350;
+    }
+
+    p {
+        font-size: 16px;
+        padding: 0 0 16px;
+        font-weight: 300;
+    }
+
+    ul {
+        padding: 0 0 16px 32px;
+        font-weight: 300;
+        list-style-type: circle;
+    }
+
+    a {
+        color: $primary-text;
+        text-decoration: none;
+        font-weight: 300;
+    }
+
+}
+
+
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  
+    .toggleButton {
+      border-radius: 8px;
+      padding: 12px 12px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      text-align: right;
+      justify-content: flex-start;
+  
+    }
+  
+    .actionButton {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: auto;
+  
+    }
+  }
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 0 1em 0;
+    .actionButton {
+        border: none;
+        padding: 8px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+}
