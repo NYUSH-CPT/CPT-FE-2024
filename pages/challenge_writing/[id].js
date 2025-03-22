@@ -87,13 +87,14 @@ export default function ChallengeWriting() {
 
 
     useEffect(() => {
-        const { addListeners, removeListeners } = disablePasteForInputs();
-
-        addListeners(); // 绑定粘贴禁用事件
-        return () => {
-            removeListeners(); // 清除事件监听器
-        };
-    }, []);
+        if (!loading) {
+            const { addListeners, removeListeners } = disablePasteForInputs();
+            addListeners(); // 绑定粘贴禁用事件
+            return () => {
+                removeListeners(); // 清除事件监听器
+            }
+        }
+    }, [loading]);
 
 
     useEffect(() => {
