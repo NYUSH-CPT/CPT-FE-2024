@@ -68,7 +68,7 @@ export default function Tasks(props) {
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
-                        if ([23, 39, 99].includes(day) && info[`survey${day}IsValid`] === "False") {
+                        if ([23, 39, 99].includes(day) && info[`survey${day}`] === "Overdue") {
                             stepProps.completed = false
                             stepProps.active = false
                             item.completed_description = "已逾期"
