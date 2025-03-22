@@ -39,13 +39,11 @@ export default function Home() {
                 window.location.href = "/login" 
                 return
             }
-            console.log(key)
             axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, {
                 params: {
                     key: key
                 }
             }).then((res) => {
-                console.log(res)
                 if (!token) {
                     window.location.href = "/login" 
                 } else {
@@ -61,7 +59,6 @@ export default function Home() {
             if (!token) {
                 window.location.href = "/login" 
             } else {
-                console.log(token)
                 requester.get('/info').then(res => {
                     setInfo(res.data)
                     console.log(res.data)
