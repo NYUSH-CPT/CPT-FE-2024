@@ -126,7 +126,7 @@ export default function Tasks(props) {
                 (`您的实验将于 ${expStart.format('YYYY-MM-DD')} 开始。`)
             }<br/>
 
-            您可以在完成9天的任务以及第23天、第39天与第99天的评估后分别获得补偿哦！补偿金额将由任务完成的进度和质量共同决定。金额将逐次累积并在最后一次随访评估后的三天内发放给您！
+            您可以在完成9天的任务以及第23天的评估后分别获得补偿哦！补偿金额将由任务完成的进度和质量共同决定。金额将逐次累积并在最后一次随访评估后的三天内发放给您！
             </p>
             <Stepper orientation="vertical" >
                 {TASK_EXP_GRP.map((item, index) => {
