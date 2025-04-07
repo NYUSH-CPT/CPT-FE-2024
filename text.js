@@ -323,7 +323,7 @@ export const TASK_WL_GRP = [
         title: '第23天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_eS7IRMfy2rUKvbg',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_6WfcsuSi4tvWsXI',
         completed_url: '/'
     },
     {
@@ -331,7 +331,7 @@ export const TASK_WL_GRP = [
         title: '第39天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_bCqe0iAygJoIgnk',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_50D49Rkjqw8WPVI',
         completed_url: '/'
     },
     {
@@ -339,7 +339,7 @@ export const TASK_WL_GRP = [
         title: '第99天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_7ProglfMtqe1dKS',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_7QDNuc5yoqmq88m',
         completed_url: '/'
     },
     {   
