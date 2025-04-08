@@ -42,12 +42,12 @@ export default function Tasks(props) {
                     if (day == currentDay) {
                         stepProps.active = true
                         const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                        const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
-                        if (info.banFlag && ![23, 39, 99].includes(day)) {
+                        const latestStartDate = expStart.clone().add(day + (day == 23? 6 : 1), 'days').add(4, 'hours')
+                        if (info.banFlag && day != 23) {
                             stepProps.active = false
                             description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
                         } else {
-                            if (!moment().isBetween(earlistStartDate, latestStartDate) && day !== 39) {
+                            if (!moment().isBetween(earlistStartDate, latestStartDate) && day != 39) {
                                 stepProps.active = false
                                 description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                             }
@@ -57,7 +57,7 @@ export default function Tasks(props) {
                         stepProps.active = false
                         link = "/"
                         if (info.banFlag && day > banDay && daysSinceStart > currentDay) {
-                            const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
+                            const latestStartDate = expStart.clone().add(day + (day==23? 6 : 1), 'days').add(4, 'hours')
                             if (moment().isBetween(expStart, latestStartDate)) {
                                 stepProps.active = true
                                 link = item.url + `?uuid=${uuid}`
@@ -68,7 +68,11 @@ export default function Tasks(props) {
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
-                        if ([23, 39, 99].includes(day) && info[`survey${day}`] === "Overdue") {
+                        if (day == 39) {
+                            stepProps.active = true
+                            stepProps.completed = false
+                        }
+                        if (day == 23 && info[`survey${day}`] === "Overdue") {
                             stepProps.completed = false
                             stepProps.active = false
                             item.completed_description = "已逾期"
@@ -138,9 +142,9 @@ export default function Tasks(props) {
                     if (day == currentDay) {
                         stepProps.active = true
                         const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                        const latestStartDate = expStart.clone().add(day + ([23, 39, 99].includes(day)? 6 : 1), 'days').add(4, 'hours')
+                        const latestStartDate = expStart.clone().add(day + (day == 23? 6 : 1), 'days').add(4, 'hours')
                         const hasViewedAll = Object.keys(viewInfo).map(Number).filter(d => d < day).every(d => viewInfo[d]); 
-                        if (info.banFlag && ![23, 39, 99].includes(day)) {
+                        if (info.banFlag && day != 23) {
                             stepProps.active = false
                             description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
                         } else {
@@ -165,14 +169,14 @@ export default function Tasks(props) {
                             } 
                         }
                         link = stepProps.active? item.url: "/"
-                        if (stepProps.active && [1, 23, 39, 99].includes(day)) {
+                        if (stepProps.active && [1, 23].includes(day)) {
                             link += `?uuid=${uuid}`
                         }
                         invisible = invisible || !stepProps.active
                     } else if (day > currentDay) {
                         stepProps.active = false
                         link = "/"
-                        if (info.banFlag && [23, 39, 99].includes(day) && day > banDay && daysSinceStart > currentDay) {
+                        if (info.banFlag && day == 23 && day > banDay && daysSinceStart > currentDay) {
                             const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
                             const latestStartDate = expStart.clone().add(day + 6, 'days').add(4, 'hours')
                             if (moment().isBetween(earlistStartDate, latestStartDate)) {
@@ -183,13 +187,13 @@ export default function Tasks(props) {
                             } else {
                                 description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                             }
-                        } else if (info.banFlag && ![23, 39, 99].includes(day)) {
+                        } else if (info.banFlag && ! (day == 23)) {
                             item.description = "已失效"
                         }
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
-                        if ([23, 39, 99].includes(day) && info[`survey${day}IsValid`] === "False") {
+                        if (day == 23 && info[`survey${day}IsValid`] === "False") {
                             stepProps.completed = false
                             stepProps.active = false
                             item.completed_description = "已逾期"
