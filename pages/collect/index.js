@@ -1,5 +1,7 @@
 import { INFORMED_CONSENT } from "@/components/text";
 
+import MentalHealthResources from "@/components/MentalHealthResources";
+
 import { Button, ToggleButton, TextField, Alert } from "@mui/material";
 
 import { useRouter } from "next/router";
@@ -20,20 +22,24 @@ export default function Collect() {
     const [responseId, setResponseId] = useState(null);
     const [exist, setExist] = useState(false);
     const [inviteCPT, setInviteCPT] = useState(null);
+    const [eligible, setEligible] = useState(null);
+    const [service, setService] = useState(null);
 
     useEffect(() => {
         if (!router.isReady) return;
-        const { uuid, invalid, responseId } = router.query;
+        const { uuid, invalid, responseId, eligible, service } = router.query;
         const data = localStorage.getItem(
-            `__autosave--${window.location.pathname}`
+            `__autosave-prod-${window.location.pathname}`
         );
-        let loadedInviteCPT, loadedUuid, loadedInvalid, loadedResponseID;
+        let loadedInviteCPT, loadedUuid, loadedInvalid, loadedResponseID, loadedEligible, loadedService;
         if (data) {
             const parsedData = JSON.parse(data);
             loadedInviteCPT = parsedData.loadedInviteCPT;
             loadedUuid = parsedData.loadedUuid;
             loadedInvalid = parsedData.loadedInvalid;
             loadedResponseID = parsedData.loadedResponseID;
+            loadedEligible =  parsedData.loadedEligible;
+            loadedService = parsedData.loadedService;
             console.log(data)
         } 
         if (loadedUuid == uuid) {
@@ -41,20 +47,26 @@ export default function Collect() {
             setInvalid(loadedInvalid);
             setResponseId(loadedResponseID);
             setInviteCPT(loadedInviteCPT);
-            setAskConsent(loadedInviteCPT == null && loadedInvalid != 1);
+            setAskConsent(loadedInviteCPT == null && loadedEligible == 1);
+            setEligible(loadedEligible);
+            setService(loadedService);
         } else {
             setUuid(uuid);
             setInvalid(invalid);
             setResponseId(responseId);
-            setAskConsent(invalid == 0);
+            setAskConsent(eligible == 1);
+            setEligible(eligible);
+            setService(service);
             const data = {
                 loadedInviteCPT: inviteCPT,
                 loadedUuid: uuid,
                 loadedInvalid: invalid,
                 loadedResponseID: responseId,
+                loadedEligible: eligible,
+                loadedService: service
             };
             localStorage.setItem(
-                `__autosave--${window.location.pathname}`,
+                `__autosave-${window.location.pathname}`,
                 JSON.stringify(data)
             );
         }
@@ -85,7 +97,7 @@ export default function Collect() {
         const rand = Math.random();
         console.log(rand);
         const inviteCPT =
-            invalid == 0 && rand >= 1 / 3 && understand && participate;
+            eligible == 1 && rand >= 1 / 3 && understand && participate;
         setInviteCPT(inviteCPT);
         setAskConsent(false);
         const data = {
@@ -93,9 +105,11 @@ export default function Collect() {
             loadedUuid: uuid,
             loadedInvalid: invalid,
             loadedResponseID: responseId,
+            loadedService: service,
+            loadedEligible: eligible
         };
         localStorage.setItem(
-            `__autosave--${window.location.pathname}`,
+            `__autosave-${window.location.pathname}`,
             JSON.stringify(data)
         );
     };
@@ -138,8 +152,10 @@ export default function Collect() {
             <header className={styles.header}>
                 <img src="logo.png" alt="logo" />
             </header>
+
             <div className={styles.container}>
-                {uuid == null || invalid == null || responseId == null ? (
+
+                {uuid == null || invalid == null || responseId == null || eligible == null || service == null? (
                     <> 抱歉，您没有权限访问此页面。</>
                 ) : !complete && !exist ? (
                     <>
@@ -251,7 +267,27 @@ export default function Collect() {
                         )}
                     </>
                 ) : (
-                    <div>您的作答已被记录。感谢您的参与！祝您⽣活愉快！</div>
+                    <>
+                        <h3>您的作答已被记录。感谢您的参与！祝您⽣活愉快！</h3>
+                        
+                        {service == 1 && (
+                            <>
+                                <MentalHealthResources />   
+                            </>
+                            )}
+
+                        {invalid == 0 && (
+                            <>
+                            <div className="justify-self-center items-center py-4">
+                                <Button variant="contained" onClick={() => router.push(`https://danlangongyi.wjx.cn/vm/tUsFDcM.aspx?sojumpparm=${uuid}`)}>
+                                    点击此处跳转至问卷星领取奖励
+                                </Button>
+                            </div>
+                            
+                            </>
+                        )}
+                    </>
+                    
                 )}
             </div>
         </>
