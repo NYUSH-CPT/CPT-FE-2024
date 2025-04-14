@@ -97,7 +97,7 @@ export default function Collect() {
         const rand = Math.random();
         console.log(rand);
         const inviteCPT =
-            eligible == 1 && rand >= 1 / 3 && understand && participate;
+            eligible == 1 && understand && participate;
         setInviteCPT(inviteCPT);
         setAskConsent(false);
         const data = {
