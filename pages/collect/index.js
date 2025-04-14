@@ -66,7 +66,7 @@ export default function Collect() {
                 loadedService: service
             };
             localStorage.setItem(
-                `__autosave-${window.location.pathname}`,
+                `__autosave-prod-${window.location.pathname}`,
                 JSON.stringify(data)
             );
         }
@@ -109,7 +109,7 @@ export default function Collect() {
             loadedEligible: eligible
         };
         localStorage.setItem(
-            `__autosave-${window.location.pathname}`,
+            `__autosave-prod-${window.location.pathname}`,
             JSON.stringify(data)
         );
     };
