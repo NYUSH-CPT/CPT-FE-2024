@@ -29,7 +29,7 @@ export default function Collect() {
         if (!router.isReady) return;
         const { uuid, invalid, responseId, eligible, service } = router.query;
         const data = localStorage.getItem(
-            `__autosave-prod-${window.location.pathname}`
+            `__autosave-pilot-${window.location.pathname}`
         );
         let loadedInviteCPT, loadedUuid, loadedInvalid, loadedResponseID, loadedEligible, loadedService;
         if (data) {
@@ -66,7 +66,7 @@ export default function Collect() {
                 loadedService: service
             };
             localStorage.setItem(
-                `__autosave-${window.location.pathname}`,
+                `__autosave-pilot-${window.location.pathname}`,
                 JSON.stringify(data)
             );
         }
@@ -109,7 +109,7 @@ export default function Collect() {
             loadedEligible: eligible
         };
         localStorage.setItem(
-            `__autosave-${window.location.pathname}`,
+            `__autosave-pilot-${window.location.pathname}`,
             JSON.stringify(data)
         );
     };
