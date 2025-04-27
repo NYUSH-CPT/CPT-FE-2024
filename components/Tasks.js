@@ -39,6 +39,7 @@ export default function Tasks(props) {
                     const stepProps = {completed: false, active: false};
                     let link = "/", description = "";
     
+                    //TODO
                     if (day == currentDay) {
                         stepProps.active = true
                         const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
@@ -65,6 +66,7 @@ export default function Tasks(props) {
                                 item.description = "已逾期"
                             }
                         }
+                    // TODO 已逾期 -》 问卷无效
                     } else if (day < currentDay) {
                         stepProps.completed = true
                         link = item.completed_url || item.url
