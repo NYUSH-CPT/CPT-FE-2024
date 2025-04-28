@@ -67,7 +67,7 @@ export default function Tasks(props) {
                         }
                     } else {
                         if (day == info.banDay) {
-                            description += "抱歉！后续干预任务已失效。\n"
+                            description += "抱歉！后续任务已失效。\n"
                         } else if (day < info.banDay) {
                             if (info[`survey${day}IsValid`] === "False") {
                                 stepProps.completed = false
@@ -76,7 +76,7 @@ export default function Tasks(props) {
                             } else if (info[`survey${day}IsValid`] === "True") {
                                 stepProps.completed = true
                                 item.description = "已完成"
-                                item.complete_description = "已完成"
+                                item.completed_description = "已完成"
                             } 
                         } 
                     }
@@ -140,7 +140,7 @@ export default function Tasks(props) {
                     const stepProps = {completed: false, active: false};
                     let link = "/", description = "", invisible = true;
                     invisible = !(unViewed(day))
-    
+
                     if (!info.banFlag) {
                         if (day == currentDay) {
                             stepProps.active = true
@@ -186,7 +186,7 @@ export default function Tasks(props) {
                     } else {
                         if (day == info.banDay) {
                             if (info.banDay == 1 || info.banDay == 1.1) {
-                                description += "抱歉！后续干预任务已失效。\n"
+                                description += "抱歉！后续任务已失效。\n"
                             } else {
                                 description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
                             }
@@ -221,6 +221,17 @@ export default function Tasks(props) {
                             }
                         } else if (day < info.banDay) {
                             stepProps.completed = true
+                            if (day == 23) {
+                                if (info[`survey${day}IsValid`] === "False") {
+                                    stepProps.completed = false
+                                    item.completed_description = "问卷无效"
+                                } else if (info[`survey${day}IsValid`] === "True") {
+                                    stepProps.completed = true
+                                    item.completed_description = "已完成"
+                                } 
+                            } else {
+                                item.description = "已失效"
+                            }
                         }
                     } 
     
