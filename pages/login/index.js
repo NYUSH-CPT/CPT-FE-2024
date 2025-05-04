@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 
 import styles from "@/styles/login.module.scss"
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 
 import axios from 'axios';
 import { requester } from '@/utils';
@@ -10,8 +10,6 @@ import { requester } from '@/utils';
 export default function Login() {
     const [phone, setPhone] = useState('')
     const [pwd, setPwd] = useState('')
-    const [smsState, setSmsState] = useState(false)
-    const [smsText, setSmsText] = useState('发送验证码')
     const [errorMsg, setErrorMsg] = useState('')
     
     useEffect(() => {
@@ -24,43 +22,6 @@ export default function Login() {
             })
         }
     }, [])
-
-    const getSMS = async () => {
-        setSmsState(true)
-        setSmsText('发送中...')
-        setErrorMsg('')
-        const payload = {
-            phoneNumber: phone,
-        }
-        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sms`, payload).then((res) => {
-            console.log(res)
-            const start = new Date().getTime()
-            setSmsText('30秒后可重试')
-            const ref = setInterval(() => {
-                const remain = 30 - Math.floor((new Date().getTime() - start) / 1000)
-                setSmsText(remain + '秒后可重试')
-            }, 1000)
-            setTimeout(() => {
-                setSmsState(false)
-                clearInterval(ref)
-                setSmsText('发送验证码')
-            }, 30000)
-            }).catch((err) => {
-                console.log(err)
-                const start = new Date().getTime()
-                setErrorMsg(err.response? err.response.data.error: JSON.stringify(err))
-                const ref = setInterval(() => {
-                    const remain = 15 - Math.floor((new Date().getTime() - start) / 1000)
-                    setSmsText('失败!' + remain + '秒重试')
-                }, 1000)
-
-                setTimeout(() => {
-                    setSmsState(false)
-                    clearInterval(ref)
-                    setSmsText('发送验证码')
-                }, 15000)
-            })
-    }
 
     const handleSubmit = async (event) => {
         const form = event.currentTarget
@@ -101,23 +62,18 @@ export default function Login() {
                                 value={phone}
                                 onChange={e => setPhone(e.target.value)}
                             />
+                            
                         </div>
                         
-                        <div className={styles.smsGroup}>
-                            <div className={styles.smsInput}>
-                                <ChatBubbleOutlineOutlinedIcon className='text-white'/>
+                        <div className={styles.inputGroup}>
+                                <KeyOutlinedIcon className='text-white'/>
                                 <input
                                     type="password"
-                                    placeholder="验证码"
+                                    placeholder="密码"
                                     className={styles.input}
                                     value={pwd}
                                     onChange={e => setPwd(e.target.value)}
                                 />
-                                
-                            </div>
-                            <button disabled={smsState} className={styles.smsButton} onClick={getSMS}>
-                                    {smsText}
-                            </button>
                         </div>
                             
                         {errorMsg && <div className={styles.errorMsg}>{errorMsg}</div>}
@@ -128,6 +84,9 @@ export default function Login() {
                         >
                             登录
                         </button>
+                        <div className={styles.setPwdLink}>
+                            <a href="/signup">第一次登录？请设置密码</a>
+                        </div>
                     </div>
                 
             </div>
