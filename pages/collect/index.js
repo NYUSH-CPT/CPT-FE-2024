@@ -14,6 +14,13 @@ import axios from "axios";
 
 import styles from "@/styles/collect.module.scss";
 
+import { 
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
+
 export default function Collect() {
     const router = useRouter();
 
@@ -31,17 +38,22 @@ export default function Collect() {
         const data = localStorage.getItem(
             `__autosave-pilot-${window.location.pathname}`
         );
-        let loadedInviteCPT, loadedUuid, loadedInvalid, loadedResponseID, loadedEligible, loadedService;
+        let loadedInviteCPT,
+            loadedUuid,
+            loadedInvalid,
+            loadedResponseID,
+            loadedEligible,
+            loadedService;
         if (data) {
             const parsedData = JSON.parse(data);
             loadedInviteCPT = parsedData.loadedInviteCPT;
             loadedUuid = parsedData.loadedUuid;
             loadedInvalid = parsedData.loadedInvalid;
             loadedResponseID = parsedData.loadedResponseID;
-            loadedEligible =  parsedData.loadedEligible;
+            loadedEligible = parsedData.loadedEligible;
             loadedService = parsedData.loadedService;
-            console.log(data)
-        } 
+            console.log(data);
+        }
         if (loadedUuid == uuid) {
             setUuid(uuid);
             setInvalid(loadedInvalid);
@@ -63,7 +75,7 @@ export default function Collect() {
                 loadedInvalid: invalid,
                 loadedResponseID: responseId,
                 loadedEligible: eligible,
-                loadedService: service
+                loadedService: service,
             };
             localStorage.setItem(
                 `__autosave-pilot-${window.location.pathname}`,
@@ -82,6 +94,24 @@ export default function Collect() {
             .catch((err) => {});
     }, [router.isReady, router.query]);
 
+    const [warn, setWarn] = useState(true)
+
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = "";
+        };
+
+        if (warn) {
+            window.addEventListener("beforeunload", handleBeforeUnload);
+
+        }
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [warn]);
+
     const [understand, setUnderstand] = useState(false);
     const [participate, setParticipate] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -92,13 +122,22 @@ export default function Collect() {
     const [complete, setComplete] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
+    
+    const [remind, setRemind] = useState(true)
+    const [popUp, setPopUp] = useState(false)
+
+    const [decline, setDecline] = useState(false)
 
     const handleContinue = () => {
         const rand = Math.random();
         console.log(rand);
-        const inviteCPT =
-            eligible == 1 && understand && participate;
+        const inviteCPT = eligible == 1 && understand && participate;
         setInviteCPT(inviteCPT);
+        if (!inviteCPT && remind) {
+            setPopUp(true)
+            setRemind(false)
+            return
+        }
         setAskConsent(false);
         const data = {
             loadedInviteCPT: inviteCPT,
@@ -106,7 +145,7 @@ export default function Collect() {
             loadedInvalid: invalid,
             loadedResponseID: responseId,
             loadedService: service,
-            loadedEligible: eligible
+            loadedEligible: eligible,
         };
         localStorage.setItem(
             `__autosave-pilot-${window.location.pathname}`,
@@ -118,14 +157,19 @@ export default function Collect() {
         event.preventDefault();
         setErrorMessage("");
 
-        if (inviteCPT && (phoneNumber == "" || WeChat == "")) {
-            setErrorMessage("无效的回答");
-            return;
-        }
+        const isValidPhoneNumber = (num) => /^\d{9,}$/.test(num);         // 至少9位数字
+        const isValidQQ = (qq) => /^[1-9]\d{4,10}$/.test(qq);              // 5到11位数字，不能以0开头
 
-        if (!inviteCPT && (phoneNumber == "" || QQ == "")) {
-            setErrorMessage("无效的回答");
-            return;
+        if (inviteCPT) {
+            if (!isValidPhoneNumber(phoneNumber) || WeChat.trim() === "") {
+                setErrorMessage("请输入合法的手机号和微信号");
+                return;
+            }
+        } else {
+            if (!isValidPhoneNumber(phoneNumber) || !isValidQQ(QQ)) {
+                setErrorMessage("请输入合法的手机号和 QQ 号");
+                return;
+            }
         }
 
         const payload = { uuid, phoneNumber, WeChat, QQ, responseId };
@@ -138,6 +182,7 @@ export default function Collect() {
             )
             .then((res) => {
                 setComplete(true);
+                setWarn(false)
             })
             .catch((err) => {
                 console.log(err);
@@ -154,8 +199,11 @@ export default function Collect() {
             </header>
 
             <div className={styles.container}>
-
-                {uuid == null || invalid == null || responseId == null || eligible == null || service == null? (
+                {!uuid ||
+                (invalid !== "0" && invalid !== "1") ||
+                !responseId ||
+                (eligible !== "0" && eligible !== "1") ||
+                (service !== "1" && service !== "0") ? (
                     <> 抱歉，您没有权限访问此页面。</>
                 ) : !complete && !exist ? (
                     <>
@@ -167,11 +215,14 @@ export default function Collect() {
                                         className={styles.toggleButton}
                                         color="primary"
                                         selected={understand}
-                                        onChange={() =>
+                                        onChange={() => {
                                             setUnderstand(
                                                 (prevUnderstand) =>
                                                     !prevUnderstand
                                             )
+                                            setDecline(false);
+                                        }
+                                            
                                         }
                                     >
                                         我已经阅读了知情书并且理解以上的信息
@@ -181,13 +232,33 @@ export default function Collect() {
                                         color="primary"
                                         selected={participate}
                                         onChange={() =>
-                                            setParticipate(
+                                            {setParticipate(
                                                 (prevParticipate) =>
                                                     !prevParticipate
                                             )
+                                            setDecline(false);
+
+                                        }
                                         }
                                     >
                                         我自愿参加本研究
+                                    </ToggleButton>
+
+
+                                    <ToggleButton
+                                        className={styles.toggleButton}
+                                        value="decline"
+                                        color="primary"
+                                        selected={decline}
+                                        onChange={() => {
+                                            setDecline((prev) => !prev);
+                                            if (!decline) {
+                                            setUnderstand(false);
+                                            setParticipate(false);
+                                            }
+                                        }}
+                                        >
+                                        我不想参与研究
                                     </ToggleButton>
 
                                     <Button
@@ -197,6 +268,15 @@ export default function Collect() {
                                     >
                                         <ArrowForward />
                                     </Button>
+
+                                    <Dialog
+                                        open={popUp}
+                                        onClose={() => {setPopUp(false)}}
+                                    >
+                                        <DialogContent>
+                                           请选择所有选项以表示您知情并同意参与本研究。
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
                             </div>
                         )}
@@ -265,29 +345,62 @@ export default function Collect() {
                         {errorMessage && (
                             <Alert severity="error">{errorMessage}</Alert>
                         )}
+
+                        {!inviteCPT && invalid == 0 && (
+                                <div className="justify-self-center items-center py-4">
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            router.push(
+                                                `https://danlangongyi.wjx.cn/vm/tUsFDcM.aspx?sojumpparm=${uuid}`
+                                            )
+                                        }
+                                          sx={{
+                                            backgroundColor: '#9e9e9e', 
+                                            color: '#ffffff',          
+                                            '&:hover': {
+                                            backgroundColor: '#7e7e7e', 
+                                            },
+                                        }}
+                                    >
+                                        不想参与研究
+                                    </Button>
+                                </div>
+                        )}
+
+                        {service == 1 && (
+                            <>
+                                <MentalHealthResources />
+                            </>
+                        )}
                     </>
                 ) : (
                     <>
                         <h3>您的作答已被记录。感谢您的参与！祝您⽣活愉快！</h3>
-                        
-                        {service == 1 && (
-                            <>
-                                <MentalHealthResources />   
-                            </>
-                            )}
 
                         {invalid == 0 && (
                             <>
-                            <div className="justify-self-center items-center py-4">
-                                <Button variant="contained" onClick={() => router.push(`https://danlangongyi.wjx.cn/vm/tUsFDcM.aspx?sojumpparm=${uuid}`)}>
-                                    点击此处跳转至问卷星领取奖励
-                                </Button>
-                            </div>
-                            
+                                <div className="justify-self-center items-center pb-4">
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            router.push(
+                                                `https://danlangongyi.wjx.cn/vm/tUsFDcM.aspx?sojumpparm=${uuid}`
+                                            )
+                                        }
+                                    >
+                                        点击此处跳转至问卷星领取奖励
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+
+                        {service == 1 && (
+                            <>
+                                <MentalHealthResources />
                             </>
                         )}
                     </>
-                    
                 )}
             </div>
         </>

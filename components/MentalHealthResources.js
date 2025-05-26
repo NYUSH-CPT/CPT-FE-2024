@@ -13,7 +13,7 @@ import styles from "@/styles/collect.module.scss";
 
 const MentalHealthResources = () => {
   return (
-    <div>
+    <div className="pt-4">
         <h3>
             心理支持资源
         </h3>
