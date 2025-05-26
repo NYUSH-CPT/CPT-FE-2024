@@ -133,7 +133,7 @@ export default function Collect() {
         console.log(rand);
         const inviteCPT = eligible == 1 && understand && participate;
         setInviteCPT(inviteCPT);
-        if (!inviteCPT && remind) {
+        if (!inviteCPT && remind && !decline) {
             setPopUp(true)
             setRemind(false)
             return
@@ -346,7 +346,7 @@ export default function Collect() {
                             <Alert severity="error">{errorMessage}</Alert>
                         )}
 
-                        {!inviteCPT && invalid == 0 && (
+                        {!askConsent && !inviteCPT && invalid == 0 && (
                                 <div className="justify-self-center items-center py-4">
                                     <Button
                                         variant="contained"
