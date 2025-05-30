@@ -201,7 +201,6 @@ export default function Collect() {
             <div className={styles.container}>
                 {!uuid ||
                 (invalid !== "0" && invalid !== "1") ||
-                !responseId ||
                 (eligible !== "0" && eligible !== "1") ||
                 (service !== "1" && service !== "0") ? (
                     <> 抱歉，您没有权限访问此页面。</>
