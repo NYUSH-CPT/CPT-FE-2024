@@ -17,95 +17,50 @@ import styles from "@/styles/collect.module.scss";
 import { 
     Dialog,
     DialogContent,
-    DialogTitle,
-    IconButton,
 } from "@mui/material";
 
 export default function Collect() {
     const router = useRouter();
 
+    const [metadata, setMetadata] = useState({});
     const [uuid, setUuid] = useState(null);
-    const [invalid, setInvalid] = useState(null);
-    const [responseId, setResponseId] = useState(null);
     const [exist, setExist] = useState(false);
     const [inviteCPT, setInviteCPT] = useState(null);
-    const [eligible, setEligible] = useState(null);
-    const [service, setService] = useState(null);
+    const [notAllowed, setNotAllowed] = useState(false);
 
     useEffect(() => {
         if (!router.isReady) return;
-        const { uuid, invalid, responseId, eligible, service } = router.query;
-        const data = localStorage.getItem(
-            `__autosave-pilot-${window.location.pathname}`
-        );
-        let loadedInviteCPT,
-            loadedUuid,
-            loadedInvalid,
-            loadedResponseID,
-            loadedEligible,
-            loadedService;
-        if (data) {
-            const parsedData = JSON.parse(data);
-            loadedInviteCPT = parsedData.loadedInviteCPT;
-            loadedUuid = parsedData.loadedUuid;
-            loadedInvalid = parsedData.loadedInvalid;
-            loadedResponseID = parsedData.loadedResponseID;
-            loadedEligible = parsedData.loadedEligible;
-            loadedService = parsedData.loadedService;
-            console.log(data);
-        }
-        if (loadedUuid == uuid) {
-            setUuid(uuid);
-            setInvalid(loadedInvalid);
-            setResponseId(loadedResponseID);
-            setInviteCPT(loadedInviteCPT);
-            setAskConsent(loadedInviteCPT == null && loadedEligible == 1);
-            setEligible(loadedEligible);
-            setService(loadedService);
-        } else {
-            setUuid(uuid);
-            setInvalid(invalid);
-            setResponseId(responseId);
-            setAskConsent(eligible == 1);
-            setEligible(eligible);
-            setService(service);
-            const data = {
-                loadedInviteCPT: inviteCPT,
-                loadedUuid: uuid,
-                loadedInvalid: invalid,
-                loadedResponseID: responseId,
-                loadedEligible: eligible,
-                loadedService: service,
-            };
-            localStorage.setItem(
-                `__autosave-pilot-${window.location.pathname}`,
-                JSON.stringify(data)
-            );
-        }
+        const { uuid } = router.query;
+        setUuid(uuid);
         axios
-            .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, {
+            .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/screen_record`, {
                 params: {
-                    key: uuid,
+                    uuid: uuid,
                 },
             })
             .then((res) => {
-                setExist(true);
+                console.log(res.data);
+                setMetadata(res.data);
+                setAskConsent(res.data.eligible);
+                setExist(res.data.submitted)
             })
-            .catch((err) => {});
+            .catch((err) => {
+                    setNotAllowed(true)
+                    
+            });
     }, [router.isReady, router.query]);
 
     const [warn, setWarn] = useState(true)
 
     useEffect(() => {
         const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = "";
+            if (warn) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
         };
 
-        if (warn) {
-            window.addEventListener("beforeunload", handleBeforeUnload);
-
-        }
+        window.addEventListener("beforeunload", handleBeforeUnload);
 
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -131,7 +86,7 @@ export default function Collect() {
     const handleContinue = () => {
         const rand = Math.random();
         console.log(rand);
-        const inviteCPT = eligible == 1 && understand && participate;
+        const inviteCPT = metadata.eligible && understand && participate;
         setInviteCPT(inviteCPT);
         if (!inviteCPT && remind && !decline) {
             setPopUp(true)
@@ -139,18 +94,6 @@ export default function Collect() {
             return
         }
         setAskConsent(false);
-        const data = {
-            loadedInviteCPT: inviteCPT,
-            loadedUuid: uuid,
-            loadedInvalid: invalid,
-            loadedResponseID: responseId,
-            loadedService: service,
-            loadedEligible: eligible,
-        };
-        localStorage.setItem(
-            `__autosave-pilot-${window.location.pathname}`,
-            JSON.stringify(data)
-        );
     };
 
     const handleSubmit = async (event) => {
@@ -172,7 +115,7 @@ export default function Collect() {
             }
         }
 
-        const payload = { uuid, phoneNumber, WeChat, QQ, responseId };
+        const payload = { uuid, phoneNumber, WeChat, QQ, responseId: metadata.responseId };
         console.log(payload);
 
         axios
@@ -199,10 +142,7 @@ export default function Collect() {
             </header>
 
             <div className={styles.container}>
-                {!uuid ||
-                (invalid !== "0" && invalid !== "1") ||
-                (eligible !== "0" && eligible !== "1") ||
-                (service !== "1" && service !== "0") ? (
+                {notAllowed ? (
                     <> 抱歉，您没有权限访问此页面。</>
                 ) : !complete && !exist ? (
                     <>
@@ -345,8 +285,8 @@ export default function Collect() {
                             <Alert severity="error">{errorMessage}</Alert>
                         )}
 
-                        {!askConsent && !inviteCPT && invalid == 0 && (
-                                <div className="justify-self-center items-center py-4">
+                        {!askConsent && !inviteCPT && metadata.valid && (
+                                <div className="flex justify-center items-center py-4">
                                     <Button
                                         variant="contained"
                                         onClick={() =>
@@ -367,7 +307,7 @@ export default function Collect() {
                                 </div>
                         )}
 
-                        {service == 1 && (
+                        {metadata.service && (
                             <>
                                 <MentalHealthResources />
                             </>
@@ -377,9 +317,9 @@ export default function Collect() {
                     <>
                         <h3>您的作答已被记录。感谢您的参与！祝您⽣活愉快！</h3>
 
-                        {invalid == 0 && (
+                        {metadata.valid && (
                             <>
-                                <div className="justify-self-center items-center pb-4">
+                                <div className="flex justify-center items-center pb-4">
                                     <Button
                                         variant="contained"
                                         onClick={() =>
@@ -394,7 +334,7 @@ export default function Collect() {
                             </>
                         )}
 
-                        {service == 1 && (
+                        {metadata.service && (
                             <>
                                 <MentalHealthResources />
                             </>
