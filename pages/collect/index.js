@@ -45,8 +45,7 @@ export default function Collect() {
                 setExist(res.data.submitted)
             })
             .catch((err) => {
-                    setNotAllowed(true)
-                    
+                setNotAllowed(true)
             });
     }, [router.isReady, router.query]);
 
@@ -54,13 +53,13 @@ export default function Collect() {
 
     useEffect(() => {
         const handleBeforeUnload = (e) => {
-            if (warn) {
-                e.preventDefault();
-                e.returnValue = "";
-            }
+            e.preventDefault();
+            e.returnValue = "";
         };
 
-        window.addEventListener("beforeunload", handleBeforeUnload);
+        if (warn) {
+            window.addEventListener("beforeunload", handleBeforeUnload);
+        }
 
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);

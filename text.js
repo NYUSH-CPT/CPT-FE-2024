@@ -306,6 +306,7 @@ export const TASK_WL_GRP = [
         url: 'https://nyu.qualtrics.com/jfe/form/SV_1M0Y9JrFaJZYow6',
         completed_url: '/'
     },
+    //pilot-only
     {   
         day: 39,
         title: '任务1：自由写作*',
@@ -325,20 +326,12 @@ export const TASK_WL_GRP = [
         title: '任务3：游戏*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: '/game/1',
+        url: '/game/waitlist',
         completed_url: '/'
     },
     {
         day: 39,
-        title: '任务4：游戏*',
-        description: '预计时间：30分钟',
-        completed_description: '已完成',
-        url: '/game/2',
-        completed_url: '/'
-    },
-    {
-        day: 39,
-        title: '任务5：挑战性写作1*',
+        title: '任务4：挑战性写作1*',
         description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/intro',
@@ -346,35 +339,35 @@ export const TASK_WL_GRP = [
     },
     {
         day: 39,
-        title: '任务6：挑战性写作2*',
+        title: '任务5：挑战性写作2*',
         description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/2',
     },
     {
         day: 39,
-        title: '任务7：挑战性写作3*',
+        title: '任务6：挑战性写作3*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/challenge_writing/3',
     },
     {
         day: 39,
-        title: '任务8：写作反馈*',
+        title: '任务7：写作反馈*',
         description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day6',
     },
     {
         day: 39,
-        title: '任务9：虚拟信件*',
+        title: '任务8：虚拟信件*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/virtual_letter',
     },
     {
         day: 39,
-        title: '任务10：写作反馈*',
+        title: '任务9：写作反馈*',
         description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day8',

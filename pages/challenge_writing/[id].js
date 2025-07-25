@@ -279,14 +279,14 @@ export default function ChallengeWriting() {
         (!loading &&
         <>
             <Head>
-                <title>Day {day} 挑战性写作</title>
+                <title>第{day}天 挑战性写作</title>
             </Head>
             <Header />
             <hr/>
             <Skill />
 
             <form className={styles.container} id="myform">
-            <h1>Day {day} 挑战性写作</h1>
+            <h1>第{day}天 挑战性写作</h1>
                 {day != 4 && CHALLENGE_WRITING_INTRO[day]}
                 {day == 4 && (<p>换您来试试吧！下面是一位性少数男性针对最近的苦恼写下的一段话。您能识别并挑战其中所体现的非适应性思维吗？</p>)}
                     {day != 6? (
