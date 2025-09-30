@@ -21,8 +21,31 @@ export default function Tasks(props) {
     const group = info.group
     const uuid = info.uuid
     const banDay = info.banDay
+    const banned = info.banFlag
 
-    if (group == 'Waitlist') {
+    if (group == "") {
+        return (
+            <>
+            <h1>任务列表</h1>
+            <p>
+                提示词
+           </p>
+            <Stepper orientation="vertical" >
+                <Step completed={false}>
+                    <Link
+                        href={`https://nyu.qualtrics.com/jfe/form/SV_bfqaJJoB84pUy4C?uuid=${uuid}`}
+                    >
+                        <StepLabel className={styles.stepLabel}>
+                            <h4>第一天：调查问卷&nbsp;</h4>
+                            <span className={styles.description}>预计时间：30分钟</span><br/>
+                        </StepLabel>
+                    </Link>
+                </Step>
+            </Stepper>
+            </>
+        )
+
+    } else if (group == 'Waitlist') {
         return (
             <>
             <h1>任务列表</h1>
@@ -108,7 +131,7 @@ export default function Tasks(props) {
         };
 
         const unViewed = (day) => {
-            return ((day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
+            return (!banned & (day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
         }
         
         const handleClick = async (e, link, stepProps, day) =>  {
@@ -185,45 +208,46 @@ export default function Tasks(props) {
                         }
                     } else {
                         if (day == info.banDay) {
-                            if (info.banDay == 1 || info.banDay == 1.1) {
-                                description += "抱歉！后续任务已失效。\n"
-                            } else {
-                                description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
-                            }
+                            // if (info.banDay == 1 || info.banDay == 1.1) {
+                            //     description += "抱歉！后续任务已失效。\n"
+                            // } else {
+                            description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
+                            // }
                         } else if (day > info.banDay) {
                             stepProps.active = false
                             link = "/"
-                            if (info.banDay == 1 || info.banDay == 1.1) {
-                                item.description = "已失效"
-                            } else {
-                                if (day == 23) {
-                                    if (info[`survey${day}IsValid`] === "False") {
-                                        stepProps.completed = false
-                                        item.description = "问卷无效"
-                                    } else if (info[`survey${day}IsValid`] === "True") {
-                                        stepProps.completed = true
-                                        item.description = "已完成"
-                                    } else {
-                                        const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                                        const latestStartDate = expStart.clone().add(day + 6, 'days').add(4, 'hours')
-                                        if (moment().isBetween(earlistStartDate, latestStartDate)) {
-                                            stepProps.active = true
-                                            link = item.url + `?uuid=${uuid}`
-                                        } else if (moment().isAfter(latestStartDate)) {
-                                            item.description = "问卷无效"
-                                        } else {
-                                            description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
-                                        }
-                                    }
-                                } else {
-                                    item.description = "已失效"
-                                }
-                            }
-                        } else if (day < info.banDay) {
-                            stepProps.completed = true
+                            // if (info.banDay == 1 || info.banDay == 1.1) {
+                            //     item.description = "已失效"
+                            // } else {
                             if (day == 23) {
                                 if (info[`survey${day}IsValid`] === "False") {
                                     stepProps.completed = false
+                                    item.description = "问卷无效"
+                                } else if (info[`survey${day}IsValid`] === "True") {
+                                    stepProps.completed = true
+                                    item.description = "已完成"
+                                } else {
+                                    const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
+                                    const latestStartDate = expStart.clone().add(day + 6, 'days').add(4, 'hours')
+                                    if (moment().isBetween(earlistStartDate, latestStartDate)) {
+                                        stepProps.active = true
+                                        link = item.url + `?uuid=${uuid}`
+                                    } else if (moment().isAfter(latestStartDate)) {
+                                        item.description = "问卷无效"
+                                    } else {
+                                        description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
+                                    }
+                                }
+                            } else {
+                                item.description = "已失效"
+                            }
+                            // }
+                        } else if (day < info.banDay) {
+                            stepProps.completed = true
+                            stepProps.active = true
+                            if (day == 23) {
+                                if (info[`survey${day}IsValid`] === "False") {
+                                    stepProps.active = false
                                     item.completed_description = "问卷无效"
                                 } else if (info[`survey${day}IsValid`] === "True") {
                                     stepProps.completed = true
