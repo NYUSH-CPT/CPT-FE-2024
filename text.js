@@ -118,7 +118,7 @@ export const FAQ_EXP_GRP = [
     {
         title: "如何知道更多研究相关信息/如何找到我的知情同意书？",
         content:
-`您可以在这个[链接](https://nyu.qualtrics.com/jfe/form/SV_3dZfPg3LsDGqhUO)里找到知情同意书，上面含有关于本研究和您的权利的详细信息。`
+`您可以在这个[链接](https://nyu.qualtrics.com/jfe/form/SV_29VTt8SFgSrjUjA)里找到知情同意书，上面含有关于本研究和您的权利的详细信息。`
     }
 ]
 
@@ -193,17 +193,17 @@ export const FAQ_WL_GRP = [
     },
     {
         title: "如何知道更多研究相关信息/如何找到我的知情同意书？",
-        content: `您可以在这个[链接](https://nyu.qualtrics.com/jfe/form/SV_bmyubDypO8FX7M2)里找到知情同意书，上面含有关于本研究和您的权利的详细信息。`
+        content: `您可以在这个[链接](https://nyu.qualtrics.com/jfe/form/SV_8cfbkYIxHnC4mHk)里找到知情同意书，上面含有关于本研究和您的权利的详细信息。`
     }
 ]
 
 export const TASK_EXP_GRP = [
     {
         day: 1,
-        title: '第1天：问卷调查',
+        title: '第0天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_e9BDbHNLDURjDg2',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii',
         completed_url: '/'
     },
     {   
@@ -284,7 +284,23 @@ export const TASK_EXP_GRP = [
         title: '第23天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_b4m9463r8Hsf1xc',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_eS7IRMfy2rUKvbg',
+        completed_url: '/'
+    },
+    {
+        day: 39,
+        title: '第39天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_bCqe0iAygJoIgnk',
+        completed_url: '/'
+    },
+    {
+        day: 99,
+        title: '第99天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_7ProglfMtqe1dKS',
         completed_url: '/'
     }
 ]
@@ -292,10 +308,10 @@ export const TASK_EXP_GRP = [
 export const TASK_WL_GRP = [
     {
         day: 1,
-        title: '第1天：问卷调查',
+        title: '第0天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_54RK735erfNve5g',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii',
         completed_url: '/'
     },
     {
@@ -303,26 +319,41 @@ export const TASK_WL_GRP = [
         title: '第23天：问卷调查',
         description: '预计时间：30分钟',
         completed_description: '已完成',
-        url: 'https://nyu.qualtrics.com/jfe/form/SV_1M0Y9JrFaJZYow6',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_6WfcsuSi4tvWsXI',
         completed_url: '/'
     },
-    //pilot-only
-    {   
+    {
         day: 39,
+        title: '第39天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_50D49Rkjqw8WPVI',
+        completed_url: '/'
+    },
+    {
+        day: 99,
+        title: '第99天：问卷调查',
+        description: '预计时间：30分钟',
+        completed_description: '已完成',
+        url: 'https://nyu.qualtrics.com/jfe/form/SV_7QDNuc5yoqmq88m',
+        completed_url: '/'
+    },
+    {   
+        day: 100,
         title: '任务1：自由写作*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/free_writing',
     },
     {   
-        day: 39,
+        day: 100,
         title: '任务2：科普视频*',
         description: '预计时间：10分钟',
         completed_description: '已完成',
         url: '/video',
     },
     {
-        day: 39,
+        day: 100,
         title: '任务3：游戏*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
@@ -330,7 +361,7 @@ export const TASK_WL_GRP = [
         completed_url: '/'
     },
     {
-        day: 39,
+        day: 100,
         title: '任务4：挑战性写作1*',
         description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
@@ -338,35 +369,35 @@ export const TASK_WL_GRP = [
         completed_url: '/challenge_writing/1'
     },
     {
-        day: 39,
+        day: 100,
         title: '任务5：挑战性写作2*',
         description: '预计时间：30分钟',
         completed_description: '查看咨询师的解读',
         url: '/challenge_writing/2',
     },
     {
-        day: 39,
+        day: 100,
         title: '任务6：挑战性写作3*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/challenge_writing/3',
     },
     {
-        day: 39,
+        day: 100,
         title: '任务7：写作反馈*',
         description: '预计时间：30分钟',
         completed_description: '查看反馈',
         url: '/feed_back/day6',
     },
     {
-        day: 39,
+        day: 100,
         title: '任务8：虚拟信件*',
         description: '预计时间：30分钟',
         completed_description: '已完成',
         url: '/virtual_letter',
     },
     {
-        day: 39,
+        day: 100,
         title: '任务9：写作反馈*',
         description: '预计时间：30分钟',
         completed_description: '查看反馈',

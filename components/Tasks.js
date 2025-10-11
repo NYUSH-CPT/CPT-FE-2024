@@ -20,23 +20,29 @@ export default function Tasks(props) {
     const daysSinceStart = today.diff(expStart, 'days')+1
     const group = info.group
     const uuid = info.uuid
-    const banDay = info.banDay
-    const banned = info.banFlag
+    const surveyDays = [23, 39, 99]
 
-    if (group == "") {
+    if (info.survey1IsValid == "False") {
+        return (
+            <> 抱歉，您没有权限访问此页面。</>
+        )
+    }
+    else { if (group == "Null") {
         return (
             <>
             <h1>任务列表</h1>
             <p>
-                提示词
+                {`参与者您好！感谢参与我们的研究。我们邀请您完成该研究的第一项任务——一份问卷调查。您需要在${expStart.format('YYYY-MM-DD')}凌晨4点前完成该问卷，否则您将无法继续参与后续研究并获得相应报酬。期待您的参与！`}
+                <br/><br/>
+                温馨提示：为保护您的个人隐私，请勿将链接分享给他人。期待您的参与，祝您生活愉快！
            </p>
             <Stepper orientation="vertical" >
                 <Step completed={false}>
                     <Link
-                        href={`https://nyu.qualtrics.com/jfe/form/SV_bfqaJJoB84pUy4C?uuid=${uuid}`}
+                        href={`https://nyu.qualtrics.com/jfe/form/SV_6FIG6R7YKjvBn14?uuid=${uuid}`}
                     >
                         <StepLabel className={styles.stepLabel}>
-                            <h4>第一天：调查问卷&nbsp;</h4>
+                            <h4>第0天：调查问卷&nbsp;</h4>
                             <span className={styles.description}>预计时间：30分钟</span><br/>
                         </StepLabel>
                     </Link>
@@ -62,12 +68,12 @@ export default function Tasks(props) {
                     const stepProps = {completed: false, active: false};
                     let link = "/", description = "";
                     
-                    if (!info.banFlag) {
+                    // if (!info.banFlag) {
                         if (day == currentDay) {
                             stepProps.active = true
                             const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                            const latestStartDate = expStart.clone().add(day + (day == 23? 6 : 1), 'days').add(4, 'hours')
-                            if (!moment().isBetween(earlistStartDate, latestStartDate) && day != 39) {
+                            const latestStartDate = expStart.clone().add(day + (surveyDays.includes(day)? 6 : 1), 'days').add(4, 'hours')
+                            if (!moment().isBetween(earlistStartDate, latestStartDate) && day != 100) {
                                 stepProps.active = false
                                 description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                             }
@@ -78,31 +84,16 @@ export default function Tasks(props) {
                         } else if (day < currentDay) {
                             stepProps.completed = true
                             link = "/"
-                            if (day == 39) {
+                            if (day == 100) {
                                 stepProps.active = true
                                 stepProps.completed = false
                             }
-                            if (day == 23 && info[`survey${day}IsValid`] === "False") {
+                            if (surveyDays.includes(day) && info[`survey${day}IsValid`] === "False") {
                                 stepProps.completed = false
                                 stepProps.active = false
                                 item.completed_description = "问卷无效"
                             }
                         }
-                    } else {
-                        if (day == info.banDay) {
-                            description += "抱歉！后续任务已失效。\n"
-                        } else if (day < info.banDay) {
-                            if (info[`survey${day}IsValid`] === "False") {
-                                stepProps.completed = false
-                                item.description
-                                item.completed_description = "问卷无效"
-                            } else if (info[`survey${day}IsValid`] === "True") {
-                                stepProps.completed = true
-                                item.description = "已完成"
-                                item.completed_description = "已完成"
-                            } 
-                        } 
-                    }
     
                     return (
                         <Step key={index} {...stepProps} >
@@ -131,7 +122,7 @@ export default function Tasks(props) {
         };
 
         const unViewed = (day) => {
-            return (!banned & (day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
+            return (!info.banFlag & (day < currentDay) || (day == currentDay && (day==7 || day==9))) && Object.keys(viewInfo).map(Number).includes(day) && !viewInfo[day]
         }
         
         const handleClick = async (e, link, stepProps, day) =>  {
@@ -168,7 +159,7 @@ export default function Tasks(props) {
                         if (day == currentDay) {
                             stepProps.active = true
                             const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                            const latestStartDate = expStart.clone().add(day + (day == 23? 6 : 1), 'days').add(4, 'hours')
+                            const latestStartDate = expStart.clone().add(day + (surveyDays.includes(day)? 6 : 1), 'days').add(4, 'hours')
                             const hasViewedAll = Object.keys(viewInfo).map(Number).filter(d => d < day).every(d => viewInfo[d]); 
                             if (!moment().isBetween(earlistStartDate, latestStartDate)) {
                                 stepProps.active = false
@@ -200,7 +191,7 @@ export default function Tasks(props) {
                         } else if (day < currentDay) {
                             stepProps.completed = true
                             link = item.completed_url || item.url
-                            if (day == 23 && info[`survey${day}IsValid`] === "False") {
+                            if (surveyDays.includes(day) && info[`survey${day}IsValid`] === "False") {
                                 stepProps.completed = false
                                 stepProps.active = false
                                 item.completed_description = "问卷无效"
@@ -208,18 +199,11 @@ export default function Tasks(props) {
                         }
                     } else {
                         if (day == info.banDay) {
-                            // if (info.banDay == 1 || info.banDay == 1.1) {
-                            //     description += "抱歉！后续任务已失效。\n"
-                            // } else {
                             description += "抱歉！后续干预任务已失效。参与后续随访调查仍可获得现金补偿！\n"
-                            // }
                         } else if (day > info.banDay) {
                             stepProps.active = false
                             link = "/"
-                            // if (info.banDay == 1 || info.banDay == 1.1) {
-                            //     item.description = "已失效"
-                            // } else {
-                            if (day == 23) {
+                            if (surveyDays.includes(day)) {
                                 if (info[`survey${day}IsValid`] === "False") {
                                     stepProps.completed = false
                                     item.description = "问卷无效"
@@ -241,25 +225,19 @@ export default function Tasks(props) {
                             } else {
                                 item.description = "已失效"
                             }
-                            // }
                         } else if (day < info.banDay) {
                             stepProps.completed = true
                             stepProps.active = true
-                            if (day == 23) {
+                            if (surveyDays.includes(day)) {
                                 if (info[`survey${day}IsValid`] === "False") {
                                     stepProps.active = false
                                     item.completed_description = "问卷无效"
-                                } else if (info[`survey${day}IsValid`] === "True") {
-                                    stepProps.completed = true
-                                    item.completed_description = "已完成"
                                 } 
                             } else {
                                 item.description = "已失效"
                             }
                         }
                     } 
-    
-    
                     return (
                         <Step key={index} {...stepProps} >
                             <Link
@@ -281,5 +259,6 @@ export default function Tasks(props) {
             </Stepper>
             </>
         )
+    }
     }
 }

@@ -66,7 +66,7 @@ export default function Home() {
                             .catch((err) => {});
                     })
                     .catch(() => {
-                        window.location.href = `https://nyu.qualtrics.com/jfe/form/SV_02IlZfVxNdMUgR0?key=${key}`;
+                        window.location.href = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
                     });
             } else {
                 router.push("/login");
