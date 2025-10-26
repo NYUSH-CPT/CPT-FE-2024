@@ -60,7 +60,7 @@ export default function Tasks(props) {
                 (`欢迎回来！这是您参与研究的第 ${daysSinceStart} 天。`) : 
                 (`您的实验将于 ${expStart.format('YYYY-MM-DD')} 开始。`)
             }<br/>
-            您可以在完成第1天的调查问卷以及第23天的随访评估后获得补偿哦！补偿金额将由任务完成的进度和质量共同决定，并将在最后一次随访评估后的三天内发放给您！此外，您还将获得一次免费参与心理干预项目的机会！项目将在您完成上述任务后自动开放，欢迎您的参与～
+            您可以在完成后续的随访评估后获得补偿哦！补偿金额将由任务完成的进度和质量共同决定，并将在最后一次随访评估后的三天内发放给您！此外，您还将获得一次免费参与心理干预项目的机会！项目将在您完成上述任务后自动开放，欢迎您的参与～
             </p>
             <Stepper orientation="vertical" >
                 {TASK_WL_GRP.map((item, index) => {
@@ -68,32 +68,31 @@ export default function Tasks(props) {
                     const stepProps = {completed: false, active: false};
                     let link = "/", description = "";
                     
-                    // if (!info.banFlag) {
-                        if (day == currentDay) {
-                            stepProps.active = true
-                            const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
-                            const latestStartDate = expStart.clone().add(day + (surveyDays.includes(day)? 6 : 1), 'days').add(4, 'hours')
-                            if (!moment().isBetween(earlistStartDate, latestStartDate) && day != 100) {
-                                stepProps.active = false
-                                description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
-                            }
-                            link = stepProps.active? item.url + `?uuid=${uuid}`: "/"
-                        } else if (day > currentDay) {
+                    if (day == currentDay) {
+                        stepProps.active = true
+                        const earlistStartDate = expStart.clone().add(day - 1, 'days').add(4, 'hours')
+                        const latestStartDate = expStart.clone().add(day + (surveyDays.includes(day)? 6 : 1), 'days').add(4, 'hours')
+                        if (!moment().isBetween(earlistStartDate, latestStartDate) && day != 100) {
                             stepProps.active = false
-                            link = "/"
-                        } else if (day < currentDay) {
-                            stepProps.completed = true
-                            link = "/"
-                            if (day == 100) {
-                                stepProps.active = true
-                                stepProps.completed = false
-                            }
-                            if (surveyDays.includes(day) && info[`survey${day}IsValid`] === "False") {
-                                stepProps.completed = false
-                                stepProps.active = false
-                                item.completed_description = "问卷无效"
-                            }
+                            description += "开启时间：" + earlistStartDate.format('YYYY-MM-DD hh:mm A') + "，结束时间：" + latestStartDate.format('YYYY-MM-DD hh:mm A') + "。\n"
                         }
+                        link = stepProps.active? item.url + `?uuid=${uuid}`: "/"
+                    } else if (day > currentDay) {
+                        stepProps.active = false
+                        link = "/"
+                    } else if (day < currentDay) {
+                        stepProps.completed = true
+                        link = "/"
+                        if (day == 100) {
+                            stepProps.active = true
+                            stepProps.completed = false
+                        }
+                        if (surveyDays.includes(day) && info[`survey${day}IsValid`] === "False") {
+                            stepProps.completed = false
+                            stepProps.active = false
+                            item.completed_description = "问卷无效"
+                        }
+                    }
     
                     return (
                         <Step key={index} {...stepProps} >
@@ -146,7 +145,7 @@ export default function Tasks(props) {
                 (`您的实验将于 ${expStart.format('YYYY-MM-DD')} 开始。`)
             }<br/>
 
-            您可以在完成9天的任务以及第23天的评估后分别获得补偿哦！补偿金额将由任务完成的进度和质量共同决定。金额将逐次累积并在最后一次随访评估后的三天内发放给您！
+            您可以在完成9天的任务以及后续评估后分别获得补偿哦！补偿金额将由任务完成的进度和质量共同决定。金额将逐次累积并在最后一次随访评估后的三天内发放给您！
             </p>
             <Stepper orientation="vertical" >
                 {TASK_EXP_GRP.map((item, index) => {

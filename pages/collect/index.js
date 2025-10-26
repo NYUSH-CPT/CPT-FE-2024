@@ -83,8 +83,6 @@ export default function Collect() {
     const [decline, setDecline] = useState(false)
 
     const handleContinue = () => {
-        const rand = Math.random();
-        console.log(rand);
         const inviteCPT = metadata.eligible && understand && participate;
         setInviteCPT(inviteCPT);
         if (!inviteCPT && remind && !decline) {
@@ -314,9 +312,10 @@ export default function Collect() {
                     </>
                 ) : (
                     <>
+                        
                         <h3>您的作答已被记录。感谢您的参与！祝您⽣活愉快！</h3>
 
-                        {metadata.valid && (
+                        {metadata.valid ? (
                             <>
                                 <div className="flex justify-center items-center pb-4">
                                     <Button
@@ -331,6 +330,10 @@ export default function Collect() {
                                     </Button>
                                 </div>
                             </>
+                        ): (
+                            <h3>
+                                很抱歉！您未能通过问卷中的注意力检测题，故问卷被判定为无效。失去您的参与我们感到很遗憾！期待与您再次相遇！
+                            </h3>
                         )}
 
                         {metadata.service && (

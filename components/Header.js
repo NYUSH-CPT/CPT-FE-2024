@@ -26,7 +26,7 @@ export default function Header() {
         window.localStorage.removeItem("group")
         window.location.reload()
     }
-
+// TODO show only task for null group
     return (
         <header className={styles.header}>
             <h1>{process.env.NEXT_PUBLIC_PROJECT_NAME}</h1>
