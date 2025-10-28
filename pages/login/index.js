@@ -13,7 +13,7 @@ export default function Login() {
     const [pwd, setPwd] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
     const router = useRouter()
-    const { info, loading } = useInfo();
+    const { info, loading, refresh } = useInfo();
 
     useEffect(() => {
         if (loading) return; 
@@ -34,13 +34,12 @@ export default function Login() {
             passcode: pwd,
         }
 
-        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, payload).then((res) => {
-            console.log(res)
+        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, payload).then(async (res) => {
             localStorage.setItem("access_token", res.data.access)
             localStorage.setItem("refresh_token", res.data.refresh)
+            await refresh()
             router.push("/")
         }).catch((err) => {
-            console.log(err)
             setErrorMsg(err.response? err.response.data.error: JSON.stringify(err))
         })
     }
