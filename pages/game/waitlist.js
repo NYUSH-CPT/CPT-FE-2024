@@ -70,7 +70,6 @@ export default function Game() {
             }
         } else if (typeof window !== 'undefined') {
             const initialDisplayID = 0;
-            // const initialDisplayID = window.location.href.includes('game/1') ? 0 : 8;
             console.log("initialID", initialDisplayID)
             oldDisplayID.current = initialDisplayID;
         }

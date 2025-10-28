@@ -20,11 +20,14 @@ import styles from '@/styles/article.module.scss'
 import { CONTENT_WRITING_DAY8 } from '@/text'
 import { requester, enableAutoSave, disablePasteForInputs } from '@/utils'
 
+import { useInfo } from '@/context/InfoContext';
+
 export default function VirtualLetter() {
     const [contentExist, setContentExist] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
     const router = useRouter();
+    const { refresh } = useInfo()
 
     useEffect(() => {
         enableAutoSave('myform')
@@ -67,13 +70,12 @@ export default function VirtualLetter() {
             }
             await requester.post("/writing/8", data)
             .then(res => {
-                    console.log(res)
-                    setSuccessDialogOpen(true)
-                })
-                .catch(err => {
-                    setErrorMessage(err.response? err.response.data.error: JSON.stringify(err))
-                }
-            )
+                setSuccessDialogOpen(true)
+                refresh()
+            })
+            .catch(err => {
+                setErrorMessage(err.response? err.response.data.error: JSON.stringify(err))
+            })
         }
     }
     return (

@@ -8,6 +8,9 @@ import Header from '@/components/Header'
 import { Button, Card } from '@mui/material';
 import moment from 'moment'
 
+import { useInfo } from '@/context/InfoContext';
+import { useRouter } from 'next/router';
+
 
 const Video = () => {
     const videoRef = useRef(null)
@@ -15,20 +18,15 @@ const Video = () => {
     const [watched, setWatched] = useState(false)
     const [currentTime, setCurrentTime] = useState('')
     const [playPauseText, setPlayPauseText] = useState('播放')
-
+    const { info, loading, refresh } = useInfo()
+    const router = useRouter()
 
     useEffect(() => {
-        requester.get("/info").then((res) => {
-            const currentDay = res.data.currentDay
-            console.log("currentDay", currentDay)
-            if (currentDay >= 2.1) {
-                setWatched(true)
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
-    }, [])
-
+        if (loading || !info) return;
+        if (info.currentDay >= 2.1) {
+            setWatched(true)
+        }
+    }, [info, loading]);
 
     return(
         <>
@@ -53,6 +51,7 @@ const Video = () => {
                         if (!watched && videoRef.current.currentTime >= videoRef.current.duration) {
                             console.log("video end");
                             await requester.post('/video');
+                            refresh()
                             setWatched(true);
                         }
                         setPlayPauseText('重新播放')
@@ -91,7 +90,7 @@ const Video = () => {
                     <Button 
                         color='primary'
                         variant='contained'
-                        onClick={(e) => window.location.href='/'}
+                        onClick={(e) => {router.push('/')}}
                     >
                         返回
                     </Button>

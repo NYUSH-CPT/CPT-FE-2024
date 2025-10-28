@@ -5,7 +5,7 @@ import ChatBox from "@/components/ChatBox";
 import Header from "@/components/Header";
 import styles from "@/styles/game.module.scss";
 import Head from "next/head";
-
+import { useInfo } from '@/context/InfoContext';
 
 export default function Game() {
 
@@ -24,14 +24,14 @@ export default function Game() {
 
     const [update, setUpdate] = useState(false)
 
+    const { info, loading } = useInfo()
+
     useEffect(() => {
-        requester.get("/info").then(res => {
-            console.log(res.data, id)
-            if (res.data.currentDay >= 3 && id==1 || res.data.currentDay >= 4 && id==2) {
-                window.location.href = "/"
-            }
-        }).catch(err => {})
-    }, [id]);
+        if (loading || !info) return;
+        if ((info.currentDay >= 3 && id === 1) || (info.currentDay >= 4 && id === 2)) {
+            router.push("/");
+        }
+    }, [info, id, loading, router]);
 
     const elicitResponse = async (payload = {"choice": ""}) => {
 

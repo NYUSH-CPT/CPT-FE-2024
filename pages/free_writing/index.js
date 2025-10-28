@@ -20,6 +20,8 @@ import styles from '@/styles/article.module.scss'
 import { CONTENT_WRITING_DAY1 } from '@/text'
 import { requester, disablePasteForInputs } from '@/utils'
 
+import { useInfo } from '@/context/InfoContext';
+
 export default function FreeWriting() {
     const [contentExist, setContentExist] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
@@ -28,6 +30,8 @@ export default function FreeWriting() {
 
     const [scene, setScene] = useState("")
     const [feeling, setFeeling] = useState("")
+
+    const { refresh } = useInfo()
 
     useEffect(() => {
         const loadedData = localStorage.getItem(`__autosave-${window.location}`)
@@ -57,6 +61,7 @@ export default function FreeWriting() {
 
     const handleCloseSuccessDialog = () => {
         setSuccessDialogOpen(false)
+        refresh()
         router.push("/")
     }
 
@@ -78,12 +83,11 @@ export default function FreeWriting() {
             }
             await requester.post("/writing/1", data)
                 .then(res => {
-                    console.log(res)
                     setSuccessDialogOpen(true)
                 }
-            ).catch((err) => {
-                setErrorMessage(err.response? err.response.data.error: JSON.stringify(err))
-            })
+                ).catch((err) => {
+                    setErrorMessage(err.response? err.response.data.error: JSON.stringify(err))
+                })
         }
     }
     return (
