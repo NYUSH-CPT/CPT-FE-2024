@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Markdown from 'markdown-to-jsx'
 import Accordion from '@mui/material/Accordion'
-import AccordionActions from '@mui/material/AccordionActions'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -11,32 +10,21 @@ import Header from '@/components/Header'
 import styles from '@/styles/info.module.scss'
 
 import { FAQ_EXP_GRP, FAQ_WL_GRP } from '@/text'
-import { useState, useEffect } from 'react'
-import { requester } from '@/utils'
+import { useInfo } from '@/context/InfoContext'
 
 export default function About() {
 
-    const [group, setGroup] = useState("");
-    const [loading, setLoading] = useState(true)
+    const { info, loading } = useInfo();
+    const group = info?.group
+    let content;
 
-    useEffect(() => {
-        requester.get("/info")
-            .then(res => {
-                console.log(res)
-                setGroup(res.data.group)
-                setLoading(false)
-            }).catch(() => {})
-    }, [])
-
-    return (
-        <>
-        {!loading? (
-        <>
-            <Head>
-                <title>常见疑问</title>
-            </Head>
-            <Header />
-            <div className={styles.article}>
+    if (loading) {
+        content = <>加载中...</>;
+    } else if (!(group === "Exp1" || group === "Exp2" || group === "Waitlist")) {
+        content = <>抱歉，您没有权限访问此页面。</>;
+    } else {
+        content = (
+            <>
                 <h1>常见疑问</h1>
                 {group === "Waitlist" ? (FAQ_WL_GRP?.map((item, index) => (
                     <Accordion key={index}>
@@ -67,11 +55,19 @@ export default function About() {
                         </AccordionDetails>
                     </Accordion>
                 ))} 
+            </>
+        )
+    }
+
+    return ( 
+        <>
+            <Head>
+                <title>常见疑问</title>
+            </Head>
+            <Header />
+            <div className={styles.article}>
+            {content}
             </div>
         </>
-        ) : ('加载中...')
-        }
-        </>
-
     )
 }

@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import Head from 'next/head'
 import Markdown from 'markdown-to-jsx'
 
@@ -8,23 +6,15 @@ import Header from '@/components/Header'
 
 import styles from '@/styles/feedback.module.scss'
 
-import { requester } from '@/utils'
+import { useInfo } from '@/context/InfoContext';
 
 import { useRouter } from 'next/router';
 
 export default function FeedBackDay6() {
-    const [content, setContent] = useState("")
 
-    const router = useRouter(); 
-
-    useEffect(() => {
-        requester.get("/info")
-            .then(res => {
-                console.log(res)
-                setContent(res.data.feedback6)
-            }).catch(() => {})
-    }, [])
-
+    const { info, setInfo, refresh, loading } = useInfo();
+    const content = info?.feedback6
+    const router = useRouter()
 
     return (
         <>
@@ -42,10 +32,9 @@ export default function FeedBackDay6() {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={()=>{window.location.href="/"}}
+                    onClick={()=>{router.push("/")}}
                     type="submit"
                     sx = {{marginBottom: "2em"}}
-
                 >
                     返回
                 </Button>

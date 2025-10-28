@@ -5,23 +5,22 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 
 import axios from 'axios';
-import { requester } from '@/utils';
+import { useRouter } from 'next/router';
+import { useInfo } from '@/context/InfoContext';
 
 export default function Login() {
     const [phone, setPhone] = useState('')
     const [pwd, setPwd] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
-    
+    const router = useRouter()
+    const { info, loading, refresh } = useInfo();
+
     useEffect(() => {
-        const token = localStorage.getItem('access_token');
-        if (token) {
-            requester.get('/info').then(res => {
-                window.location.href = "/"
-            }).catch(err => {
-                console.log(err)
-            })
+        if (loading) return; 
+        if (info) {
+          router.push("/");
         }
-    }, [])
+      }, [info, loading, router]);
 
     const handleSubmit = async (event) => {
         const form = event.currentTarget
@@ -35,13 +34,12 @@ export default function Login() {
             passcode: pwd,
         }
 
-        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, payload).then((res) => {
-            console.log(res)
+        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, payload).then(async (res) => {
             localStorage.setItem("access_token", res.data.access)
             localStorage.setItem("refresh_token", res.data.refresh)
-            window.location.href = "/"
+            await refresh()
+            router.push("/")
         }).catch((err) => {
-            console.log(err)
             setErrorMsg(err.response? err.response.data.error: JSON.stringify(err))
         })
     }

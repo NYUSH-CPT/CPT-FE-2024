@@ -25,6 +25,7 @@ import Skill from "@/components/Skill";
 import styles from "@/styles/challenge.module.scss";
 
 import { requester, disablePasteForInputs } from "@/utils";
+import { useInfo } from "@/context/InfoContext";
 
 import { CHALLENGE_WRITING_INTRO, CHALLENGE_WRITING_PROMPT, CHALLENGE_WRITING_REFERENCE } from "@/components/text";
 
@@ -85,6 +86,7 @@ export default function ChallengeWriting() {
     const [day6ContentExist, setDay6ContentExist] = useState(false);
     const [day6ExtraContent, setDay6ExtraContent] = useState("");
 
+    const { refresh } = useInfo() 
 
     useEffect(() => {
         if (!loading) {
@@ -268,10 +270,11 @@ export default function ChallengeWriting() {
                 .then((res) => {
                     console.log(res);
                     setSuccessDialogOpen(true);
+                    refresh()
                 })
                 .catch((err) => {
                     setErrorMessage(err.response.data.error);
-                });
+                })
         }
     };
 

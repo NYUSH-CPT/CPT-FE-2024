@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { InfoProvider } from "@/context/InfoContext";
+import { AppProps } from "next/app";
 
 const theme = createTheme({
     palette: {
@@ -37,8 +39,10 @@ const theme = createTheme({
 
 export default function App({ Component, pageProps }) {
     return (
-        <ThemeProvider theme={theme}>
-            <Component {...pageProps} />
-        </ThemeProvider>
+        <InfoProvider>
+            <ThemeProvider theme={theme}>
+                    <Component {...pageProps} />
+            </ThemeProvider>
+        </InfoProvider>
     )
 }

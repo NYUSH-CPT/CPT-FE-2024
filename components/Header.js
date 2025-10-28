@@ -1,32 +1,27 @@
 import { useState, useEffect } from 'react'
+import { useInfo } from '@/context/InfoContext'
 
 import Drawer from '@mui/material/Drawer'
 import Link from 'next/link'
-
-import { getUserNameFromLocalStorage } from '@/utils'
 
 import styles from '@/styles/header.module.scss'
 
 export default function Header() {
 
     const [open, setOpen] = useState(false)
-    const [userName, setUserName] = useState('')
+    const { info } = useInfo()
+    const group = info?.group
 
     const handleClick = () => {
         setOpen(!open)
     }
-
-    // useEffect(() => {
-    //     const name = getUserNameFromLocalStorage()
-    //     setUserName(name)
-    // }, [])
 
     const handleLogout = () => {
         window.localStorage.removeItem('access_token')
         window.localStorage.removeItem("group")
         window.location.reload()
     }
-// TODO show only task for null group
+    
     return (
         <header className={styles.header}>
             <h1>{process.env.NEXT_PUBLIC_PROJECT_NAME}</h1>
@@ -34,20 +29,25 @@ export default function Header() {
             <Drawer open={open} onClose={handleClick} anchor="right">
                 <div className={styles.drawer}>
                     <div>
-                        <h2>{userName}</h2>
+                        <h2></h2>
                         <ul>
                             <Link href="/">
                                 <li>任务列表</li>
                             </Link>
-                            <Link href="/about">
-                                <li>项目简介</li>
-                            </Link>
-                            <Link href="/contact">
-                                <li>联系我们</li>
-                            </Link>
-                            <Link href="/faq">
-                                <li>常见疑问</li>
-                            </Link>
+                            {(group === "Exp1" || group === "Exp2" || group == "Waitlist") && 
+                                <>
+                                    <Link href="/about">
+                                        <li>项目简介</li>
+                                    </Link>
+                                    <Link href="/contact">
+                                        <li>联系我们</li>
+                                    </Link>
+                                    <Link href="/faq">
+                                        <li>常见疑问</li>
+                                    </Link>
+                                </>
+                            }
+                            
                         </ul>
                     </div>
                     <div className={styles.logout} onClick={handleLogout}>
