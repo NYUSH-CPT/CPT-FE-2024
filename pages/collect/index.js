@@ -288,7 +288,7 @@ export default function Collect() {
                                         variant="contained"
                                         onClick={() =>
                                             router.push(
-                                                `https://danlangongyi.wjx.cn/vm/tUsFDcM.aspx?sojumpparm=${uuid}`
+                                                `https://danlangongyi.wjx.cn/vm/Yu8MAp9.aspx?sojumpparm=${uuid}`
                                             )
                                         }
                                           sx={{
