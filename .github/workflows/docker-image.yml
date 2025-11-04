@@ -62,10 +62,12 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.TENCENT_CLOUD_VM_PK }}
+      - name: Prepare deploy.sh with secrets
+        run: |
+          sed -i "s|\$QR_JWT_SECRET|${{ secrets.QR_JWT_SECRET }}|g" deploy.sh
       - name: Deploy to production
         run: |
           IMAGE_SHA="${{ needs.build-and-push-image.outputs.image-digest }}"
           sed -i "s|\$IMAGE_SHA|$IMAGE_SHA|g" deploy.sh
-          sed -i "s|\$NEXT_PUBLIC_QR_JWT_SECRET|${{ secrets.NEXT_PUBLIC_QR_JWT_SECRET }}|g" deploy.sh
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
 

@@ -17,7 +17,7 @@ export default function QRDisplay() {
             }
 
             // 使用前后端共享的密钥（从环境变量获取）
-            const secret = process.env.NEXT_PUBLIC_QR_JWT_SECRET;
+            const secret = process.env.QR_JWT_SECRET;
             if (!secret) {
                 throw new Error('QR_JWT_SECRET not configured');
             }
