@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect } from "react";
 
 import Head from "next/head";
 import Header from "@/components/Header";
@@ -6,7 +6,6 @@ import Tasks from "@/components/Tasks";
 
 import styles from "@/styles/article.module.scss";
 
-import { requester } from "@/utils";
 import { useRouter } from "next/router";
 import { useInfo } from "@/context/InfoContext";
 import axios from "axios";
@@ -18,26 +17,33 @@ export default function Home() {
     
     const router = useRouter();
     const key = router.query.key;
+    const token = router.query.token;
 
     useEffect(() => {
         if (!router.isReady) return;
-        const token = localStorage.getItem("access_token");
-        if (token) {
+        const accessToken = localStorage.getItem("access_token");
+        if (accessToken) {
           return;
         }
         if (key && key !== "L3G1kl7j") {
           axios
-            .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, { params: { key } })
+            .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, { 
+                params: { key, token }
+            })
             .then(() => {
                 refresh(); 
             })
-            .catch(() => {
-                window.location.href = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
+            .catch((err) => {   
+                if (err.response && err.response.status === 419) {
+                    router.push('/error/qr_expired');
+                } else {
+                    window.location.href = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
+                }
             });
         } else {
             router.push("/login");
         }
-      }, [key, router.isReady, refresh]);
+      }, [key, token, router.isReady, refresh]);
 
 
       return (
