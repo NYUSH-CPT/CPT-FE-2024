@@ -32,6 +32,9 @@ ENV NEXT_PUBLIC_CONVERSATION_GAP="2500"
 ENV NEXT_PUBLIC_PROJECT_NAME="上海纽约大学压力与健康研究"
 ENV NEXT_PUBLIC_SHUFFLE_ARRAY_FLAG="true"
 
+ARG NEXT_PUBLIC_QR_JWT_SECRET
+ENV NEXT_PUBLIC_QR_JWT_SECRET=$NEXT_PUBLIC_QR_JWT_SECRET
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
