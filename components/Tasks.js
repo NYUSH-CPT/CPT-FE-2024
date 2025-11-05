@@ -16,13 +16,10 @@ import { useRouter } from 'next/router'
 
 export default function Tasks() {
 
-    const { info, refresh, loading } = useInfo()
+    const { info, refresh } = useInfo()
 
     const router = useRouter()
 
-    if (loading) {
-        return <>加载中......</>;
-    }
     if (!info || info.survey1IsValid === "False") {
         return <>抱歉，您没有权限访问此页面。</>;
     }
