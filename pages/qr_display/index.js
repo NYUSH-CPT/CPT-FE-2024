@@ -93,6 +93,8 @@ export default function QRDisplay() {
                 ) : (
                     <div className={styles.loading}>加载中...</div>
                 )}
+
+                <h2 className={styles.subtitle2}>扫一扫位置：我的 ＞ 设置 ＞ 扫一扫</h2>
                 
                 {error && <p className={styles.error}>{error}</p>}
             </div>
