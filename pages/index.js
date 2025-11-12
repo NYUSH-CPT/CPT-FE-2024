@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Head from "next/head";
 import Header from "@/components/Header";
@@ -14,48 +14,67 @@ import axios from "axios";
 export default function Home() {
 
     const { info, setInfo, refresh, loading } = useInfo();
+    const [processingParams, setProcessingParams] = useState(true);
     
     const router = useRouter();
     const key = router.query.key;
     const token = router.query.token;
+    const from = router.query.from; // 获取机构参数
 
     useEffect(() => {
-        if (!router.isReady) return;
+        if (!router.isReady) {
+            setProcessingParams(true);
+            return;
+        }
+        
         const accessToken = localStorage.getItem("access_token");
         if (accessToken) {
-          return;
+            // 已有 token，参数处理完成，可以渲染 Tasks
+            setProcessingParams(false);
+            return;
         }
+        
         if (key && key !== "L3G1kl7j") {
-          axios
-            .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, { 
-                params: { key, token }
-            })
-            .then(() => {
-                refresh(); 
-            })
-            .catch((err) => {   
-                if (err.response && err.response.status === 419) {
-                    router.push('/error/qr_expired');
-                } else {
-                    window.location.href = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
-                }
-            });
+            // 处理 key 参数
+            setProcessingParams(true);
+            axios
+                .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, { 
+                    params: { key, token }
+                })
+                .then(() => {
+                    refresh();
+                    setProcessingParams(false);
+                })
+                .catch((err) => {   
+                    if (err.response && err.response.status === 419) {
+                        router.push('/error/qr_expired');
+                    } else {
+                        let qualtricsUrl = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
+                        if (from) {
+                            qualtricsUrl += `&from=${encodeURIComponent(from)}`;
+                        } else {
+                            qualtricsUrl += `&from=${encodeURIComponent('线上')}`;
+                        }
+                        window.location.href = qualtricsUrl;
+                    }
+                });
         } else {
+            // 没有有效的 key，跳转到登录页
             router.push("/login");
         }
-      }, [key, token, router.isReady, refresh]);
+    }, [key, token, from, router.isReady, refresh, router]);
 
 
-      return (
+    return (
         <>
             <Head>
                 <title>{process.env.NEXT_PUBLIC_PROJECT_NAME}</title>
             </Head>
             <Header />
             <main className={styles.article}>
-                {loading? (
+                {processingParams || loading ? (
                     <div>加载中......</div>
-                ):  (
+                ) : (
                     <Tasks />
                 )}
             </main>
