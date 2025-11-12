@@ -27,11 +27,13 @@ export default function Collect() {
     const [exist, setExist] = useState(false);
     const [inviteCPT, setInviteCPT] = useState(null);
     const [notAllowed, setNotAllowed] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!router.isReady) return;
         const { uuid } = router.query;
         setUuid(uuid);
+        setLoading(true);
         axios
             .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/screen_record`, {
                 params: {
@@ -43,9 +45,13 @@ export default function Collect() {
                 setMetadata(res.data);
                 setAskConsent(res.data.eligible);
                 setExist(res.data.submitted)
+                setNotAllowed(false);
             })
             .catch((err) => {
                 setNotAllowed(true)
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }, [router.isReady, router.query]);
 
@@ -139,7 +145,9 @@ export default function Collect() {
             </header>
 
             <div className={styles.container}>
-                {notAllowed ? (
+                {loading ? (
+                    <>加载中......</>
+                ) : notAllowed ? (
                     <> 抱歉，您没有权限访问此页面。</>
                 ) : !complete && !exist ? (
                     <>
