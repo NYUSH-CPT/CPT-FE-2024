@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { SignJWT } from 'jose';
 import { QRCodeSVG } from 'qrcode.react';
 import styles from '@/styles/qr_display.module.scss';
@@ -6,10 +6,21 @@ import styles from '@/styles/qr_display.module.scss';
 export default function QRDisplay() {
     const [qrUrl, setQrUrl] = useState('');
     const [error, setError] = useState('');
+    const [organization, setOrganization] = useState(''); // 机构名称
+    const [orgError, setOrgError] = useState(''); // 机构名称验证错误
     const refreshTimerRef = useRef(null); // 存储定时器 ID
+    const currentTokenRef = useRef(''); // 存储当前的 token
 
-    const generateToken = async () => {
+    const generateToken = useCallback(async () => {
         try {
+            // 验证机构名称是否填写
+            if (!organization.trim()) {
+                setOrgError('请填写机构名称');
+                setQrUrl('');
+                return;
+            }
+            setOrgError('');
+
             // 清除之前的定时器（如果存在）
             if (refreshTimerRef.current) {
                 clearTimeout(refreshTimerRef.current);
@@ -31,11 +42,14 @@ export default function QRDisplay() {
                 .setProtectedHeader({ alg: 'HS256' })
                 .sign(secretKey);
 
-            // 生成二维码 URL
-            const url = `https://activity.bluedhealth.com/weal/shnyu/redirect?token=${token}`;
+            // 保存 token
+            currentTokenRef.current = token;
+
+            // 生成二维码 URL，添加 from 参数（机构名称，必填）
+            const url = `https://activity.bluedhealth.com/weal/shnyu/redirect?token=${token}&from=${encodeURIComponent(organization.trim())}`;
             setQrUrl(url);
             setError('');
-            console.log("token generated", "now:", now, "exp:", exp);
+            // console.log("token generated", "now:", now, "exp:", exp, "from:", organization, url);
 
             const nextRefresh = 30000;
             refreshTimerRef.current = setTimeout(() => {
@@ -56,7 +70,7 @@ export default function QRDisplay() {
                 generateToken();
             }, 5000);
         }
-    };
+    }, [organization]);
 
     useEffect(() => {
         // 页面加载时立即生成
@@ -69,7 +83,24 @@ export default function QRDisplay() {
                 refreshTimerRef.current = null;
             }
         };
-    }, []);
+    }, [generateToken]);
+
+    // 当机构名称改变时，更新二维码 URL（使用当前 token）
+    useEffect(() => {
+        if (!organization.trim()) {
+            setOrgError('请填写机构名称');
+            setQrUrl('');
+            return;
+        }
+        
+        setOrgError('');
+        
+        // 如果有 token，更新二维码 URL
+        if (currentTokenRef.current) {
+            const url = `https://activity.bluedhealth.com/weal/shnyu/redirect?token=${currentTokenRef.current}&from=${encodeURIComponent(organization.trim())}`;
+            setQrUrl(url);
+        }
+    }, [organization]);
 
     return (
         <>
@@ -78,6 +109,25 @@ export default function QRDisplay() {
             </header>
             <div className={styles.container}>
                 <h2 className={styles.subtitle}>请使用 Blued App 扫描二维码</h2>
+                
+                {/* 机构输入框 */}
+                <div className={styles.orgInputContainer}>
+                    <label className={styles.orgLabel}>机构名称 <span className={styles.required}>*</span></label>
+                    <input
+                        type="text"
+                        placeholder="请输入机构名称"
+                        className={`${styles.orgInput} ${orgError ? styles.orgInputError : ''}`}
+                        value={organization}
+                        onChange={(e) => {
+                            setOrganization(e.target.value);
+                            if (orgError && e.target.value.trim()) {
+                                setOrgError('');
+                            }
+                        }}
+                        required
+                    />
+                    {orgError && <p className={styles.orgError}>{orgError}</p>}
+                </div>
                 
                 {qrUrl ? (
                     <div className={styles.qrContainer}>

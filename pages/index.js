@@ -18,6 +18,7 @@ export default function Home() {
     const router = useRouter();
     const key = router.query.key;
     const token = router.query.token;
+    const from = router.query.from; // 获取机构参数
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -37,13 +38,19 @@ export default function Home() {
                 if (err.response && err.response.status === 419) {
                     router.push('/error/qr_expired');
                 } else {
-                    window.location.href = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
+                    let qualtricsUrl = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
+                    if (from) {
+                        qualtricsUrl += `&from=${encodeURIComponent(from)}`;
+                    } else {
+                        qualtricsUrl += `&from=${encodeURIComponent('线上')}`;
+                    }
+                    window.location.href = qualtricsUrl;
                 }
             });
         } else {
             router.push("/login");
         }
-      }, [key, token, router.isReady, refresh]);
+      }, [key, token, from, router.isReady, refresh]);
 
 
       return (
