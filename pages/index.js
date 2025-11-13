@@ -19,7 +19,7 @@ export default function Home() {
     const router = useRouter();
     const key = router.query.key;
     const token = router.query.token;
-    const from = router.query.from; // 获取机构参数
+    const from = router.query.from; 
 
     useEffect(() => {
         if (!router.isReady) {
@@ -29,7 +29,6 @@ export default function Home() {
         
         const accessToken = localStorage.getItem("access_token");
         if (accessToken) {
-            // 已有 token，参数处理完成，可以渲染 Tasks
             setProcessingParams(false);
             return;
         }
@@ -51,9 +50,9 @@ export default function Home() {
                     } else {
                         let qualtricsUrl = `https://nyu.qualtrics.com/jfe/form/SV_0VOLbB7OTrhi6ii?key=${key}`;
                         if (from) {
-                            qualtricsUrl += `&from=${encodeURIComponent(from)}`;
+                            qualtricsUrl += `&from=${from}`;
                         } else {
-                            qualtricsUrl += `&from=${encodeURIComponent('线上')}`;
+                            qualtricsUrl += `&from=0`;
                         }
                         window.location.href = qualtricsUrl;
                     }
