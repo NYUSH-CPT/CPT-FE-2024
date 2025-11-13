@@ -1,25 +1,28 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import { SignJWT } from 'jose';
 import { QRCodeSVG } from 'qrcode.react';
 import styles from '@/styles/qr_display.module.scss';
 
 export default function QRDisplay() {
+    const router = useRouter();
+    const { id } = router.query;
     const [qrUrl, setQrUrl] = useState('');
     const [error, setError] = useState('');
-    const [organization, setOrganization] = useState(''); // 机构名称
-    const [orgError, setOrgError] = useState(''); // 机构名称验证错误
+    const [invalidId, setInvalidId] = useState(false);
     const refreshTimerRef = useRef(null); // 存储定时器 ID
     const currentTokenRef = useRef(''); // 存储当前的 token
 
     const generateToken = useCallback(async () => {
         try {
-            // 验证机构名称是否填写
-            if (!organization.trim()) {
-                setOrgError('请填写机构名称');
+            // 验证id是否有效（1-5）
+            const orgId = parseInt(id, 10);
+            if (!id || isNaN(orgId) || orgId < 1 || orgId > 5) {
+                setInvalidId(true);
                 setQrUrl('');
                 return;
             }
-            setOrgError('');
+            setInvalidId(false);
 
             // 清除之前的定时器（如果存在）
             if (refreshTimerRef.current) {
@@ -45,11 +48,12 @@ export default function QRDisplay() {
             // 保存 token
             currentTokenRef.current = token;
 
-            // 生成二维码 URL，添加 from 参数（机构名称，必填）
-            const url = `https://activity.bluedhealth.com/weal/shnyu/redirect?token=${token}&from=${encodeURIComponent(organization.trim())}`;
+            // 生成二维码 URL，添加 from 参数（机构ID，1-5）
+            const url = `https://activity.bluedhealth.com/weal/shnyu/redirect?from=${orgId}&token=${token}`;
             setQrUrl(url);
             setError('');
-            // console.log("token generated", "now:", now, "exp:", exp, "from:", organization, url);
+            
+            console.log(url);
 
             const nextRefresh = 30000;
             refreshTimerRef.current = setTimeout(() => {
@@ -70,9 +74,12 @@ export default function QRDisplay() {
                 generateToken();
             }, 5000);
         }
-    }, [organization]);
+    }, [id]);
 
     useEffect(() => {
+        // 等待路由参数加载完成
+        if (!router.isReady) return;
+
         // 页面加载时立即生成
         generateToken();
 
@@ -83,24 +90,21 @@ export default function QRDisplay() {
                 refreshTimerRef.current = null;
             }
         };
-    }, [generateToken]);
+    }, [router.isReady, generateToken]);
 
-    // 当机构名称改变时，更新二维码 URL（使用当前 token）
-    useEffect(() => {
-        if (!organization.trim()) {
-            setOrgError('请填写机构名称');
-            setQrUrl('');
-            return;
-        }
-        
-        setOrgError('');
-        
-        // 如果有 token，更新二维码 URL
-        if (currentTokenRef.current) {
-            const url = `https://activity.bluedhealth.com/weal/shnyu/redirect?token=${currentTokenRef.current}&from=${encodeURIComponent(organization.trim())}`;
-            setQrUrl(url);
-        }
-    }, [organization]);
+    // 如果id无效，显示错误信息
+    if (router.isReady && invalidId) {
+        return (
+            <>
+                <header className={styles.header}>
+                    <img src="/logo.png" alt="logo" />
+                </header>
+                <div className={styles.container}>
+                    <h2 className={styles.error}>无效的机构ID</h2>
+                </div>
+            </>
+        );
+    }
 
     return (
         <>
@@ -109,25 +113,6 @@ export default function QRDisplay() {
             </header>
             <div className={styles.container}>
                 <h2 className={styles.subtitle}>请使用 Blued App 扫描二维码</h2>
-                
-                {/* 机构输入框 */}
-                <div className={styles.orgInputContainer}>
-                    <label className={styles.orgLabel}>机构名称 <span className={styles.required}>*</span></label>
-                    <input
-                        type="text"
-                        placeholder="请输入机构名称"
-                        className={`${styles.orgInput} ${orgError ? styles.orgInputError : ''}`}
-                        value={organization}
-                        onChange={(e) => {
-                            setOrganization(e.target.value);
-                            if (orgError && e.target.value.trim()) {
-                                setOrgError('');
-                            }
-                        }}
-                        required
-                    />
-                    {orgError && <p className={styles.orgError}>{orgError}</p>}
-                </div>
                 
                 {qrUrl ? (
                     <div className={styles.qrContainer}>
