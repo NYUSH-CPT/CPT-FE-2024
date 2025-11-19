@@ -44,6 +44,11 @@ export default function Tasks() {
     const surveyDays = [23, 39, 99]
 
     if (group == "Null") {
+        // 前测问卷截止时间：Day 1 凌晨4点
+        const survey1Deadline = expStart.clone().add(0, "days").add(4, "hours");
+        const isSurvey1Expired = now.isAfter(survey1Deadline);
+        const survey1Link = `https://nyu.qualtrics.com/jfe/form/SV_6FIG6R7YKjvBn14?uuid=${uuid}`;
+        
         return (
         <>
             <h1>任务列表</h1>
@@ -53,15 +58,26 @@ export default function Tasks() {
                 温馨提示：为保护您的个人隐私，请勿将链接分享给他人。期待您的参与，祝您生活愉快！
            </p>
             <Stepper orientation="vertical" >
-                <Step completed={false}>
-                    <Link
-                        href={`https://nyu.qualtrics.com/jfe/form/SV_6FIG6R7YKjvBn14?uuid=${uuid}`}
-                    >
+                <Step completed={false} active={!isSurvey1Expired}>
+                    {isSurvey1Expired ? (
                         <StepLabel className={styles.stepLabel}>
                             <h4>第0天：调查问卷&nbsp;</h4>
-                            <span className={styles.description}>预计时间：30分钟</span><br/>
+                            <span className={styles.description}>问卷已过期</span><br/>
+                            <span className={styles.inactiveReason}>
+                                {`截止时间：${survey1Deadline.format("YYYY-MM-DD hh:mm A")}，当前时间：${now.format("YYYY-MM-DD hh:mm A")}`}
+                            </span>
                         </StepLabel>
-                    </Link>
+                    ) : (
+                        <Link href={survey1Link}>
+                            <StepLabel className={styles.stepLabel}>
+                                <h4>第0天：调查问卷&nbsp;</h4>
+                                <span className={styles.description}>预计时间：30分钟</span><br/>
+                                <span className={styles.inactiveReason}>
+                                    {`请在${survey1Deadline.format("YYYY-MM-DD hh:mm A")}前完成`}
+                                </span>
+                            </StepLabel>
+                        </Link>
+                    )}
                 </Step>
             </Stepper>
         </>
