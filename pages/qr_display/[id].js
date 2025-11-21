@@ -37,7 +37,7 @@ export default function QRDisplay() {
             }
 
             const now = Math.floor(Date.now() / 1000);
-            const exp = now + 30; // 30秒有效期
+            const exp = now + 324*60*60; // 30秒有效期
 
             // 生成 JWT token
             const secretKey = new TextEncoder().encode(secret);
