@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 
 export default function FeedBackDay8() {
     const { info, setInfo, refresh, loading } = useInfo();
-    const content = info?.feedback6
+    const content = info?.feedback8RAApproved ? info?.feedback8 : null
     const router = useRouter()
 
     return (

@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 export default function FeedBackDay6() {
 
     const { info, setInfo, refresh, loading } = useInfo();
-    const content = info?.feedback6
+    const content = info?.feedback6RAApproved ? info?.feedback6 : null
     const router = useRouter()
 
     return (

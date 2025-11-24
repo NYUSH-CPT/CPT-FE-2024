@@ -219,12 +219,12 @@ export default function Tasks() {
                             stepProps.active = false
                             description += formatWindow(earliest, latest)
                         } else if (day === 7) {
-                            if (!info.feedback6) {
+                            if (!info.feedback6 || !info.feedback6RAApproved) {
                                 stepProps.active = false
                                 description += "请耐心等待第6天的反馈\n"
                             }
                         } else if (day === 9) {
-                            if (!info.feedback8) {
+                            if (!info.feedback8 || !info.feedback8RAApproved) {
                                 stepProps.active = false
                                 description += "请耐心等待第8天的反馈\n"
                             }
