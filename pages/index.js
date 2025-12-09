@@ -40,7 +40,13 @@ export default function Home() {
                 .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/key`, { 
                     params: { key, token }
                 })
-                .then(() => {
+                .then((res) => {
+                    const nextAction = res.data?.next
+                    if (nextAction === "collect") {
+                        router.push(`/collect?uuid=${key}`);
+                        return
+                    } 
+                    
                     refresh();
                     setProcessingParams(false);
                 })
