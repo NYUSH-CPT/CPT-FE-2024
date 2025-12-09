@@ -14,7 +14,7 @@ fi
 
 # Start a new container with the latest image
 docker run \
-    --memory=300m \
+    --restart always \
     -e "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" \
     -e "NEXT_PUBLIC_CONVERSATION_GAP=$NEXT_PUBLIC_CONVERSATION_GAP" \
     -e "NEXT_PUBLIC_PROJECT_NAME=$NEXT_PUBLIC_PROJECT_NAME" \

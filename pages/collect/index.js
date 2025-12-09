@@ -138,6 +138,16 @@ export default function Collect() {
             });
     };
 
+    const handleDecline = () => {
+        axios
+            .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/collect_decline`, { uuid })
+            .catch((err) => {
+                console.log(err);
+            }).finally(() => {
+                router.push(`https://danlangongyi.wjx.cn/vm/Yu8MAp9.aspx?sojumpparm=${uuid}`);
+            });
+    };
+
     return (
         <>
             <header className={styles.header}>
@@ -294,11 +304,7 @@ export default function Collect() {
                                 <div className="flex justify-center items-center py-4">
                                     <Button
                                         variant="contained"
-                                        onClick={() =>
-                                            router.push(
-                                                `https://danlangongyi.wjx.cn/vm/Yu8MAp9.aspx?sojumpparm=${uuid}`
-                                            )
-                                        }
+                                        onClick={handleDecline}
                                           sx={{
                                             backgroundColor: '#9e9e9e', 
                                             color: '#ffffff',          
