@@ -101,6 +101,12 @@
     align-items: center;
     gap: 1rem;
     padding: 0 0 1em 0;
+    p {
+        align-self: start;
+        font-size: 16px;
+        padding: 0 0 0 0;
+        font-weight: 250;
+    }
     .actionButton {
         border: none;
         padding: 8px 24px;

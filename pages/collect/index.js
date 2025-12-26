@@ -248,6 +248,7 @@ export default function Collect() {
                                         fullWidth
                                         label={"您的电话号码："}
                                     ></TextField>
+                                    <p>请优先留下微信绑定的手机号哦！</p>
                                     <TextField
                                         value={WeChat}
                                         onChange={(e) =>
@@ -329,9 +330,16 @@ export default function Collect() {
                         
                         <h3>您的作答已被记录。感谢您的参与！祝您⽣活愉快！</h3>
 
+                        {(inviteCPT || metadata.eligible) && (
+                            <>
+                            <h3>感谢您的作答！我们的研究助理将在3天内通过“企业微信”联系您，请您留意好友申请。企业微信添加好友的方式与常规微信略有不同，以下为企业微信添加好友的流程：</h3>
+                            <img src="/add_wechat.jpg" alt="add_wechat" />
+                            </>
+                        )}
+
                         {metadata.valid ? (
                             <>
-                                <div className="flex justify-center items-center pb-4">
+                                <div className="flex justify-center items-center pt-4 pb-4">
                                     <Button
                                         variant="contained"
                                         onClick={() =>
