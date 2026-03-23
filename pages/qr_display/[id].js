@@ -15,9 +15,9 @@ export default function QRDisplay() {
 
     const generateToken = useCallback(async () => {
         try {
-            // 验证id是否有效（1-5）
+            // 验证id是否有效（1-10）
             const orgId = parseInt(id, 10);
-            if (!id || isNaN(orgId) || orgId < 1 || orgId > 5) {
+            if (!id || isNaN(orgId) || orgId < 1 || orgId > 10) {
                 setInvalidId(true);
                 setQrUrl('');
                 return;
