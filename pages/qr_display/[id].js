@@ -17,7 +17,7 @@ export default function QRDisplay() {
         try {
             // 验证id是否有效（1-10）
             const orgId = parseInt(id, 10);
-            if (!id || isNaN(orgId) || orgId < 1 || orgId > 10) {
+            if (!id || isNaN(orgId) || orgId < 1 || orgId > 11) {
                 setInvalidId(true);
                 setQrUrl('');
                 return;
@@ -37,8 +37,11 @@ export default function QRDisplay() {
             }
 
             const now = Math.floor(Date.now() / 1000);
-            const exp = now + 24*60*60; // 24h有效期
-
+            
+            let exp = now + 24*60*60; // 24h有效期
+            if (orgId == 11) {
+                exp = now + 48*60*60 //48h有效期
+            }
             // 生成 JWT token
             const secretKey = new TextEncoder().encode(secret);
             const token = await new SignJWT({ iat: now, exp })
