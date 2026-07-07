@@ -248,7 +248,7 @@ export default function Collect() {
                                         fullWidth
                                         label={"您的电话号码："}
                                     ></TextField>
-                                    <p>请优先留下微信绑定的手机号哦！</p>
+                                    <p>请优先留下微信绑定的手机号哦！我们将通过该号码添加您～</p>
                                     <TextField
                                         value={WeChat}
                                         onChange={(e) =>
@@ -270,7 +270,9 @@ export default function Collect() {
                         {!askConsent && !inviteCPT && (
                             <div>
                                 <p>
-                                    感谢您的回答！我们十分荣幸能邀请您参与这个项目！我们将收集您的手机号和QQ账号等信息。您的信息将会全程采取严格的保密措施。在项目开始前，我们的研究小助理将会添加您的QQ，正式向您发出邀请并说明研究具体事项。期待您的参与！
+                                    感谢您的回答！很遗憾，您暂时不是我们此次研究的目标人群。若您想参与另一项关于性与性别少数群体的研究，欢迎留下您的联系方式。您的信息将会全程采取严格的保密措施。
+                                    <br/><br/>
+                                    在另一项研究中，您需要在一年内填写四次调查问卷。您会因此获得现金作为报酬。
                                 </p>
                                 <div className={styles.form}>
                                     <TextField
@@ -332,8 +334,26 @@ export default function Collect() {
 
                         {(inviteCPT || metadata.eligible) && (
                             <>
-                            <h3>感谢您的作答！我们的研究助理将在3天内通过“企业微信”联系您，请您留意好友申请。企业微信添加好友的方式与常规微信略有不同，以下为企业微信添加好友的流程：</h3>
-                            <img src="/add_wechat.jpg" alt="add_wechat" />
+                            <h3>感谢您的作答！我们的研究助理将在3天内通过“企业微信”联系您，请确保您的微信号可以通过手机号找到，并留意好友申请。企业微信添加好友的方式与常规微信略有不同，以下为企业微信添加好友的流程：</h3>
+                            <div className="my-2 flex flex-col sm:mx-4 lg:mx-6">
+                                <div className="flex w-full">
+                                    <img
+                                        src="/add_wechat_1.jpg"
+                                        alt="add_wechat step 1"
+                                        className="block w-1/2 object-contain"
+                                    />
+                                    <img
+                                        src="/add_wechat_2.jpg"
+                                        alt="add_wechat step 2"
+                                        className="block w-1/2 object-contain"
+                                    />
+                                </div>
+                                <img
+                                    src="/add_wechat_3.jpg"
+                                    alt="add_wechat step 3"
+                                    className="block w-full object-contain"
+                                />
+                            </div>
                             </>
                         )}
 
